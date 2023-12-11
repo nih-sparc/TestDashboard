@@ -1,6 +1,15 @@
 @import './base.css';
 
-#app {
+/* remove these styles when you import the new sparc-design-system-component-2 */
+@import "./delete-when-dsc2-imported/_sparc-theme.scss";
+@import 'https://fonts.googleapis.com/css?family=Asap:400,400i,500,600,700&display=swap';
+@import './delete-when-dsc2-imported/_variables.scss';
+@import './delete-when-dsc2-imported/_base.scss';
+@import './delete-when-dsc2-imported/_spacing.scss';
+@import './delete-when-dsc2-imported/_layout.scss';
+
+
+/* #app {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
@@ -32,4 +41,4 @@ a,
     grid-template-columns: 1fr 1fr;
     padding: 0 2rem;
   }
-}
+} */
