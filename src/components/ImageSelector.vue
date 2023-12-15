@@ -2,35 +2,55 @@
     <div class="fill sticky">
         <img :src=imgPath>
     </div>
-    <div @click="opener.openImageViewer()" class="fill">
-        <img :src=imgPath2>
+    <div class="selector-body">
+        <div @click="selectImage('./imgs/img.png')" class="fill">
+            <img :src=imgPath2>
+        </div>
+        <div @click="selectImage('./imgs/img2.png')" class="fill">
+            <img :src=imgPath3>
+        </div>
+        <div @click="selectImage('./imgs/img.png')"  class="fill">
+            <img :src=imgPath2>
+        </div>
+        <div @click="selectImage('./imgs/img2.png')"  class="fill">
+            <img :src=imgPath3>
+        </div>
+        <div @click="selectImage('./imgs/img.png')"  class="fill">
+            <img :src=imgPath2>
+        </div>
+        <div @click="selectImage('./imgs/img2.png')"  class="fill">
+            <img :src=imgPath3>
+        </div>
     </div>
-    <div @click="opener.openImageViewer()" class="fill">
-        <img :src=imgPath3>
-    </div>
-    <div @click="opener.openImageViewer()"  class="fill">
-        <img :src=imgPath2>
-    </div>
-    <div @click="opener.openImageViewer()"  class="fill">
-        <img :src=imgPath3>
-    </div>
-    <div @click="opener.openImageViewer()"  class="fill">
-        <img :src=imgPath2>
-    </div>
-    <div @click="opener.openImageViewer()"  class="fill">
-        <img :src=imgPath3>
-    </div>
+
 
 </template>
 <script setup>
-    import { ref } from "vue";
-  import { useOpenerStore } from "../stores/opener.ts";
-  const opener = useOpenerStore();
+    import { ref, defineEmits, inject } from "vue";
+    const emitter = inject('emitter');
 
-  const imgPath = ref("./imgs/subInfo.png");
-  const imgPath2 = ref("./imgs/imgSel.png");
-  const imgPath3 = ref("./imgs/imgSel2.png");
- 
+    const imgPath = ref();
+    const imgPath2 = ref();
+    const imgPath3 = ref();
+
+    const emit = defineEmits(['setName'])
+    emit('setName','MUSE Image Selector');
+
+    function selectImage(img){
+        emitter.emit('selectImage', img);
+    }
+
+    emitter.on('selectSubject', (value) => {  
+        imgPath.value = value;
+        imgPath2.value = "./imgs/imgSel.png";
+        imgPath3.value = "./imgs/imgSel2.png";
+    });
+    
+//'./imgs/imgInfo.png'
+
 </script>
-<style>
+<style scoped>
+    .selector-body{
+        
+    }
 </style>

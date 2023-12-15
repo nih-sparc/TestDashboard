@@ -14,8 +14,9 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "element-plus":"^2.4.3",
+    "element-plus": "^2.4.3",
     "gridstack": "^9.5.0",
+    "mitt": "^3.0.1",
     "pinia": "^2.1.7",
     "sass": "^1.69.5",
     "storybook": "^7.5.3",

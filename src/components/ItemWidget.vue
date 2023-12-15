@@ -1,28 +1,56 @@
 <template>
-    <header>  
- 
-            <h3>{{ widgetName }}</h3>
-            <close class="close-button" @click="$emit('removeWidget')"></close>
-
-    </header>
-            <div class="grid-stack-item-content py-16">
+            <div ref="instance" class="grid-stack-item-content">
+                <div class="content-header">
+                    <h3>{{ widgetName }}</h3>
+                    <h3>{{ foo }}</h3>
+                    <close class="close-button" @click="$emit('removeWidget')"></close>
+                </div>
                 <slot></slot>
             </div>
 </template>
 <script setup>
-import Close from './icons/Close.vue';
+    import Close from './icons/Close.vue';
+    import { ref, inject, nextTick, onMounted} from 'vue';
 
-const emit = defineEmits(['removeWidget']);
+    const emitter = inject('emitter');
 
-const props = defineProps({
-        widgetName:{
-            type:String,
-            required:true
-        }
-    })
+    const emit = defineEmits(['removeWidget']);
+
+
+    const foo = ref("foo");
+    const bar = ref("bar");
+    let instance = null;
+
+    const props = defineProps({
+            widgetName:{
+                type:String,
+                required:true
+            },           
+            widgetID:{
+                type:String,
+                required:true
+            }
+        })
+    // accepts and executes custom function on this widget's scope
+    //just import inject and add ref="instance" to template
+        const customFunction = ref(null);
+        const allRefs = {foo,bar} // ref you want to expose
+    
+        emitter.on('custom-events-ItemWidget-'+props.widgetID,(value)=>{
+            customFunction.value = value;
+            nextTick(()=>{
+                customFunction.value(instance, allRefs);
+            })
+        })
+
+onMounted(()=>{
+ 
+})
 </script>
 <style scoped lang="scss">
-header{
+@import '../assets/delete-when-dsc2-imported/_variables.scss';
+
+.content-header{
     justify-content: space-between;
     align-items: center;
     display:flex;
@@ -40,8 +68,8 @@ header{
 }
 
 .grid-stack-item-content {
-    position: relative !important;
-    inset:0 !important;
+    border: 1px solid $lineColor1;
+    border-radius: 0.2rem;
     text-align: center;
 }
 :deep(.fill) {

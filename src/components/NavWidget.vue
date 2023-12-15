@@ -1,11 +1,12 @@
 <template>
-    <header>      
-        <h3>{{ navType }}</h3>
-          <div>hide</div>
-    </header>
-            <div class="grid-stack-item-content py-16">
-                <slot></slot>
-            </div>
+
+    <div class="grid-stack-item-content">
+        <div class="content-header">
+            <h3>{{ navType }}</h3>
+            <div>hide</div>
+        </div>
+        <slot></slot>
+    </div>
 </template>
 <script setup>
 import { useOpenerStore } from '../stores/opener.ts';
@@ -13,13 +14,14 @@ import { useOpenerStore } from '../stores/opener.ts';
 const emit = defineEmits([]);
 
 const props = defineProps({
-
+    navType:String
     })
 const opener = useOpenerStore();
-const navType = opener.navigatorType;
+
 </script>
 <style scoped lang="scss">
-header{
+@import '../assets/delete-when-dsc2-imported/_variables.scss';
+.content-header{
     justify-content: space-between;
     align-items: center;
     display:flex;
@@ -31,9 +33,10 @@ header{
 }
 
 .grid-stack-item-content {
-    position: relative !important;
-    inset:0 !important;
+    border: 1px solid $lineColor1;
+    border-radius: 0.2rem;
     text-align: center;
+    background:$lineColor2;
 }
 :deep(.fill) {
     display: flex;

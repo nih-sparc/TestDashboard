@@ -5,7 +5,7 @@ export const useOpenerStore = defineStore('opener', () => {
 
     const imageSelectorOpen = ref(false);
     const openImage = ref(1);
-    const navigatorType = ref("");
+    const navigatorType = ref("SubjectNav");//default 
     let count = 0;
 
     //does not need bool value, because multiple image viewers can be opened
