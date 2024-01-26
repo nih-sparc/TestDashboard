@@ -1,5 +1,5 @@
 <template>
-    <div class="fill sticky">
+    <div class="fill">
         <img :src=imgPath>
     </div>
     <div class="selector-body">
@@ -26,8 +26,10 @@
 
 </template>
 <script setup>
-    import { ref, defineEmits, inject } from "vue";
+    import { ref, defineEmits, inject, onUnmounted, onMounted, nextTick } from "vue";
+    import { useOpenerStore } from "../stores/opener";
     const emitter = inject('emitter');
+    const opener = useOpenerStore();
 
     const imgPath = ref();
     const imgPath2 = ref();
@@ -37,7 +39,12 @@
     emit('setName','MUSE Image Selector');
 
     function selectImage(img){
-        emitter.emit('selectImage', img);
+        if(!opener.ImageViewerOpen){
+            emitter.emit("SparcDashboard-addNewWidget","ImageViewer");
+        }
+        nextTick(()=>{
+            emitter.emit('ImageSelector-selectImage', img);
+        })
     }
 
     emitter.on('selectSubject', (value) => {  
@@ -46,6 +53,12 @@
         imgPath3.value = "./imgs/imgSel2.png";
     });
     
+onMounted(()=>{
+    opener.imageSelectorOpen = true;
+})
+onUnmounted(()=>{
+    opener.imageSelectorOpen = false;
+})
 //'./imgs/imgInfo.png'
 
 </script>

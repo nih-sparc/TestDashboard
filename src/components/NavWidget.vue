@@ -2,21 +2,19 @@
 
     <div class="grid-stack-item-content">
         <div class="content-header">
-            <h3>{{ navType }}</h3>
-            <div>hide</div>
+            <h3>{{ navType.replace(/([A-Z])/g, ' $1').trim()}}</h3>
+            <div> show/hide</div>
         </div>
         <slot></slot>
     </div>
 </template>
 <script setup>
-import { useOpenerStore } from '../stores/opener.ts';
 
 const emit = defineEmits([]);
 
 const props = defineProps({
     navType:String
     })
-const opener = useOpenerStore();
 
 </script>
 <style scoped lang="scss">

@@ -1,10 +1,12 @@
 <template>
-  
+    <div class="text-3xl bg-green-300 font-bold underline">
+      Sparc Dashboard
+    </div>
     <el-col>
       <el-row class="m-12">
         <el-select v-model="NewComponent" placeholder="Add New Widget">
           <el-option
-            v-for="item in componentListOptions"
+            v-for="item in ComponentListOptions"
             :key="item"
             :label="item"
             :value="item"
@@ -15,16 +17,20 @@
       </el-row>
   </el-col> 
     <div class="grid-stack">
-      <div class="grid-stack-item" :gs-id="navItem.id" :gs-x="navItem.x" :gs-y="navItem.y" :gs-w="navItem.w" :gs-h="navItem.h" 
-      :id="navItem.id" :key="navItem.id" :gs-no-move="navItem.noMove" :gs-locked="navItem.locked" :gs-min-height="3" :navType="navItem.component">
-        <NavWidget>
-            <component :is="navItem.component"></component>
-        </NavWidget>
+      <div class="grid-stack-item" 
+      :gs-id="NavItem.id" :gs-x="NavItem.x" :gs-y="NavItem.y" :gs-w="NavItem.w" :gs-h="NavItem.h" :id="NavItem.id" :key="NavItem.id" 
+      :gs-no-move="NavItem.noMove" :gs-locked="NavItem.locked" :gs-min-height="3">
+          <NavWidget :navType="NavItem.component">
+              <component :is="NavItem.component"></component>
+          </NavWidget>
       </div>
-      <div v-for="(w, indexs) in DashboardItems" class="grid-stack-item" :gs-x="w.x" :gs-y="w.y" :gs-w="w.w" :gs-h="w.h"
-            :gs-id="w.id" :id="w.id" :key="w.id">
-            <ItemWidget :widgetID="w.id" :widgetName="w.componentName" @remove-widget="removeWidget(w.id)">
-              <component :widgetID="w.id" :is="w.component"  @set-name="(n)=>w.componentName=n"></component>
+      <div v-for="(w, indexs) in DashboardItems" class="grid-stack-item" 
+      :gs-x="w.x" :gs-y="w.y" :gs-w="w.w" :gs-h="w.h" :gs-id="w.id" :id="w.id" :key="w.id">
+            <ItemWidget 
+            :widgetID="w.id" :widgetName="w.componentName" @remove-widget="removeWidget(w.id)">
+              <component 
+              :widgetID="w.id" :is="w.component"  @set-name="(n)=>w.componentName=n">
+              </component>
             </ItemWidget>
       </div>
     </div>
@@ -32,31 +38,27 @@
 
 <script setup>
 
-import { ref, onMounted, nextTick, watch, defineAsyncComponent} from 'vue';
+import { ref, onMounted, nextTick, inject} from 'vue';
 import { GridStack } from 'gridstack';
 import ItemWidget from './ItemWidget.vue';
 import NavWidget from './NavWidget.vue';
-import { useOpenerStore } from '../stores/opener.ts';
 import { useGlobalVarsStore }from '../stores/globalVars.ts';
 
 import "gridstack/dist/gridstack.min.css";
 import "gridstack/dist/gridstack-extra.min.css";
 
-const emit = defineEmits([])
-const opener = useOpenerStore();
-
-const globalVars = useGlobalVarsStore();
+const _emitter = inject('emitter');
+const _globalVars = useGlobalVarsStore();
 
 //counts the widget id
-const newName="";
-let grid = null;
-let navItem = ref({});
+let Grid = null;
+let NavItem = ref({});
 let DashboardItems = ref([]);
 getItemsFromLS();
-let componentListOptions = globalVars.componentList;
+let ComponentListOptions = _globalVars.componentList;
 let NewComponent = ref("");
 
-let nextId = DashboardItems.value.length;
+let NextId = DashboardItems.value.length;
 
 
 onMounted(() => {
@@ -68,41 +70,42 @@ onMounted(() => {
 function initGridStack(){
     const options={
       float:true,
-      column: 4,
-      cellHeight: 100,
+      column: 12,
+      cellHeight: 30,
       minRow: 6,
-      margin:5
+      margin:5,
+      alwaysShowResizeHandle:true,
+      row:28
     }
-    grid = GridStack.init(options);
+    Grid = GridStack.init(options);
 
 }
 //All additional Functions - - - - - - - - -- - - - - --  -- - -- - - - - - - -  --
-function removeWidget(widget) {
-    var index = DashboardItems.value.findIndex(w => w.id == widget.id);
-    DashboardItems.value.splice(index, 1);
-    const selector = `#${widget.id}`;
-    grid.removeWidget(selector, false);    
-  }
-
-// watch(() => opener.openImage, (newVal, oldVal) => {
-
-//   const imgViewer ={id:"img"+newVal,x:1,y:0,w:1,h:2,component: "ImageViewer"};
-//   addNewWidget(imgViewer);
-// });
 
 function addNewWidget() {
-    const node = {id:NewComponent.value+"-"+nextId,x:1,y:0,w:1,h:2,component: NewComponent.value, componentName:NewComponent.value};
-    nextId++;
+    const node = {id:NewComponent.value+"-"+NextId,w:2,h:6,autoPosition:true, component: NewComponent.value, componentName:NewComponent.value};
+    NextId++;
     //add component to items array first. this will update the dom
     DashboardItems.value.push(node);
 
     nextTick(()=>{
       //after dom updates, add your widget to the grid with makewidget. don't use addwidget
-      grid.makeWidget(node.id);
+      Grid.makeWidget(node.id);
     });
 }
+_emitter.on('SparcDashboard-addNewWidget', (value) => { 
+      NewComponent.value = value;
+      addNewWidget()  
+  })
+  
+function removeWidget(widget) {
+    var index = DashboardItems.value.findIndex(w => w.id == widget);
+    DashboardItems.value.splice(index, 1);
+    const selector = `#${widget}`;
+    Grid.removeWidget(selector, false);    
+  }
 function saveDashboard(){
-  const gridItems = grid.save();
+  const gridItems = Grid.save();
   gridItems.forEach(item => {
     item.component = item.id.split("-")[0];
     item.componentName = item.component;
@@ -110,57 +113,25 @@ function saveDashboard(){
   window.localStorage.setItem("DashboardItems",JSON.stringify(gridItems));
 }
 function getItemsFromLS(){
-  let dashItems = [];
-  let nav = {};
- 
+    let dashItems = [];
+    let nav = {};
   
-  if(isValidJSON(window.localStorage.getItem("DashboardItems"))){
-    dashItems = JSON.parse(window.localStorage.getItem("DashboardItems"));
-  }
-  nav = dashItems.find(item => item.id === "SubjectNav");
-  if(!nav){
-    navItem = {id:"SubjectNav",x:0,y:0,h:6,w:1, component:opener.navigatorType, noMove:true, locked:true};
-  }else{
-    navItem = nav;
-  }
-  let navIndex = dashItems.indexOf(nav);
-  if(navIndex!==-1){
-    dashItems.splice(navIndex,1);
-  }
-
-  DashboardItems.value = dashItems;
+    if(isValidJSON(window.localStorage.getItem("DashboardItems"))){
+      dashItems = JSON.parse(window.localStorage.getItem("DashboardItems"));
+    }
+    nav = dashItems.find(item => item.id === "SubjectNav");
+    if(!nav){
+      NavItem= {id:"SubjectNav",x:0,y:0,h:20,w:2, component:_globalVars.navigatorType, noMove:true, locked:true};
+    }else{
+      NavItem = nav;
+    }
+    let navIndex = dashItems.indexOf(nav);
+    if(navIndex!==-1){
+      dashItems.splice(navIndex,1);
+    }
+    DashboardItems.value = dashItems;
 }
-          // function onChange(event, changeItems) {
-          //  //updateInfo();
-          //   // update item position
-          //   changeItems.forEach(item => {
-          //     var widget = items.value.find(w => w.id == item.id);
-          //     if (!widget) {
-          //       alert("Widget not found: " + item.id);
-          //       return;
-          //     }
-          //     widget.x = item.x;
-          //     widget.y = item.y;
-          //     widget.w = item.w;
-          //     widget.h = item.h;            
-          //   });
-          // }
-
-          
-          // function removeLastWidget() {
-          //   if (count.value == 0) return;
-          //   var id = `w_${count.value-1}`;
-          //   var index = items.value.findIndex(w => w.id == id);    
-          //   if (index < 0) return;
-          //   var removed = items.value[index];
-          //   removeWidget(removed);
-          // }
-          
-
-          // function updateInfo() {
-          //   color.value = grid.engine.nodes.length == items.value.length ? "black" : "red";
-          //   gridInfo.value = `Grid engine: ${grid.engine.nodes.length}, widgets: ${items.value.length}`;
-          // }       
+    
 function isValidJSON(str) {
   if(!str){return false;}
     try {
@@ -176,22 +147,8 @@ function isValidJSON(str) {
 <style  lang="scss">
 @import '../assets/delete-when-dsc2-imported/_variables.scss';
 
-
-a {
-  text-decoration: none;
-}
-
-h1 {
-  font-size: 2.5rem;
-  margin-bottom: .5rem;
-}
-
 .grid-stack {
   background: $background;
-}
-
-.grid-stack-item-removing {
-  opacity: 0.5;
 }
 
 .grid-stack-item {

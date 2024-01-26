@@ -1,8 +1,8 @@
 <template>
             <div ref="instance" class="grid-stack-item-content">
-                <div class="content-header">
+
+                <div class="content-header stick-to-top">
                     <h3>{{ widgetName }}</h3>
-                    <h3>{{ foo }}</h3>
                     <close class="close-button" @click="$emit('removeWidget')"></close>
                 </div>
                 <slot></slot>
@@ -10,16 +10,14 @@
 </template>
 <script setup>
     import Close from './icons/Close.vue';
-    import { ref, inject, nextTick, onMounted} from 'vue';
+    import { ref, inject, onMounted} from 'vue';
 
     const emitter = inject('emitter');
 
     const emit = defineEmits(['removeWidget']);
 
 
-    const foo = ref("foo");
-    const bar = ref("bar");
-    let instance = null;
+    let instance = ref(null);
 
     const props = defineProps({
             widgetName:{
@@ -31,17 +29,10 @@
                 required:true
             }
         })
-    // accepts and executes custom function on this widget's scope
-    //just import inject and add ref="instance" to template
-        const customFunction = ref(null);
-        const allRefs = {foo,bar} // ref you want to expose
-    
-        emitter.on('custom-events-ItemWidget-'+props.widgetID,(value)=>{
-            customFunction.value = value;
-            nextTick(()=>{
-                customFunction.value(instance, allRefs);
-            })
-        })
+
+    emitter.on('ImageViewwer-imageSelected-'+props.widgetID,(value)=>{
+        instance.value.classList.toggle("focus-from-Img-View");
+    })
 
 onMounted(()=>{
  
@@ -55,7 +46,8 @@ onMounted(()=>{
     align-items: center;
     display:flex;
     flex-flow:row;
-
+    border: 1px solid $lineColor1;
+    
     h3{
         margin:10px;
     }
@@ -71,15 +63,27 @@ onMounted(()=>{
     border: 1px solid $lineColor1;
     border-radius: 0.2rem;
     text-align: center;
+    background-color: white;
+    display: flex;
+    flex-flow: column;
 }
 :deep(.fill) {
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+
     img {
     flex-shrink: 1;
     width:100%;
     }
 }
+.stick-to-top{
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background:white;
+}
+.focus-from-Img-View{
+        border:solid $lightPurple 2px !important;
+    }
 </style>
