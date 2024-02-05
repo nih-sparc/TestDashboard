@@ -36,6 +36,8 @@
     </div>
 </template>
 
+
+
 <script setup>
 
 import { ref, onMounted, nextTick, inject} from 'vue';
@@ -49,22 +51,28 @@ import "gridstack/dist/gridstack-extra.min.css";
 
 const _emitter = inject('emitter');
 const _globalVars = useGlobalVarsStore();
+let _json = {};
 
-//counts the widget id
 let Grid = null;
 let NavItem = ref({});
 let DashboardItems = ref([]);
 getItemsFromLS();
 let ComponentListOptions = _globalVars.componentList;
 let NewComponent = ref("");
-
 let NextId = DashboardItems.value.length;
 
 
 onMounted(() => {
+    retrieveDataset();
     initGridStack();
   });
 
+//retrieve dataset as json ------------------------------- - - - - - - - --------- - -- - -- - - -
+function retrieveDataset(){
+  fetch('../assets/data.json')
+    .then((response) => JSON.parse(json))
+    .then((json) => console.log(json));
+}
 
 //add gridstack specific events here - - - - - - --  -- -- - - -- - --  -- - - -----  -  - - - - 
 function initGridStack(){

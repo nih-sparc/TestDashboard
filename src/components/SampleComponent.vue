@@ -22,7 +22,16 @@
     const emit = defineEmits(['setName']);
     emit('setName','New Custom Component!'); //replace with component name you want shown
 
-    
+    //emit and event
+    let payload ={}
+    emit('SampleComponent-eventName',payload);
+
+    //catch an event
+    // This catches when Image Selector throws the event when the image selector widget has an image selected
+    //see Events in documentation for all available events
+    emitter.on('ImageSelector-selectImage', (value) => {  
+        //do something
+    });
 
 </script>
 <style scoped lang="scss">
