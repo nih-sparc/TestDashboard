@@ -29,7 +29,7 @@
     //catch an event
     // This catches when Image Selector throws the event when the image selector widget has an image selected
     //see Events in documentation for all available events
-    emitter.on('ImageSelector-selectImage', (value) => {  
+    emitter.on('Dashboard-Image-Selected', (value) => {  
         //do something
     });
 

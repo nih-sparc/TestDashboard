@@ -1,0 +1,58 @@
+import { Meta, Story } from '@storybook/blocks';
+import * as stories from './LocationNavigator.stories.js';
+
+
+<Meta title="Components/LocationNavigator" />
+
+# Location Navigator
+The Location Navigator contains component BranchSlider that uses el-slider with a vertical attribure 
+Currently the Location Navigator is using hard coded data
+
+## Properties
+The Location Navigator component accepts the following properties:
+
+`dataList`: The default list is the vagus anatomical locations. You can change the list to by sending the property dataList, which is an array of strings. 
+
+## Events
+`SparcDashboard-addNewWidget`: Will fire when a user makes a selection change. This tells the dashboard to add a new widget to the dashboard.
+
+`Dashboard-Image-Selected`: Will fire when a user makes a selection change. Returns a type string that is the location identifier. This can be listened to by any component.
+
+### Location Navigator
+
+<Story of={stories.Primary}>{stories.Primary()}</Story>
+
+#### Code
+
+to listen for location-navigator event
+```js
+
+    emitter.on('Dashboard-Image-Selected', (value) => {  
+        //do something with the payload
+    });
+
+```
+
+```html
+<location-navigator/>
+```
+
+### adding a different list
+
+<Story of={stories.ListChange}>{stories.ListChange()}</Story>
+
+#### Code
+
+```js
+data() {
+  return {
+    dataList:[0,1,2,3]
+  }
+}
+```
+
+```html
+<location-navigator
+  :dataList="dataList"  
+/>
+```

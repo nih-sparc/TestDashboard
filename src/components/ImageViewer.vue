@@ -33,7 +33,7 @@
     emit('setName','MUSE Image Viewer');
 
 
-    emitter.on('ImageSelector-selectImage', (value) => {  
+    emitter.on('Dashboard-Image-Selected', (value) => {  
         if(listening.value || opener.ImageViewerCount===1){
             imgPath.value = value;
         }

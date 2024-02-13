@@ -1,24 +1,38 @@
-class Derivative
+
+
+class Img
 {
-    constructor(derivative){
-        this.Name = derivative.Name;
-        this.Samples = derivative.Samples
+    constructor(image){
+        this.ImgName = image.ImgName;
+        this.Path = image.Path;
+        this.Subject = new Subject(image.Subject);
+        this.Metadata = new Metadata(image.Metadata);
     }
 }
 
-class Dataset
+export class Dataset
 {
     constructor(dataset){
-        this.Derivative = dataset.Derivative
+        this.Imgs = [];
+        dataset.Imgs.forEach((img)=>this.Imgs.push(new Img(img)));
     }
 }
 
-class Sample
+class Metadata
 {
-    constructor(sample){
-        this.Name = sample.Name;
-        this.Imgs = sample.Imgs
+    constructor(metadata){
+        this.Branch = metadata.Branch;
+        this.Sample = metadata.Sample;
     }
 
+}
+
+class Subject
+{
+    constructor(subject){
+        this.ID = subject.ID;
+        this.Sex = subject.Sex;
+        this.Age = subject.Age;
+    }
 }
 

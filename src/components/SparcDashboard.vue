@@ -40,18 +40,19 @@
 
 <script setup>
 
-import { ref, onMounted, nextTick, inject} from 'vue';
+import { ref, onBeforeMount, onMounted, nextTick, inject} from 'vue';
 import { GridStack } from 'gridstack';
 import ItemWidget from './ItemWidget.vue';
 import NavWidget from './NavWidget.vue';
 import { useGlobalVarsStore }from '../stores/globalVars.ts';
+import {Dataset} from '../assets/Model';
 
 import "gridstack/dist/gridstack.min.css";
 import "gridstack/dist/gridstack-extra.min.css";
 
 const _emitter = inject('emitter');
 const _globalVars = useGlobalVarsStore();
-let _json = {};
+let _DatasetImgs = ref({});
 
 let Grid = null;
 let NavItem = ref({});
@@ -62,16 +63,19 @@ let NewComponent = ref("");
 let NextId = DashboardItems.value.length;
 
 
-onMounted(() => {
-    retrieveDataset();
+onBeforeMount(() => {
+    //retrieveDataset();
+  });
+  onMounted(() => {
     initGridStack();
   });
 
 //retrieve dataset as json ------------------------------- - - - - - - - --------- - -- - -- - - -
 function retrieveDataset(){
-  fetch('../assets/data.json')
-    .then((response) => JSON.parse(json))
-    .then((json) => console.log(json));
+  fetch('./dataByLocation.json')
+    .then((response) => response.json())
+    .then((json) => _DatasetImgs.value = Object.assign(new Dataset(json)),
+     );
 }
 
 //add gridstack specific events here - - - - - - --  -- -- - - -- - --  -- - - -----  -  - - - - 

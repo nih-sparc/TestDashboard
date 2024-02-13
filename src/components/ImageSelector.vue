@@ -43,7 +43,7 @@
             emitter.emit("SparcDashboard-addNewWidget","ImageViewer");
         }
         nextTick(()=>{
-            emitter.emit('ImageSelector-selectImage', img);
+            emitter.emit('Dashboard-Image-Selected', img);
         })
     }
 

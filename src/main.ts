@@ -14,7 +14,8 @@ app.provide('emitter', emitter);
 const componentMap = [
     'SubjectNav',
     'ImageSelector',
-    'ImageViewer'
+    'ImageViewer',
+    'LocationNav'
 ]
 componentMap.forEach(comp=>{
     const asyncComponent = defineAsyncComponent(() => import(`./components/${comp}.vue`)); 
