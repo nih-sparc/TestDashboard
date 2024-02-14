@@ -14,9 +14,9 @@ jobs:
           persist-credentials: false
       - name: Deploy storybook to GitHub Pages
         run: |
-          yarn
-          yarn storybook build
-          yarn storybook deploy
+          npm ci
+          npm run build-storybook
+  
         uses: JamesIves/github-pages-deploy-action@3.6.2
         with:
           branch: gh-pages
