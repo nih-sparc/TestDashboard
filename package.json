@@ -15,6 +15,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@abi-software/flatmapvuer": "^0.5.10",
     "element-plus": "^2.4.3",
     "gridstack": "^9.5.0",
     "mitt": "^3.0.1",
