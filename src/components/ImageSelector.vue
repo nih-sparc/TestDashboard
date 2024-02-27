@@ -26,7 +26,7 @@
 
 </template>
 <script setup>
-    import { ref, defineEmits, inject, onUnmounted, onMounted, nextTick } from "vue";
+    import { ref, inject, onUnmounted, onMounted, nextTick } from "vue";
     import { useOpenerStore } from "../stores/opener";
     const emitter = inject('emitter');
     const opener = useOpenerStore();

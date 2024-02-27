@@ -1,4 +1,5 @@
 <template>
+
     <div class="fill">
 
     </div>
@@ -27,23 +28,16 @@
   let TableData = ref();
   let Location ="";
 
+
   const props = defineProps({
             dataList:{
                 type:Array,
                 required:false
-            },
-            widgetName:{
-                type:String,
-                required:true
-            },           
-            widgetID:{
-                type:String,
-                required:true
             }
         })
         
-  const emit = defineEmits(['setName'])
-    emit('setName','Location Navigator');
+//   const emit = defineEmits(['setName'])
+//     emit('setName','Location Navigator');
 
 function selectImage(index){
 
