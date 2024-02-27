@@ -26,6 +26,6 @@ jobs:
         run: |
           yarn
           yarn run build-storybook
-          yarn rund deploy-storybook
+          yarn run deploy-storybook
         env:
           GH_TOKEN: ${{ github.actor }}:${{ secrets.GH_TOKEN }}
