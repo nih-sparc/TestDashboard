@@ -15,7 +15,9 @@ const componentMap = [
     'SubjectNav',
     'ImageSelector',
     'ImageViewer',
-    'LocationNav'
+    'LocationNav',
+    'FlatmapViewer',
+    'BiolucidaViewer'
 ]
 componentMap.forEach(comp=>{
     const asyncComponent = defineAsyncComponent(() => import(`./components/${comp}.vue`)); 

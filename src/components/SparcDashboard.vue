@@ -1,35 +1,32 @@
 <template>
-    <div class="text-3xl bg-green-300 font-bold underline">
+    <div class="text-3xl font-bold underline">
       Sparc Dashboard
     </div>
     <el-col>
       <el-row class="m-12">
         <el-select v-model="NewComponent" placeholder="Add New Widget">
           <el-option
-            v-for="item in ComponentListOptions"
-            :key="item"
-            :label="item"
-            :value="item"
-            @click="addNewWidget()">
+            v-for="item in ComponentListOptions" :key="item" :label="item" :value="item" @click="addNewWidget()">
           </el-option>
         </el-select>
-          <el-button type="default" @click="saveDashboard()">Save Dashboard</el-button>
+        <el-button type="default" @click="saveDashboard()" disabled >Save Dashboard</el-button>
       </el-row>
   </el-col> 
     <div class="grid-stack">
-      <div class="grid-stack-item" 
+      <!-- <div class="grid-stack-item" 
       :gs-id="NavItem.id" :gs-x="NavItem.x" :gs-y="NavItem.y" :gs-w="NavItem.w" :gs-h="NavItem.h" :id="NavItem.id" :key="NavItem.id" 
       :gs-no-move="NavItem.noMove" :gs-locked="NavItem.locked" :gs-min-height="3">
           <NavWidget :navType="NavItem.component">
               <component :is="NavItem.component"></component>
           </NavWidget>
-      </div>
-      <div v-for="(w, indexs) in DashboardItems" class="grid-stack-item" 
+      </div> -->
+      <div v-for="(w) in DashboardItems" class="grid-stack-item" 
       :gs-x="w.x" :gs-y="w.y" :gs-w="w.w" :gs-h="w.h" :gs-id="w.id" :id="w.id" :key="w.id">
-            <ItemWidget 
-            :widgetID="w.id" :widgetName="w.componentName" @remove-widget="removeWidget(w.id)">
-              <component 
-              :widgetID="w.id" :is="w.component"  @set-name="(n)=>w.componentName=n">
+            <ItemWidget :widgetID="w.id" @remove-widget="removeWidget(w.id)">
+              <template #title>
+                  <h3>{{ w.componentName }}</h3>
+              </template>
+              <component class="widget-body" @setTitle="(t)=>w.componentName=t" :widgetID="w.id" :is="w.component">
               </component>
             </ItemWidget>
       </div>
@@ -164,11 +161,16 @@ function isValidJSON(str) {
 }
 
 .grid-stack-item {
-  overflow: scroll;
+
   text-align: center;
   line-height: 35px;
+  .grid-stack-item-content{
+    overflow: hidden;
+  }
 }
-
+.widget-body{
+  height: calc( 100% - 40px );
+}
 
 
 </style>

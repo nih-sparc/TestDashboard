@@ -1,17 +1,17 @@
+
+/* eslint-disable */
 <template>
     <svg
       xmlns="http://www.w3.org/2000/svg"
       :width="width"
       :height="height"
-      :fill="color"
-      :direction="dir"
+
       viewBox="0 0 24 24"
     >
-    <circle id="Oval" fill="#8300BF" cx="12" cy="12" r="12"></circle>
-    <g id="Group-13" stroke-linecap="square" transform="translate(12.000000, 12.000000) rotate(45.000000) translate(-12.000000, -12.000000) translate(4.000000, 4.000000)" fill="#FFFFFF">
-    <path pid="0" d="M9,-4.54747351e-13 L9,6.999 L16,7 L16,9 L9,8.999 L9,16 L7,16 L7,8.999 L4.54747351e-13,9 L4.54747351e-13,7 L7,6.999 L7,-4.54747351e-13 L9,-4.54747351e-13 Z"/>
-    </g>
-   </svg>
+        <circle pid="0" cx="12" cy="12" r="12" :fill="background"/>
+        <path pid="1" :fill="color" d="M18.364 7.05L13.414 12l4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636l4.95 4.95 4.95-4.95 1.414 1.414z" stroke-linecap="square" />
+
+  </svg>
   </template>
   
   <script>
@@ -28,14 +28,12 @@
       },
       color: {
         type: String,
-        default: "currentColor",
+        default: "#000000",
       },
-      dir:{
-        type:String,
-        default: "ltr"
+      background: {
+        type: String,
+        default: "#ffffff00",
       }
     },
   };
   </script>
-  
-  

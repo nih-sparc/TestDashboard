@@ -15,7 +15,7 @@
     const opener = useOpenerStore();
 
     const props = defineProps({
-        widgetName:{
+        title:{
                 type:String,
                 required:true
             },  

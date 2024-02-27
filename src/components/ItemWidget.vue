@@ -2,8 +2,8 @@
             <div ref="instance" class="grid-stack-item-content">
 
                 <div class="content-header stick-to-top">
-                    <h3>{{ widgetName }}</h3>
-                    <close class="close-button" @click="$emit('removeWidget')"></close>
+                    <slot name="title"></slot>
+                    <close background="#8300BF" color="white" class="close-button" @click="$emit('removeWidget')"></close>
                 </div>
                 <slot></slot>
             </div>
@@ -19,11 +19,7 @@
 
     let instance = ref(null);
 
-    const props = defineProps({
-            widgetName:{
-                type:String,
-                required:true
-            },           
+    const props = defineProps({      
             widgetID:{
                 type:String,
                 required:true
@@ -47,13 +43,14 @@ onMounted(()=>{
     display:flex;
     flex-flow:row;
     border: 1px solid $lineColor1;
+    height: 40px;
     
     h3{
         margin:10px;
     }
     .close-button{
         cursor: pointer;
-        padding:10px;
+        margin-right:3px;
         width:20px;
         height: 20px;
     }

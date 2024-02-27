@@ -1,4 +1,5 @@
 <template>
+    <slot ></slot>
     <div class="fill">
         <img :src=imgPath>
     </div>
@@ -28,7 +29,9 @@
   const emitter = inject('emitter');
   const opener = useOpenerStore();
 
-  const name = "SubjectNav"
+  const emit = defineEmits(['setTitle'])
+  emit('setTitle','Navigate by Subject');
+
   const imgPath = ref("./imgs/filter.png");
   const imgPath2 = ref("./imgs/sub1.png");
   const imgPath3 = ref("./imgs/sub2.png");
