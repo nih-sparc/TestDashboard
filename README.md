@@ -1,6 +1,5 @@
 # TestDashboard
-
-This template should help get you started developing with Vue 3 in Vite.
+The test dashboard is part of the Sparc Portal and is meant to compare various vagus nerve images. This is v1. Will be migrated and renamed. 
 
 ## Recommended IDE Setup
 
@@ -44,3 +43,152 @@ Yarn run build
 ```sh
 Yarn run lint
 ```
+
+
+# DOCUMENTATION 
+- adding custom component to dashboard
+
+### DESCRIPTION
+Custom component that can be added within the dashboard and has the capabilities to interact with other components.
+
+
+### INSTALLATION
+Clone the github repo and navigate to src/components/SampleComponent.vue
+
+Expose Your Custom Component to the Dashboard:
+ - Add component tag name to the main.ts document
+	src/main.ts
+```
+const componentMap = [
+   'SubjectNav',
+   'ImageSelector',
+   'ImageViewer'
+  ] 
+```
+
+Using the component “SampleComponent”, It would look something like this:
+```
+const componentMap = [
+   'SubjectNav',
+   'ImageSelector',
+   'ImageViewer',
+   'SampleComponent'
+    ]
+```
+
+* component name should align with file name. SampleComponent.vue should be renamed and then that new name should be added in main.ts 
+
+
+### PROPERTIES
+These are passed down to the your component (SampleComponent) from its wrapper via the props value
+
+
+**widgetName**: 
+name of component tag. Changing this will change the title of the wrapper. If you want a display name that is different from the file name. 
+Set Display name (widgetName) using emit.
+   ```
+const emit = defineEmits(['setName']);
+emit('setName','New Custom Component!'); //replace with component name you want shown
+```
+
+
+
+### CUSTOM EMITS/EVENTS:
+
+SPARC Dashboard  uses mitt to implement an event bus. You can use the following methods to emit a custom event that other widgets can pick up or listen to. For example, if your widget has a feature that selects a custom filter and you want it available throughout the dashboard for other widgets to know about, emit your event this way. 
+
+In your project:
+Import inject from vue. 
+Assign a value to ‘emitter’
+   ```
+import {inject} from 'vue';
+const emitter = inject('emitter');
+```
+this is already done for you in the SampleWidget
+
+***Building a custom emit/event***
+Send your event using naming convention ComponentName-eventName
+Example:
+   ```
+let payload ={}
+emit('SampleComponent-eventName',payload);
+```
+	*see options for events you can emit that are already standard throughout the dashboard. 
+
+### OPTIONS
+
+***setName:*** 
+component ‘s name defaults to it’s vue tag-name. This allows you override it and add a different name
+
+Example:
+   ```
+const emit = defineEmits(['setName']);
+emit('setName','MUSE Image Viewer');
+```
+
+**other options to come. Examples might include a standard way of setting a filter that most widgets would find useful (age/sex/metadata for example)**
+
+### EVENTS
+
+***ImageSelector-selectImage***
+- Thrown when image selector widget has selected an image
+Example:
+
+```
+emitter.on('ImageSelector-selectImage', (value) => { 
+       //do something
+   });
+   ```
+Here is an example of the SampleComponent.vue file as of 1/26/2024. See github for latest versions
+
+```
+<template>
+   <div ref="instance">
+       <!-- all markup -->
+   </div>
+</template>
+<script setup>
+
+
+   import { ref, defineEmits, inject, watch, onMounted, onUnmounted } from 'vue';
+   import { useOpenerStore } from '../stores/opener';
+
+
+   //allows you to emit events that can be caught by other components.
+  const emitter = inject('emitter');
+   const opener = useOpenerStore();
+
+
+   const props = defineProps({
+       widgetName:{
+               type:String,
+               required:true
+       }
+   })
+  
+   const emit = defineEmits(['setName']);
+   emit('setName','New Custom Component!'); //replace with component name you want shown
+
+
+   //emit and event
+   let payload ={}
+   emit('SampleComponent-eventName',payload);
+
+
+   //catch an event
+   // This catches when Image Selector throws the event when the image selector widget has an image selected
+   //see Events in documentation for all available events
+   emitter.on('ImageSelector-selectImage', (imagePath) => { 
+       //do something
+   });
+
+
+</script>
+<style scoped lang="scss">
+//import SPARC styles
+@import '../assets/delete-when-dsc2-imported/_variables.scss';
+
+
+</style>
+```
+
