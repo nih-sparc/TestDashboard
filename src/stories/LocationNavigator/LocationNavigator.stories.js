@@ -1,4 +1,4 @@
-import LocationNav from '../,,/demo/locationnavdemo.vue'
+import LocationNav from '../../demo/locationnavdemo.vue'
 import BranchSlider from '../../devComponents/BranchSlider.vue'
 
 export default {
