@@ -1,5 +1,5 @@
 
-import LocationNav from '../../demo/locationnavdemo.vue'
+import LocationNav from '../../demo/NewLocationNavDemo.vue'
 
 import BranchSlider from '../../devComponents/BranchSlider.vue'
 
