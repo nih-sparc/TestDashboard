@@ -22,10 +22,17 @@ jobs:
         uses: actions/checkout@v2.3.1
         with:
           persist-credentials: false
-      - name: Install and Build
-        run: |
-          yarn
-          yarn run build-storybook
-          yarn run storybook
+      - name: Testing_Flow
+        uses: bitovi/github-actions-storybook-to-github-pages@v1.0.1
+        with:
+          install_command: yarn install # default: npm ci
+          build_command: yarn build-storybook # default: npm run build-storybook
+          path: storybook-static # default: dist/storybook
+          checkout: false # default: true
+      # - name: Install and Build
+      #   run: |
+      #     yarn
+      #     yarn run build-storybook
+      #     yarn run deploy-storybook
         env:
           GH_TOKEN: ${{ github.actor }}:${{ secrets.GH_TOKEN }}
