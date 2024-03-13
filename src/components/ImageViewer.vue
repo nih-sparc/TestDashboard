@@ -3,16 +3,16 @@
 
     </div>
     <div ref="instance" @click="listening = !listening" class="viewer-img">
-        <img :src=imgPath> 
+        <img :src=props.imageSrc> 
     </div>
 </template>
 <script setup>
 
     import { ref, defineEmits, inject, watch, onMounted, onUnmounted } from 'vue';
-    import { useOpenerStore } from '../stores/opener';
+    //import { useOpenerStore } from '../stores/opener';
 
     const emitter = inject('emitter');
-    const opener = useOpenerStore();
+    //const opener = useOpenerStore();
 
     const props = defineProps({
         title:{
@@ -22,36 +22,39 @@
         widgetID:{
                 type:String,
                 required:true
-            }
+            },
+        imageSrc:{
+            type:String
+        }
     })
 
     const listening = ref(false);
-    const imgPath = ref("");
 
     
     const emit = defineEmits(['setName']);
     emit('setName','MUSE Image Viewer');
 
 
-    emitter.on('Dashboard-Image-Selected', (value) => {  
-        if(listening.value || opener.ImageViewerCount===1){
-            imgPath.value = value;
-        }
-    });
+    // emitter.on('SparcDashboard-addNewWidget', (value) => { 
+    //     if(value[0]) 
+    //     if(listening.value || opener.ImageViewerCount===1){
+    //         imgPath.value = value;
+    //     }
+    // });
 
     //uses widgetID to specify own wrapper
     watch(() => listening.value, (newVal, oldVal) => {
            emitter.emit('ImageViewwer-imageSelected-'+props.widgetID, newVal);
     });
 
-onMounted(()=>{
-    opener.ImageViewerOpen = true;
-    opener.ImageViewerCount++;
-})
-onUnmounted(()=>{
-    opener.ImageViewerOpen = false;
-    opener.ImageViewerCount--;
-})
+// onMounted(()=>{
+//     opener.ImageViewerOpen = true;
+//     opener.ImageViewerCount++;
+// })
+// onUnmounted(()=>{
+//     opener.ImageViewerOpen = false;
+//     opener.ImageViewerCount--;
+// })
     //have the data on the dashboard save, not just the positions
 
 </script>

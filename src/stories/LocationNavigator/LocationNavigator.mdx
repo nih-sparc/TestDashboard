@@ -14,9 +14,8 @@ The Location Navigator component accepts the following properties:
 `dataList`: The default list is the vagus anatomical locations. You can change the list to by sending the property dataList, which is an array of strings. 
 
 ## Events
-`SparcDashboard-addNewWidget`: Will fire when a user makes a selection change. This tells the dashboard to add a new widget to the dashboard.
+`SparcDashboard-addNewWidget`: Will fire when a user adds any new widget to the dashbaord using the opener store. You can listen for it if you want to program an action off of it. 
 
-`Dashboard-Image-Selected`: Will fire when a user makes a selection change. Returns a type string that is the location identifier. This can be listened to by any component.
 
 ### Location Navigator
 
@@ -27,7 +26,9 @@ The Location Navigator component accepts the following properties:
 to listen for location-navigator event
 ```js
 
-    emitter.on('Dashboard-Image-Selected', (value) => {  
+    emitter.on('SparcDashboard-addNewWidget', (payload) => {  
+      if(payload[0]=='SomeOtherComponent')
+      //payload[0] is the component name and payload[1] is the components properties in the form of an array
         //do something with the payload
     });
 

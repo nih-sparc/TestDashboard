@@ -27,9 +27,9 @@
     emit('SampleComponent-eventName',payload);
 
     //catch an event
-    // This catches when Image Selector throws the event when the image selector widget has an image selected
+    // This catches when a new widget is added to the sparc dashboard main component
     //see Events in documentation for all available events
-    emitter.on('Dashboard-Image-Selected', (value) => {  
+    emitter.on('SparcDashboard-addNewWidget', (value) => {  
         //do something
     });
 

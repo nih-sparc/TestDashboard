@@ -37,13 +37,9 @@
   const imgPath3 = ref("./imgs/sub2.png");
 
 function selectSubject(img){
-    if(!opener.imageSelectorOpen){
-        emitter.emit("addNewWidget","ImageSelector");
-    }
-    nextTick(()=>{
-        emitter.emit('selectSubject', img);
-    })
-
+    //if(!opener.imageSelectorOpen){
+    opener.openWidget("ImageSelector", [{key:"imageSrc",value:img}])
+    //}
 }
 </script>
 <style scoped lang="scss">

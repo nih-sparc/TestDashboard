@@ -1,9 +1,35 @@
+import axios from "axios";
+const base = 'https://sparc-api.herokuapp.com/'
+
+const CreateBaseApiService = (resource) => {
+  return {
+    // Get a list of resources
+    searchDataset: (id) => axios.get(`${base}image_search/${id}`),
+    // Get a single resource by its id
+    getBLVLink: (id) => axios.get(`${base}image_blv_link/${id}`),
+    // Create a new resource
+    //create: (payload) => axios.post(`${base}/${resource}`, payload),
+    // Replace an existing resource with payload
+    //update: (id, payload) => axios.put(`${base}/${resource}/${id}`, payload),
+  };
+};
+
+
+export const biolucida = {
+  ...CreateBaseApiService("users"),
+  //custom: axios.get(`${base}/some/custom/route`, config),
+};
+
 const searchDataset = async (id) => {
     const { $portalApiClient } = useNuxtApp()
     const response = await $portalApiClient.get('image_search/' + id)
     return response.data
   }
-  
+  const getBLVLink = async (id) => {
+    const { $portalApiClient } = useNuxtApp()
+    const response = await $portalApiClient.get('image_blv_link/' + id)
+    return response.data
+  }
   const getXMPInfo = async (id) => {
     const { $portalApiClient } = useNuxtApp()
     const response = await $portalApiClient.get('image_xmp_info/' + id)
@@ -39,11 +65,7 @@ const searchDataset = async (id) => {
     return $portalApiClient.get('collections/' + id)
   }
   
-  const getBLVLink = async (id) => {
-    const { $portalApiClient } = useNuxtApp()
-    const response = await $portalApiClient.get('image_blv_link/' + id)
-    return response.data
-  }
+
   
   const fetchNeurolucida360Url = (payload) => {
     const { $mbfSparcApiClient } = useNuxtApp()
