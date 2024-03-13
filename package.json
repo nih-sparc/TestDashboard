@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@abi-software/flatmapvuer": "^0.6.1-vue3.8",
+    "@tsconfig/node21": "^21.0.1",
     "axios": "^1.6.7",
     "element-plus": "^2.4.3",
     "gridstack": "^9.5.0",
