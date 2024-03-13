@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="flatmap-viewer h-4/6 flex justify-center mb-1">
-            <FlatmapVuer disableUI="true" entry="UBERON:1759" v-on:resource-selected="FlatmapSelected"  v-on:ready="FlatmapReady"/>
+            <FlatmapVuer disableUI="true" minZoom="6" entry="UBERON:1759" v-on:resource-selected="FlatmapSelected"  v-on:ready="FlatmapReady"/>
         </div>
         <el-table :data="TableData" class="table-of-images h-2/6 text-sm">
             <el-table-column prop="name" label="Name"/>
