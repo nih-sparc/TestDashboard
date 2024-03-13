@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="flatmap-viewer h-4/6 flex justify-center mb-1">
-            <FlatmapVuer entry="UBERON:1759" v-on:resource-selected="FlatmapSelected"  v-on:ready="FlatmapReady"/>
+            <FlatmapVuer disableUI="true" entry="UBERON:1759" v-on:resource-selected="FlatmapSelected"  v-on:ready="FlatmapReady"/>
         </div>
         <el-table :data="TableData" class="table-of-images h-2/6 text-sm">
             <el-table-column prop="name" label="Name"/>
@@ -17,6 +17,7 @@
 <script setup>
   import { ref, inject, nextTick} from "vue";
   import {Dataset} from '../assets/Model';
+  import { Api } from "../services";
   import {FlatmapVuer, MultiFlatmapVuer} from '@abi-software/flatmapvuer';
   import { useOpenerStore } from "../stores/opener";
   FlatmapVuer.props.flatmapAPI.default="https://mapcore-demo.org/devel/flatmap/v4/";
@@ -33,25 +34,31 @@
             dataList:{
                 type:Array,
                 required:false
-            },
+            }
         })
 function FlatmapSelected(data){
     Location = data.feature.featureId;
-    console.log("featureId: "+ Location);
-    
-    fetch('./dataByLocation.json')
-        .then((response) => response.json())
-        .then((json) => buildDataTable(Object.assign(new Dataset(json)).Imgs),
-        );
+    getImagesFromDataset(353);
 }
+
+const getImagesFromDataset = async (datasetId)=>{
+            let _biolucidaImageData = {};
+            let _response = {};
+            try{
+                await Api.biolucida.searchDataset(datasetId).then(response =>{
+                    _response = response;
+                })
+                if (_response.status === 200) {
+                _biolucidaImageData = _response;
+                buildDataTable(Object.assign(new Dataset(_biolucidaImageData.data.dataset_images)).Imgs);
+                }
+            }catch(e){
+                console.error("couldn't fetch images from dataset");
+            }
+        }
 function selectImage(index){
     let img = TableData.value[index].path;
-    if(!opener.ImageViewerOpen){
-        emitter.emit("SparcDashboard-addNewWidget","ImageViewer");
-    }
-    nextTick(()=>{
-        emitter.emit('Dashboard-Image-Selected', baseUrl+img);
-    })
+    opener.openWidget("BiolucidaViewer", [{key:"mbfLink",value:img}])
 }
 
 function buildDataTable(Imgs){
@@ -71,12 +78,6 @@ function buildDataTable(Imgs){
     .flatmap-viewer{
         :deep(.flatmap-container){
             width: 100%;
-        }
-        :deep(.icon-button){
-            display:none;
-        }
-        :deep(.tooltip){
-            display:none;
         }
     }
     .open-image{

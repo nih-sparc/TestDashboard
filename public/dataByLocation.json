@@ -1,8 +1,8 @@
-{
-    "Imgs":[
+
+    [
         {
-            "ImgName":"ImgName_2019",
-            "Path":"img1.png",
+            "image_id":"ImgName_2019",
+            "share_link":"https://sparc.biolucida.net/image?c=MjE1NjctY29sLTI0OA%3D%3D",
             "Subject":{
                 "ID":"sub-12",
                 "Sex":"F",
@@ -14,8 +14,8 @@
             }
         },
         {
-            "ImgName":"ImgName4_2013",
-            "Path":"img2.png",
+            "image_id":"ImgName4_2013",
+            "share_link":"https://sparc.biolucida.net/image?c=MjE1NjgtY29sLTI0OA%3D%3D",
             "Subject":{
                 "ID":"sub-12",
                 "Sex":"F",
@@ -27,8 +27,8 @@
             }
         },
         {
-            "ImgName":"ImgName200_2013",
-            "Path":"img1.png",
+            "image_id":"ImgName200_2013",
+            "share_link":"https://sparc.biolucida.net/image?c=MjE1NjktY29sLTI0OA%3D%3D",
             "Subject":{
                 "ID":"sub-100",
                 "Sex":"M",
@@ -40,4 +40,3 @@
             }
         }
     ]
-}

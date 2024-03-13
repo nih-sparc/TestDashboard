@@ -1,61 +1,45 @@
 <template>
     <div class="bv-metadata text-left p-1 text-sm">
         <p><span>Dataset: </span>
-Mapping of dorsal root ganglia sensory nerve populations in the mouse lung </p>
-        <p><span>Age: </span>4</p>
-        <p><span>Sex: </span>Female</p>
+Dataset Name Here </p>
+        <p><span>Metadata: </span>Metadata could go here</p>
     </div>
     <div class="bio-viewer h-screen flex justify-center">
-        <iframe class="p-1 w-screen" src="https://sparc.biolucida.net/image?c=MjE1NzItY29sLTI0OA%3D%3D" ></iframe>
+        <iframe class="p-1 w-screen" :src="props.mbfLink" ></iframe>
     </div>
 
 </template>
 <script setup>
-  import { ref} from "vue";
-  import biolucida from '@/services/biolucida'
+  import {ref, watch} from "vue";
+  import { Api } from "../services";
   import {Dataset} from '../assets/Model';
 
+  let mbfLink =ref("");
   const props = defineProps({
+    imageID:0,
+    mbfLink: {type:String}
+  })
+    // watch(() => mbfLink.value, (newVal) => {
+    //        console.log(mbfLink);
+    // });
 
-        })
 
-        const getImagesFromDataset = async (datasetId)=>{
-            let _biolucidaImageData = {};
-            let _response = {};
-
-            try{
-                await biolucida.searchDataset(datasetId).then(response =>{
-                    _response = response;
-                    console.log(response)
-                })
-
-              
-                if (_response.status === 'success') {
-
-                _biolucidaImageData = _response;
-
-                }
-            }catch(e){
-                console.error("couldn't fetch images from dataset");
-            }
-        }
-
-        const getImageURLByID = async(imageId)=>{
+        const getImageURLByID = async(_imageId)=>{
             let _biolucidaUrl = {};
             let _response ={};
-                
             try{
-                await biolucida.getImageURLByID(imageId).then(response =>{
+                await Api.biolucida.getBLVLink(_imageId).then(response =>{
                     _response = response;
-                    if(_response.status==='sucess'){
+                    if(_response.status===200){
                         _biolucidaUrl = response;
+                        mbfLink.value = response.data.link;
                     }
                 })
             }catch(e){
                 console.error("couldn't get image url by id");
             }
         }
-   // getImageURLByID(16179);
+   // getImageURLByID(21572);
 </script>
 <style scoped lang="scss">
 .bv-metadata{

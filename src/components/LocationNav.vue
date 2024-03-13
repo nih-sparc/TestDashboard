@@ -42,12 +42,10 @@
 function selectImage(index){
 
     let img = TableData.value[index].path;
-    if(!opener.ImageViewerOpen){
-        emitter.emit("SparcDashboard-addNewWidget","ImageViewer");
-    }
-    nextTick(()=>{
-        emitter.emit('Dashboard-Image-Selected', baseUrl+img);
-    })
+    opener.openWidget("BiolucidaViewer", [{key:"mbfLink",value:img}])
+    // if(!opener.ImageViewerOpen){
+    //     emitter.emit("SparcDashboard-addNewWidget","ImageViewer");
+    // }
     
 }
 function selectLocation(location){

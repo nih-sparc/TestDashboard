@@ -31,20 +31,15 @@
     const emitter = inject('emitter');
     const opener = useOpenerStore();
 
-    const imgPath = ref();
-    const imgPath2 = ref();
-    const imgPath3 = ref();
+    const imgPath = ref("./imgs/imgInfo.png");
+    const imgPath2 = ref("./imgs/imgSel.png");
+    const imgPath3 = ref("./imgs/imgSel2.png");
 
     const emit = defineEmits(['setName'])
     emit('setName','MUSE Image Selector');
 
     function selectImage(img){
-        if(!opener.ImageViewerOpen){
-            emitter.emit("SparcDashboard-addNewWidget","ImageViewer");
-        }
-        nextTick(()=>{
-            emitter.emit('Dashboard-Image-Selected', img);
-        })
+        opener.openWidget("ImageViewer",[{key:"imageSrc",value:img}]);
     }
 
     emitter.on('selectSubject', (value) => {  
@@ -53,12 +48,12 @@
         imgPath3.value = "./imgs/imgSel2.png";
     });
     
-onMounted(()=>{
-    opener.imageSelectorOpen = true;
-})
-onUnmounted(()=>{
-    opener.imageSelectorOpen = false;
-})
+// onMounted(()=>{
+//     opener.imageSelectorOpen = true;
+// })
+// onUnmounted(()=>{
+//     opener.imageSelectorOpen = false;
+// })
 //'./imgs/imgInfo.png'
 
 </script>

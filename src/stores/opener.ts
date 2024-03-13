@@ -1,11 +1,18 @@
-import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
+import {inject} from 'vue'
 
-export const useOpenerStore = defineStore('opener', () => {
+export const useOpenerStore = defineStore('opener',{
 
-    const imageSelectorOpen = ref(false);
-    const ImageViewerOpen = ref(false);
-    const ImageViewerCount = ref(0);
-
-  return { imageSelectorOpen, ImageViewerOpen, ImageViewerCount }
+  state:() => ({
+    emitter: inject('emitter'),
+    imageSelectorOpen: false,
+    ImageViewerOpen: false,
+    ImageViewerCount: false
+  }),
+  actions:{
+    openWidget(widgetName, props){
+      this.emitter.emit("SparcDashboard-addNewWidget",[widgetName, props]);
+    },
+  },
+    
 })

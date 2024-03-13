@@ -29,10 +29,10 @@
     minisearch "^2.2.1"
     polylabel "^1.1.0"
 
-"@abi-software/flatmapvuer@^0.6.0-vue3.3":
-  version "0.6.0-vue3.3"
-  resolved "https://registry.yarnpkg.com/@abi-software/flatmapvuer/-/flatmapvuer-0.6.0-vue3.3.tgz#950546ff1af953dddaf659c70a3d509650970d7e"
-  integrity sha512-egCzbwR301WTo2u28ZYCV4kPwCBa3xkZ+RehXUeZPVwfGz25BUuQuIV1D6Hepj4QX7EfUXPnyk2KvI85mY8XNQ==
+"@abi-software/flatmapvuer@^0.6.1-vue3.8":
+  version "0.6.1-vue3.8"
+  resolved "https://registry.yarnpkg.com/@abi-software/flatmapvuer/-/flatmapvuer-0.6.1-vue3.8.tgz#aecf1aa80fe26c55fb4f711c561d593844e6c503"
+  integrity sha512-shanbbXLVGcInx64Ym2zjLCLxnLIHtYKaYoKXWuFfAZpmS187HQJSoO44SMDL4rRzSEyoO9MygN7hKwW2CrGCg==
   dependencies:
     "@abi-software/flatmap-viewer" "^2.4.4"
     "@abi-software/sparc-annotation" "0.0.5"

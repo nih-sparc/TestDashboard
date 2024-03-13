@@ -4,9 +4,9 @@
     </div>
     <el-col>
       <el-row class="m-12">
-        <el-select v-model="NewComponent" placeholder="Add New Widget">
+        <el-select :value="NewComponent.Name" placeholder="Add New Widget">
           <el-option
-            v-for="item in ComponentListOptions" :key="item" :label="item" :value="item" @click="addNewWidget()">
+            v-for="item in ComponentListOptions" :key="item" :label="item" :value="item" @click="addNewWidget(item)">
           </el-option>
         </el-select>
         <el-button type="default" @click="saveDashboard()" disabled >Save Dashboard</el-button>
@@ -26,7 +26,7 @@
               <template #title>
                   <h3>{{ w.componentName }}</h3>
               </template>
-              <component class="widget-body" @setTitle="(t)=>w.componentName=t" :widgetID="w.id" :is="w.component">
+              <component class="widget-body" @setTitle="(t)=>w.componentName=t" :widgetID="w.id" :is="w.component" :[w.propName]="w.propVal">
               </component>
             </ItemWidget>
       </div>
@@ -37,7 +37,7 @@
 
 <script setup>
 
-import { ref, onBeforeMount, onMounted, nextTick, inject} from 'vue';
+import { ref, onBeforeMount, onMounted, nextTick, inject, computed} from 'vue';
 import { GridStack } from 'gridstack';
 import ItemWidget from './ItemWidget.vue';
 import NavWidget from './NavWidget.vue';
@@ -56,7 +56,7 @@ let NavItem = ref({});
 let DashboardItems = ref([]);
 getItemsFromLS();
 let ComponentListOptions = _globalVars.componentList;
-let NewComponent = ref("");
+let NewComponent = {};
 let NextId = DashboardItems.value.length;
 
 
@@ -66,6 +66,7 @@ onBeforeMount(() => {
   onMounted(() => {
     initGridStack();
   });
+
 
 //retrieve dataset as json ------------------------------- - - - - - - - --------- - -- - -- - - -
 function retrieveDataset(){
@@ -91,8 +92,16 @@ function initGridStack(){
 }
 //All additional Functions - - - - - - - - -- - - - - --  -- - -- - - - - - - -  --
 
-function addNewWidget() {
-    const node = {id:NewComponent.value+"-"+NextId,w:2,h:6,autoPosition:true, component: NewComponent.value, componentName:NewComponent.value};
+function addNewWidget(name) {
+    if(name){
+      NewComponent.Name = name;
+      NewComponent.Props = new Map();
+    }
+    const node = {id:NewComponent.Name+"-"+NextId,w:2,h:6,autoPosition:true, component: NewComponent.Name, componentName:NewComponent.Name};
+    for(let [key,val] of NewComponent.Props){
+      node.propName=key
+      node.propVal = val;
+    }
     NextId++;
     //add component to items array first. this will update the dom
     DashboardItems.value.push(node);
@@ -103,7 +112,15 @@ function addNewWidget() {
     });
 }
 _emitter.on('SparcDashboard-addNewWidget', (value) => { 
-      NewComponent.value = value;
+      NewComponent.value={}
+      NewComponent.Props = new Map();
+      NewComponent.Name = value[0];
+      value[1].forEach((val)=>{
+        NewComponent.Props.set(val.key,val.value);
+      })
+
+      
+      
       addNewWidget()  
   })
   
