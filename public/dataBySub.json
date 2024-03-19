@@ -1,0 +1,41 @@
+{
+    "subject_id":"sub-23",
+    "species": "human",
+
+    "ear_tag_number":"",
+    "treatment":"",
+    "initial_weight":"",
+    "height_inches":69,
+    "gender":"male",
+    "body_mass_weight": "",
+    "anesthesia":null,
+    "stimulation_site":null,
+    "stimulator":null,
+    "stimulating_electrode_type": null,
+    "nerve":"vagus",
+    "images": 
+        [
+            {
+                "sample_id":"sam-212",
+                "anatomical_region":"Cranial Inferior",
+                
+                "file_id": "2193586",
+                "image_id": "21567",
+                "share_link": "https://sparc.biolucia.net/image?c=MjE1NjctY29sLTI0OA%3D%3D",
+                "sourcepkg_id":"N:package:3d2ff4af-0d5f-40e1-a041-22713ba5f81f",
+                "thumbnail_url": "https://sparc.biolucida.net/api/v1/thumbnail/21567",
+                "type_field":"col248"
+            },
+            {
+                "sample_id":"sam-213",
+                "anatomical_region":"Cranial Superior",
+                
+                "file_id": "2193583",
+                "image_id": "21563",
+                "share_link": "https://sparc.biolucia.net/image?c=MjE1NjctY29sLTI0OA%3D%3D",
+                "sourcepkg_id":"N:package:3d2ff4af-0d5f-40e1-a041-22713ba5f81f",
+                "thumbnail_url": "https://sparc.biolucida.net/api/v1/thumbnail/21563",
+                "type_field":"col248"
+            }
+        ]        
+}

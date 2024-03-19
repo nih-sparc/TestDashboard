@@ -1,0 +1,51 @@
+import { Meta, Story } from '@storybook/blocks';
+import * as stories from './BiolucidaViewer.stories.js';
+
+
+<Meta title="Components/BiolucidaViewer" />
+
+# Biolucida Viewer
+The Biolucida Viewer uses the MBF Bilucida Viewer to display a images of the vagus nerve.
+https://www.mbfbioscience.com/help/biolucidaEducation/Default.htm#BL_ViewerTour.htm
+
+## Events
+**Opener**
+- How to open the Biolucida Viewer from another component.
+
+```js
+    
+    import { useOpenerStore } from "../stores/opener";
+    const opener = useOpenerStore();
+    opener.openWidget("BiolucidaViewer", [{key:"mbfLink",value:img}])
+```
+**key/value pair** - an array of key value pairs that tell the opener the properties that need to be passed down to the component.
+
+key - property name
+
+value - property value
+
+### Properties
+**mbfLink** - the link used in the iframe of the mbfviewer that's inside the biolucida-viewer
+
+```html
+    <biolucida-viewer mbfLink="https://sparc.biolucida.net/image?c=MjE1NjctY29sLTI0OA%3D%3D"/>
+```
+* use :mbfLink if using variable
+
+### Biolucida Viewer Standard View
+
+<Story of={stories.Primary}>{stories.Primary()}</Story>
+
+#### Code
+
+how biolucida viewer is being add to the dashboard
+```html
+
+    <item-widget>
+        <template #title>
+            <h3>Biolucida Viewer</h3>
+        </template>
+        <biolucida-viewer/>
+    </item-widget>
+
+```

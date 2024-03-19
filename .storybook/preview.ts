@@ -4,6 +4,12 @@ import { setup, app } from '@storybook/vue3'
 import 'element-plus/dist/index.css';
 import sparcTheme from './sparcTheme'
 import ElementPlus from 'element-plus'
+import { createPinia } from 'pinia';
+import mitt from 'mitt';
+
+const pinia = createPinia();
+const emitter = mitt();
+
 
 const viewports = {
   mobile: {
@@ -67,5 +73,7 @@ const preview = {
 };
 setup((app)=>{
   app.use(ElementPlus);
+  app.use(pinia);
+  app.provide('emitter', emitter); 
 })
 export default preview;

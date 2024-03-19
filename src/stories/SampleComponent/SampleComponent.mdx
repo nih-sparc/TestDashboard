@@ -1,0 +1,70 @@
+import { Meta, Story } from '@storybook/blocks';
+import * as stories from './SampleComponent.stories.js';
+
+
+<Meta title="Components/SampleComponent" />
+
+# Biolucida Viewer
+An example of how to build your own component for the Sparc Dashboard.
+
+## Events
+**Opener**
+
+ How to open another component from your component.
+
+```js
+    
+    import { useOpenerStore } from "../stores/opener";
+    const opener = useOpenerStore();
+    opener.openWidget("ComponentName", [{key:"propertyName",value:propertyValue}])
+```
+**ComponentName** - this is the unique name of the component, how it appears in the drop down as well as the file name.
+
+**key/value pair** - an array of key value pairs that tell the opener the properties that need to be passed down to the component.
+
+key - property name
+
+value - property value
+
+**Listener**
+
+How to listen for the known events of another component that is inside the dashboard
+
+```js
+    import {inject} from 'vue';
+    const emitter = inject('emitter');
+    
+    emitter.on('ComponentName-componentEvent', (payload) => { 
+        //do something
+    });
+```
+
+### Properties
+**defineProps** - define the properties you want to be passed to your component
+```js
+    const props = defineProps({
+        propertyName:{
+                type:String,
+                required:true
+        }
+    })
+```
+* use vue 3 documentation for more property information
+
+### A Sample Component
+
+<Story of={stories.Primary}>{stories.Primary()}</Story>
+
+#### Code
+
+how all components are being added to the dashboard
+```html
+
+    <item-widget>
+        <template #title>
+            <h3>Sample Component</h3>
+        </template>
+        <sample-component/>
+    </item-widget>
+
+```

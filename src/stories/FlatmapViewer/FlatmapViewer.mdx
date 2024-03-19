@@ -1,0 +1,40 @@
+import { Meta, Story } from '@storybook/blocks';
+import * as stories from './FlatmapViewer.stories.js';
+
+
+<Meta title="Components/FlatmapViewer" />
+
+# Flatmap Viewer
+The Flatmap Viewer (or Flatmap Selector) uses the abi-software flatmapvuer to display a flatmap of the vagus nerve that can be used to filter down to an image, by its anatomical location on the nerve.
+https://abi-software.github.io/flatmapvuer/
+
+There are no properties specific to the Flatmap Viewer at this time. 
+
+# Events
+The Flatmap emits the event "FlatmapViewer-selectImage" that is fired when an image is selected on the flat map. 
+```js
+    import {inject} from 'vue';
+    const emitter = inject('emitter');
+    
+    emitter.on('FlatmapViewer-selectImage', (selectedImage) => { 
+        //do something
+    });
+```
+
+### Flatmap Basic
+
+<Story of={stories.Primary}>{stories.Primary()}</Story>
+
+#### Code
+
+how flatmap viewer is being add to the dashboard
+```html
+
+    <item-widget>
+        <template #title>
+            <h3>Flatmap Viewer</h3>
+        </template>
+        <flatmap-viewer/>
+    </item-widget>
+
+```

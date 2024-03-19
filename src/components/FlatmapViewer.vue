@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="flatmap-viewer h-4/6 flex justify-center mb-1">
-            <FlatmapVuer disableUI="true" minZoom="6" entry="UBERON:1759" v-on:resource-selected="FlatmapSelected"  v-on:ready="FlatmapReady"/>
+            <FlatmapVuer disableUI="true" entry="UBERON:1759" v-on:resource-selected="FlatmapSelected"  v-on:ready="FlatmapReady"/>
         </div>
         <el-table :data="TableData" class="table-of-images h-2/6 text-sm">
             <el-table-column prop="name" label="Name"/>
@@ -29,13 +29,6 @@
   let TableData = ref();
   let Location ="";
   
-
-  const props = defineProps({
-            dataList:{
-                type:Array,
-                required:false
-            }
-        })
 function FlatmapSelected(data){
     Location = data.feature.featureId;
     getImagesFromDataset(353);
@@ -59,6 +52,7 @@ const getImagesFromDataset = async (datasetId)=>{
 function selectImage(index){
     let img = TableData.value[index].path;
     opener.openWidget("BiolucidaViewer", [{key:"mbfLink",value:img}])
+    emitter.emit("FlatmapViewer-selectImage",TableData.value[index]);
 }
 
 function buildDataTable(Imgs){

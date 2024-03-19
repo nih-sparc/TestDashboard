@@ -1,5 +1,10 @@
 <template>
     <div ref="instance">
+        <div class="sample-component">this is a sample component
+        <div> 
+            <p>more of the component goes here</p>
+        </div>
+        </div>
         <!-- all markup -->
     </div>
 </template>
@@ -38,4 +43,10 @@
 //import SPARC styles
 @import '../assets/delete-when-dsc2-imported/_variables.scss';
 
+.sample-component{
+    height:500px;
+    width:400px;
+    border: solid purple 1px;
+    background-color: lightgray;
+}
 </style>
