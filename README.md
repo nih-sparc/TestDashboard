@@ -1,6 +1,10 @@
 # TestDashboard
 The test dashboard is part of the Sparc Portal and is meant to compare various vagus nerve images. This is v1. Will be migrated and renamed. 
 
+## Storybook
+View the storybook of working components here
+https://nih-sparc.github.io/TestDashboard/?path=/docs/components-biolucidaviewer--docs
+
 ## Recommended IDE Setup
 
 [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
