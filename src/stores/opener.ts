@@ -10,9 +10,14 @@ export const useOpenerStore = defineStore('opener',{
     ImageViewerCount: false
   }),
   actions:{
-    openWidget(widgetName, props){
+    //example of a call to open BiolucidaViewer
+    //  opener.openWidget("BiolucidaViewer", [{key:"mbfLink",value:img}])
+    openWidget(widgetName:string, props:string){
       this.emitter.emit("SparcDashboard-addNewWidget",[widgetName, props]);
     },
+    updateWidget(widgetName:string, props:string){
+      this.emitter.emit("SparcDashboard-updateWidget",[widgetName,props]);
+    }
   },
     
 })

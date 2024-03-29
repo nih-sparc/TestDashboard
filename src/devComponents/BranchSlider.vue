@@ -9,7 +9,7 @@
     </div>
 
 </template>
-<script lang="ts" setup>
+<script setup>
 import { reactive, ref, watch} from "vue";
 
 const props = defineProps({
@@ -34,13 +34,13 @@ let BranchMap = new Map([
 ])
 if(props.dataList && props.dataList.length>0){
     BranchMap.clear();
-    props.dataList.forEach((d:string,i)=>{
+    props.dataList.forEach((d,i)=>{
         BranchMap.set(i,d);
     })
 }
 
 const value = ref(8);
-const formatLabel= (val:number)=>{
+const formatLabel= (val)=>{
     return BranchMap.get(val);
 }
 

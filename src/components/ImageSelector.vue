@@ -2,45 +2,72 @@
     <div class="fill">
         <img :src=imgPath>
     </div>
-    <div class="selector-body">
-        <div @click="selectImage('./imgs/img.png')" class="fill">
-            <img :src=imgPath2>
-        </div>
-        <div @click="selectImage('./imgs/img2.png')" class="fill">
-            <img :src=imgPath3>
-        </div>
-        <div @click="selectImage('./imgs/img.png')"  class="fill">
-            <img :src=imgPath2>
-        </div>
-        <div @click="selectImage('./imgs/img2.png')"  class="fill">
-            <img :src=imgPath3>
-        </div>
-        <div @click="selectImage('./imgs/img.png')"  class="fill">
-            <img :src=imgPath2>
-        </div>
-        <div @click="selectImage('./imgs/img2.png')"  class="fill">
-            <img :src=imgPath3>
-        </div>
-    </div>
+    <el-table :data="TableData" class="table-of-images text-sm">
+            <el-table-column prop="name" label="Name"/>
+            <el-table-column prop="size" label="Size"/>
+            <el-table-column fixed="right" label="Img">
+                <template #default="scope">
+                    <el-button link type="primary" size="small" @click="selectImage(scope.$index)">Open</el-button>
+                </template> 
+            </el-table-column>
+     </el-table>
 
 
 </template>
 <script setup>
     import { ref, inject, onUnmounted, onMounted, nextTick } from "vue";
     import { useOpenerStore } from "../stores/opener";
+    import {Dataset} from '../assets/Model';
+    import { Api } from "../services";
     const emitter = inject('emitter');
-    const opener = useOpenerStore();
+    //const opener = useOpenerStore();
 
-    const imgPath = ref("./imgs/imgInfo.png");
-    const imgPath2 = ref("./imgs/imgSel.png");
-    const imgPath3 = ref("./imgs/imgSel2.png");
+    const imgPath = ref(null);
+
+    let TableData = ref();
 
     const emit = defineEmits(['setName'])
     emit('setName','MUSE Image Selector');
 
-    function selectImage(img){
-        opener.openWidget("ImageViewer",[{key:"imageSrc",value:img}]);
-    }
+function selectImage(index){
+    let img = TableData.value[index].path;
+    emitter.emit("mbf-image-selected",img);
+//  opener.openWidget("BiolucidaViewer", [{key:"mbfLink",value:img}])
+}
+
+emitter.on('anatomical-location-selected',(location)=>{
+    getImagesFromDataset(location);
+});
+//on update
+const getImagesFromDataset = async (datasetId)=>{
+            let _biolucidaImageData = {};
+            let _response = {};
+            try{
+                await Api.biolucida.searchDataset(datasetId).then(response =>{
+                    _response = response;
+                })
+                if (_response.status === 200) {
+                _biolucidaImageData = _response;
+                buildDataTable(Object.assign(new Dataset(_biolucidaImageData.data.dataset_images)).Imgs);
+                }
+            }catch(e){
+                console.error("couldn't fetch images from dataset");
+            }
+        }
+
+function buildDataTable(Imgs){
+    let _tempArr=[];
+    Imgs.forEach((img)=>{
+        let column = {
+            name:img.ImgName,
+            size: "...",
+            path: img.Path
+        }
+        _tempArr.push(column);
+    })
+    TableData.value=_tempArr;
+    imgPath.value = "./imgs/imgInfo.png";
+}
 
     emitter.on('selectSubject', (value) => {  
         imgPath.value = value;

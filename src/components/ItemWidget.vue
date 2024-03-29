@@ -3,7 +3,7 @@
 
                 <div class="content-header stick-to-top">
                     <slot name="title"></slot>
-                    <close background="#8300BF" color="white" class="close-button" @click="$emit('removeWidget')"></close>
+                    <close v-if="!staticMode" background="#8300BF" color="white" class="close-button" @click="$emit('removeWidget')"></close>
                 </div>
                 <slot></slot>
             </div>
@@ -22,6 +22,10 @@
     const props = defineProps({      
             widgetID:{
                 type:String,
+                required:true
+            },
+            staticMode:{
+                type:Boolean,
                 required:true
             }
         })

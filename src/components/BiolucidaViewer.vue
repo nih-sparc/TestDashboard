@@ -1,29 +1,36 @@
 <template>
-    <div class="bv-metadata text-left p-1 text-sm">
-        <p><span>Dataset: </span>
-Dataset Name Here </p>
-        <p><span>Metadata: </span>Metadata could go here</p>
+    <div class="flex flex-col">
+        <div class="bv-metadata text-left p-1 text-sm">
+            <p><span>Dataset: </span>
+    Dataset Name Here </p>
+            <p><span>Metadata: </span>Metadata could go here</p>
+        </div>
+        <div class="bio-viewer h-screen flex justify-center">
+            <iframe class="p-1 w-screen" :src="mbfURLSrc" ></iframe>
+        </div>
     </div>
-    <div class="bio-viewer h-screen flex justify-center">
-        <iframe class="p-1 w-screen" :src="props.mbfLink" ></iframe>
-    </div>
-
 </template>
 <script setup>
-  import {ref, watch} from "vue";
+  import {ref, watch, inject} from "vue";
   import { Api } from "../services";
   import {Dataset} from '../assets/Model';
 
-  let mbfLink =ref("");
   const props = defineProps({
     imageID:0,
     mbfLink: {type:String}
   })
+
+  const emitter = inject('emitter');
+  let mbfURLSrc =ref(props.mbfLink);
+
+
     // watch(() => mbfLink.value, (newVal) => {
     //        console.log(mbfLink);
     // });
 
-
+    emitter.on('mbf-image-selected',(img)=>{
+        mbfURLSrc.value=img;
+    });
         const getImageURLByID = async(_imageId)=>{
             let _biolucidaUrl = {};
             let _response ={};

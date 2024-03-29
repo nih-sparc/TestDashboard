@@ -2,7 +2,7 @@
     <div class="text-3xl font-bold underline">
       Sparc Dashboard
     </div>
-    <el-col>
+    <el-col v-if="!staticMode">
       <el-row class="m-12">
         <el-select :value="NewComponent.Name" placeholder="Add New Widget">
           <el-option
@@ -12,7 +12,10 @@
         <el-button type="default" @click="saveDashboard()" disabled >Save Dashboard</el-button>
       </el-row>
   </el-col> 
-    <div class="grid-stack">
+  <el-col>
+    <el-button @click="staticMode=!staticMode">Edit Grid</el-button>
+  </el-col>
+    <div  ref="root" class="grid-stack">
       <!-- <div class="grid-stack-item" 
       :gs-id="NavItem.id" :gs-x="NavItem.x" :gs-y="NavItem.y" :gs-w="NavItem.w" :gs-h="NavItem.h" :id="NavItem.id" :key="NavItem.id" 
       :gs-no-move="NavItem.noMove" :gs-locked="NavItem.locked" :gs-min-height="3">
@@ -21,8 +24,8 @@
           </NavWidget>
       </div> -->
       <div v-for="(w) in DashboardItems" class="grid-stack-item" 
-      :gs-x="w.x" :gs-y="w.y" :gs-w="w.w" :gs-h="w.h" :gs-id="w.id" :id="w.id" :key="w.id">
-            <ItemWidget :widgetID="w.id" @remove-widget="removeWidget(w.id)">
+      :gs-x="w.x" :gs-y="w.y" :gs-w="w.w" :gs-h="w.h" :gs-id="w.id" :id="w.id" :key="w.id" :locked="false">
+            <ItemWidget :widgetID="w.id" @remove-widget="removeWidget(w.id)" :static-mode="staticMode">
               <template #title>
                   <h3>{{ w.componentName }}</h3>
               </template>
@@ -37,7 +40,7 @@
 
 <script setup>
 
-import { ref, onBeforeMount, onMounted, nextTick, inject, computed} from 'vue';
+import { ref, onBeforeMount, onMounted, nextTick, inject, onUpdated, watch} from 'vue';
 import { GridStack } from 'gridstack';
 import ItemWidget from './ItemWidget.vue';
 import NavWidget from './NavWidget.vue';
@@ -52,8 +55,11 @@ const _globalVars = useGlobalVarsStore();
 let _DatasetImgs = ref({});
 
 let Grid = null;
+const root = ref(null);
 let NavItem = ref({});
-let DashboardItems = ref([]);
+let DashboardItems = ref([
+]);
+let staticMode = ref(true);
 getItemsFromLS();
 let ComponentListOptions = _globalVars.componentList;
 let NewComponent = {};
@@ -61,12 +67,17 @@ let NextId = DashboardItems.value.length;
 
 
 onBeforeMount(() => {
-    //retrieveDataset();
+  DashboardItems.value = [    { id: "FlatmapViewer-1", x: 0, y: 0, h: 20, w:3, componentName:"Flatmap Viewer",component:"FlatmapViewer" },
+    { id: "ImageSelector-2", x: 3, y: 0, h: 20, w:3, componentName:"Image Selector", component:"ImageSelector"},
+    { id: "BiolucidaViewer-3", x: 6, y: 0,h: 20, w:6, componentName:"MBF Viewer", component:"BiolucidaViewer"}]
+
   });
   onMounted(() => {
     initGridStack();
   });
+  onUpdated(() => {
 
+})
 
 //retrieve dataset as json ------------------------------- - - - - - - - --------- - -- - -- - - -
 function retrieveDataset(){
@@ -85,12 +96,16 @@ function initGridStack(){
       minRow: 6,
       margin:5,
       alwaysShowResizeHandle:true,
-      row:28
+      row:28,
+  
     }
     Grid = GridStack.init(options);
-
+    Grid.setStatic(staticMode.value)
 }
 //All additional Functions - - - - - - - - -- - - - - --  -- - -- - - - - - - -  --
+watch(()=> staticMode.value, (value) => {
+  Grid.setStatic(value)
+})
 
 function addNewWidget(name) {
     if(name){
@@ -118,8 +133,6 @@ _emitter.on('SparcDashboard-addNewWidget', (value) => {
       value[1].forEach((val)=>{
         NewComponent.Props.set(val.key,val.value);
       })
-
-      
       
       addNewWidget()  
   })
