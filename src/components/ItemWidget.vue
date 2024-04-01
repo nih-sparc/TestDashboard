@@ -1,7 +1,7 @@
 <template>
             <div ref="instance" class="grid-stack-item-content">
 
-                <div class="content-header stick-to-top">
+                <div class="flex flex-row items-center justify-between h-10 content-header stick-to-top p-1">
                     <slot name="title"></slot>
                     <close v-if="!staticMode" background="#8300BF" color="white" class="close-button" @click="$emit('removeWidget')"></close>
                 </div>
@@ -42,12 +42,7 @@ onMounted(()=>{
 @import '../assets/delete-when-dsc2-imported/_variables.scss';
 
 .content-header{
-    justify-content: space-between;
-    align-items: center;
-    display:flex;
-    flex-flow:row;
-    border: 1px solid $lineColor1;
-    height: 40px;
+    border-bottom: 1px solid $mediumGrey;
     
     h3{
         margin:10px;
@@ -61,10 +56,10 @@ onMounted(()=>{
 }
 
 .grid-stack-item-content {
-    border: 1px solid $lineColor1;
+    border: 1px solid $lightGrey;
     border-radius: 0.2rem;
     text-align: center;
-    background-color: white;
+    background-color: #ebedf0;
     display: flex;
     flex-flow: column;
 }
@@ -82,7 +77,6 @@ onMounted(()=>{
     position: sticky;
     top: 0;
     width: 100%;
-    background:white;
 }
 .focus-from-Img-View{
         border:solid $lightPurple 2px !important;

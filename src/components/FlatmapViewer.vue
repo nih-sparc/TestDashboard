@@ -1,9 +1,10 @@
 <template>
+<div class="flatmap-viewer">
+    <div class="text-left pl-1"><p>select anatomical location</p></div>
 
-        <!-- <div class="flatmap-viewer h-4/6 flex justify-center mb-1"> -->
-            <FlatmapVuer disableUI="true" entry="UBERON:1759" v-on:resource-selected="FlatmapSelected"  v-on:ready="FlatmapReady"/>
+    <FlatmapVuer class="px-2 py-2" disableUI="true" entry="UBERON:1759" v-on:resource-selected="FlatmapSelected"  v-on:ready="FlatmapReady"/>
 
-
+</div>
 
 </template>
 <script setup>
@@ -12,11 +13,10 @@
   import { useOpenerStore } from "../stores/opener";
   FlatmapVuer.props.flatmapAPI.default="https://mapcore-demo.org/devel/flatmap/v4/";
 
+  const emit = defineEmits(['setName']);
+  emit('setName','New Custom Component!'); 
+
   const emitter = inject('emitter');
-  const opener = useOpenerStore();
-
-  const baseUrl = './imgs/'
-
   let Location ="";
   
 function FlatmapSelected(data){
@@ -29,9 +29,15 @@ function FlatmapSelected(data){
 
 </script>
 <style scoped lang="scss">
+@import '../assets/delete-when-dsc2-imported/_variables.scss';
     .flatmap-viewer{
         :deep(.flatmap-container){
             width: 100%;
+            height: 90%;
+        }
+        p{
+            color: $mediumGrey;
+            font-size: 14px;
         }
     }
     .open-image{

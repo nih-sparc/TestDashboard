@@ -1,6 +1,8 @@
 <template>
-    <div class="text-3xl font-bold underline">
-      Sparc Dashboard
+    <div class="dash-header h-10">
+      <span><sparc-logo class="w-20 p-2 float-left"></sparc-logo></span>
+     <span class="leading-10 align-bottom px-2.5">Vegus Reference Dashboard</span>
+     <span class="float-right"><el-button @click="staticMode=!staticMode">Edit Grid</el-button></span>
     </div>
     <el-col v-if="!staticMode">
       <el-row class="m-12">
@@ -12,10 +14,7 @@
         <el-button type="default" @click="saveDashboard()" disabled >Save Dashboard</el-button>
       </el-row>
   </el-col> 
-  <el-col>
-    <el-button @click="staticMode=!staticMode">Edit Grid</el-button>
-  </el-col>
-    <div  ref="root" class="grid-stack">
+    <div  ref="root" class="grid-stack h-screen">
       <!-- <div class="grid-stack-item" 
       :gs-id="NavItem.id" :gs-x="NavItem.x" :gs-y="NavItem.y" :gs-w="NavItem.w" :gs-h="NavItem.h" :id="NavItem.id" :key="NavItem.id" 
       :gs-no-move="NavItem.noMove" :gs-locked="NavItem.locked" :gs-min-height="3">
@@ -43,7 +42,6 @@
 import { ref, onBeforeMount, onMounted, nextTick, inject, onUpdated, watch} from 'vue';
 import { GridStack } from 'gridstack';
 import ItemWidget from './ItemWidget.vue';
-import NavWidget from './NavWidget.vue';
 import { useGlobalVarsStore }from '../stores/globalVars.ts';
 import {Dataset} from '../assets/Model';
 
@@ -67,9 +65,9 @@ let NextId = DashboardItems.value.length;
 
 
 onBeforeMount(() => {
-  DashboardItems.value = [    { id: "FlatmapViewer-1", x: 0, y: 0, h: 20, w:3, componentName:"Flatmap Viewer",component:"FlatmapViewer" },
-    { id: "ImageSelector-2", x: 3, y: 0, h: 20, w:3, componentName:"Image Selector", component:"ImageSelector"},
-    { id: "BiolucidaViewer-3", x: 6, y: 0,h: 20, w:6, componentName:"MBF Viewer", component:"BiolucidaViewer"}]
+  DashboardItems.value = [    { id: "FlatmapViewer-1", x: 0, y: 0, h: 25, w:3, componentName:"Flatmap Viewer",component:"FlatmapViewer" },
+    { id: "ImageSelector-2", x: 3, y: 2, h: 20, w:3, componentName:"Image Selector", component:"ImageSelector"},
+    { id: "BiolucidaViewer-3", x: 6, y: 0,h: 25, w:6, componentName:"MBF Viewer", component:"BiolucidaViewer"}]
 
   });
   onMounted(() => {
@@ -92,7 +90,7 @@ function initGridStack(){
     const options={
       float:true,
       column: 12,
-      cellHeight: 30,
+      cellHeight: 28,
       minRow: 6,
       margin:5,
       alwaysShowResizeHandle:true,
@@ -186,6 +184,10 @@ function isValidJSON(str) {
 <style  lang="scss">
 @import '../assets/delete-when-dsc2-imported/_variables.scss';
 
+.dash-header {
+  background-color: $darkBlue;
+  color: white;
+}
 .grid-stack {
   background: $background;
 }

@@ -1,0 +1,33 @@
+import { Meta, Story } from '@storybook/blocks';
+import * as stories from './SparcDashboard.stories.js';
+import dash from './sparc-dash.png'
+
+
+<Meta title="Components/SparcDashboard" />
+
+# Sparc Reva Dashboard
+This is the entire Sparc Reva Dashboard as a whole. A working demo of the dashboard and all its available components.
+
+<div>
+  <img src={dash} />
+</div>
+
+## Edit
+**edit dashboard**
+- Click on the Edit Grid button to rearrange or delete widgets.
+
+If you want to import your custom component to be used as a widget, add component's vue file to the dashboard project under components folder. 
+
+Update the main.ts with your component's folder name.
+
+```ts
+    
+const componentMap = [
+    'SubjectNav',
+    'ImageSelector',
+    'ImageViewer',
+    'LocationNav',
+    'FlatmapViewer',
+    'BiolucidaViewer'
+]
+```

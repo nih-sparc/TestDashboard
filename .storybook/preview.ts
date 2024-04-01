@@ -1,11 +1,23 @@
 /** @type { import('@storybook/vue3').Preview } */
 import { setup, app } from '@storybook/vue3'
-
+import { defineAsyncComponent } from 'vue'
+import DesignSystemComponentsPlugin from 'sparc-design-system-components-2'
 import 'element-plus/dist/index.css';
 import sparcTheme from './sparcTheme'
 import ElementPlus from 'element-plus'
 import { createPinia } from 'pinia';
+import { GridStack } from 'gridstack';
 import mitt from 'mitt';
+import { useGlobalVarsStore } from '../src/stores/globalVars.ts'
+import "../dist/output.css"
+import {Dataset} from '../src/assets/Model';
+
+const componentMap = [
+  'ImageSelector',
+  'LocationNav',
+  'FlatmapViewer',
+  'BiolucidaViewer'
+]
 
 const pinia = createPinia();
 const emitter = mitt();
@@ -71,9 +83,21 @@ const preview = {
     }
   }
 };
+
+
 setup((app)=>{
+  app.use(DesignSystemComponentsPlugin);
   app.use(ElementPlus);
   app.use(pinia);
   app.provide('emitter', emitter); 
+
+  componentMap.forEach(comp=>{
+    const asyncComponent = defineAsyncComponent(() => import(`../src/components/${comp}.vue`)); 
+    app.component(comp, asyncComponent);
+  })
+  
+  const globalVars = useGlobalVarsStore();
+  globalVars.componentList = componentMap;
+  
 })
 export default preview;

@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@abi-software/flatmapvuer": "^0.6.1-vue3.8",
+    "sparc-design-system-components-2": "0.0.26",
     "@tsconfig/node21": "^21.0.1",
     "axios": "^1.6.7",
     "element-plus": "^2.4.3",
