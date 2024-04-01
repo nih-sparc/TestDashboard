@@ -9,7 +9,7 @@ import { createPinia } from 'pinia';
 import { GridStack } from 'gridstack';
 import mitt from 'mitt';
 import { useGlobalVarsStore } from '../src/stores/globalVars.ts'
-import "../dist/output.css"
+import "../tailwind/output.css"
 import {Dataset} from '../src/assets/Model';
 
 const componentMap = [
