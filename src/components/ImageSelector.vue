@@ -2,6 +2,9 @@
     <div class="fill">
         <img :src=imgPath>
     </div>
+    <div class="p-1">
+        <el-select placeholder="Select Subject"><el-option>sub 1</el-option><el-option>sub 2</el-option><el-option>sub 3</el-option></el-select>
+    </div>
     <el-table :data="TableData" class="table-of-images text-sm">
             <el-table-column prop="name" label="Name"/>
             <el-table-column prop="size" label="Size"/>
