@@ -2,7 +2,7 @@
 <div class="flatmap-viewer">
     <div class="text-left pl-1"><p>select anatomical location</p></div>
 
-    <FlatmapVuer class="px-2 py-2" disableUI="true" entry="UBERON:1759" v-on:resource-selected="FlatmapSelected"  v-on:ready="FlatmapReady"/>
+    <FlatmapVuer class="px-2 py-2" :disableUI="disableFlatmapUI" entry="UBERON:1759" v-on:resource-selected="FlatmapSelected"  v-on:ready="FlatmapReady"/>
 
 </div>
 
@@ -12,9 +12,10 @@
   import {FlatmapVuer, MultiFlatmapVuer} from '@abi-software/flatmapvuer';
   import { useOpenerStore } from "../stores/opener";
   FlatmapVuer.props.flatmapAPI.default="https://mapcore-demo.org/devel/flatmap/v4/";
+  const disableFlatmapUI = true;
 
-  const emit = defineEmits(['setName']);
-  emit('setName','New Custom Component!'); 
+  const emit = defineEmits(['setTitle']);
+  emit('setTitle','Flatmap Vagus Selector'); 
 
   const emitter = inject('emitter');
   let Location ="";

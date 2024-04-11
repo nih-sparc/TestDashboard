@@ -3,7 +3,7 @@
         <img :src=imgPath>
     </div>
     <div class="p-1">
-        <el-select placeholder="Select Subject"><el-option>sub 1</el-option><el-option>sub 2</el-option><el-option>sub 3</el-option></el-select>
+        <el-select placeholder="Select Subject"><el-option :value="0">sub 1 </el-option> <el-option :value="1">sub 2</el-option><el-option :value="2">sub 3</el-option></el-select>
     </div>
     <el-table :data="TableData" class="table-of-images text-sm">
             <el-table-column prop="name" label="Name"/>
@@ -29,8 +29,8 @@
 
     let TableData = ref();
 
-    const emit = defineEmits(['setName'])
-    emit('setName','MUSE Image Selector');
+    const emit = defineEmits(['setTitle'])
+    emit('setTitle','MUSE Image Selector');
 
 function selectImage(index){
     let img = TableData.value[index].path;
@@ -77,14 +77,6 @@ function buildDataTable(Imgs){
         imgPath2.value = "./imgs/imgSel.png";
         imgPath3.value = "./imgs/imgSel2.png";
     });
-    
-// onMounted(()=>{
-//     opener.imageSelectorOpen = true;
-// })
-// onUnmounted(()=>{
-//     opener.imageSelectorOpen = false;
-// })
-//'./imgs/imgInfo.png'
 
 </script>
 <style scoped>

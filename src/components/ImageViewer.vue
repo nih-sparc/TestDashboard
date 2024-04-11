@@ -2,7 +2,7 @@
     <div class="metadata-imgV">
 
     </div>
-    <div ref="instance" @click="listening = !listening" class="viewer-img">
+    <div ref="instance" class="viewer-img">
         <img :src=props.imageSrc> 
     </div>
 </template>
@@ -19,43 +19,24 @@
                 type:String,
                 required:true
             },  
-        widgetID:{
-                type:String,
-                required:true
-            },
         imageSrc:{
             type:String
+        },
+        listening:{
+            tyep:Boolean
         }
     })
 
     const listening = ref(false);
 
     
-    const emit = defineEmits(['setName']);
-    emit('setName','MUSE Image Viewer');
-
-
-    // emitter.on('SparcDashboard-addNewWidget', (value) => { 
-    //     if(value[0]) 
-    //     if(listening.value || opener.ImageViewerCount===1){
-    //         imgPath.value = value;
-    //     }
-    // });
+    const emit = defineEmits(['setTitle']);
+    emit('setTitle','MUSE Image Viewer');
 
     //uses widgetID to specify own wrapper
-    watch(() => listening.value, (newVal, oldVal) => {
-           emitter.emit('ImageViewwer-imageSelected-'+props.widgetID, newVal);
+    watch(() => props.listening, (newVal, oldVal) => {
+           //emitter.emit('select-widget'+props.widgetID, newVal);
     });
-
-// onMounted(()=>{
-//     opener.ImageViewerOpen = true;
-//     opener.ImageViewerCount++;
-// })
-// onUnmounted(()=>{
-//     opener.ImageViewerOpen = false;
-//     opener.ImageViewerCount--;
-// })
-    //have the data on the dashboard save, not just the positions
 
 </script>
 <style scoped lang="scss">

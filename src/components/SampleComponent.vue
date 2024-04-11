@@ -24,8 +24,8 @@
         }
     })
     
-    const emit = defineEmits(['setName']);
-    emit('setName','New Custom Component!'); //replace with component name you want shown
+    const emit = defineEmits(['setTitle']);
+    emit('setTitle','New Custom Component!'); //replace with component name you want shown
 
     //emit and event
     let payload ={}

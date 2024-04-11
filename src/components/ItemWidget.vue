@@ -1,23 +1,24 @@
 <template>
-            <div ref="instance" class="grid-stack-item-content">
+            <div ref="instance" class="grid-stack-item-content" @click="selectWidget()">
 
                 <div class="flex flex-row items-center justify-between h-10 content-header stick-to-top p-1">
-                    <slot name="title"></slot>
+                    <h3>{{ widgetTitle}}</h3>
                     <close v-if="!staticMode" background="#8300BF" color="white" class="close-button" @click="$emit('removeWidget')"></close>
                 </div>
-                <slot></slot>
+                <component class="widget-body" @setTitle="(t)=>updateTitle(t)" :is="componentTag" :listening="highlight">
+              </component>
             </div>
 </template>
 <script setup>
     import Close from './icons/Close.vue';
-    import { ref, inject, onMounted} from 'vue';
+    import { ref, inject, computed, watch} from 'vue';
+    import { useOpenerStore } from "../stores/opener";
 
     const emitter = inject('emitter');
 
     const emit = defineEmits(['removeWidget']);
 
-
-    let instance = ref(null);
+    const opener = useOpenerStore();
 
     const props = defineProps({      
             widgetID:{
@@ -27,16 +28,46 @@
             staticMode:{
                 type:Boolean,
                 required:true
+            },
+            componentTag:{
+                required:true
+            },
+            componentProperties:{
+                
             }
         })
 
-    emitter.on('ImageViewwer-imageSelected-'+props.widgetID,(value)=>{
-        instance.value.classList.toggle("focus-from-Img-View");
-    })
 
-onMounted(()=>{
- 
-})
+
+        //this controls properties of a widget being dynamically opened from another widget.
+        //use case for this might not be needed anymore as we use edit mode and static mode to add widgets. 
+    let propName = ref("");
+    let propVal = ref("");
+    watch(() => props.componentProperties, (newVal, oldVal) => {
+        for(let [key,val] of newVal){
+        propName=key
+        propVal = val;
+    }})
+
+//-----------------------------------------------------------------------------
+    let instance = ref(null);
+
+    let widgetTitle = ref("");
+    function updateTitle(t){
+        widgetTitle.value = t;
+    }
+
+    let highlight = ref(false)
+    
+
+    function selectWidget(){
+        if(opener.selectibleWidgets.indexOf(props.widgetID.split("-")[0])>-1){
+            highlight.value=!highlight.value;
+            instance.value.classList.toggle("focus-from-Img-View");
+        }
+    }
+
+
 </script>
 <style scoped lang="scss">
 @import '../assets/delete-when-dsc2-imported/_variables.scss';
@@ -54,7 +85,9 @@ onMounted(()=>{
         height: 20px;
     }
 }
-
+.widget-body{
+  height: calc( 100% - 40px );
+}
 .grid-stack-item-content {
     border: 1px solid $lightGrey;
     border-radius: 0.2rem;

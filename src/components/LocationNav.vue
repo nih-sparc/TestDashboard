@@ -36,16 +36,11 @@
             }
         })
         
-//   const emit = defineEmits(['setName'])
-//     emit('setName','Location Navigator');
 
 function selectImage(index){
 
     let img = TableData.value[index].path;
     opener.openWidget("BiolucidaViewer", [{key:"mbfLink",value:img}])
-    // if(!opener.ImageViewerOpen){
-    //     emitter.emit("SparcDashboard-addNewWidget","ImageViewer");
-    // }
     
 }
 function selectLocation(location){

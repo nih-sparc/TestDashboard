@@ -7,7 +7,7 @@ https://nih-sparc.github.io/TestDashboard/?path=/docs/components-biolucidaviewer
 
 ## Recommended IDE Setup
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+[VSCode](https://code.visualstudio.com/) 
 
 ## Type Support for `.vue` Imports in TS
 
@@ -48,6 +48,59 @@ Yarn run build
 Yarn run lint
 ```
 
+## Dependency Setup
+
+If you are installing this project as a node module dependency you need the following installed in your project. 
+Vue(^3.3.4), Pinia(^2.1.7), mitt (^3.0.1), sparc-design-system-components-2 (0.0.26)
+
+```sh
+yarn add pina
+yarn add vue
+yarn add mitt
+yarn add sparc-design-system-components-2
+```
+### Adding dependencies to your project
+
+```js
+
+import { createApp, defineAsyncComponent } from 'vue'
+import mitt from 'mitt'
+import DesignSystemComponentsPlugin from 'sparc-design-system-components-2'
+import App from './App.vue'
+//this allows for dynamically importing components
+import { useGlobalVarsStore } from '../node_modules/sparc-dashboard-beta/src/stores/globalVars'
+import { createPinia } from 'pinia'
+
+const app = createApp(App);
+
+//import mitt and set as emitter
+const emitter = mitt();
+app.provide('emitter', emitter); 
+
+//list whichever components you want available and import them dynamically
+const componentMap = [
+    'SubjectNav',
+    'ImageSelector',
+    'ImageViewer',
+    'LocationNav',
+    'FlatmapViewer',
+    'BiolucidaViewer'
+]
+componentMap.forEach(comp=>{
+    const asyncComponent = defineAsyncComponent(() => import(`../node_modules/sparc-dashboard-beta/src/components/${comp}.vue`)); 
+    app.component(comp, asyncComponent);
+})
+
+app.use(createPinia());
+//add list of components to add componet drop down
+const globalVars = useGlobalVarsStore();
+globalVars.componentList = componentMap;
+
+
+app.use(DesignSystemComponentsPlugin);
+app.mount('#app');
+
+```
 
 # DOCUMENTATION 
 - adding custom component to dashboard
@@ -91,8 +144,8 @@ These are passed down to the your component (SampleComponent) from its wrapper v
 name of component tag. Changing this will change the title of the wrapper. If you want a display name that is different from the file name. 
 Set Display name (widgetName) using emit.
    ```
-const emit = defineEmits(['setName']);
-emit('setName','New Custom Component!'); //replace with component name you want shown
+const emit = defineEmits(['setTitle']);
+emit('setTitle','New Custom Component!'); //replace with component name you want shown
 ```
 
 
@@ -121,13 +174,13 @@ emit('SampleComponent-eventName',payload);
 
 ### OPTIONS
 
-***setName:*** 
+***setTitle:*** 
 component ‘s name defaults to it’s vue tag-name. This allows you override it and add a different name
 
 Example:
    ```
-const emit = defineEmits(['setName']);
-emit('setName','MUSE Image Viewer');
+const emit = defineEmits(['setTitle']);
+emit('setTitle','MUSE Image Viewer');
 ```
 
 **other options to come. Examples might include a standard way of setting a filter that most widgets would find useful (age/sex/metadata for example)**
@@ -170,8 +223,8 @@ Here is an example of the SampleComponent.vue file as of 1/26/2024. See github f
        }
    })
   
-   const emit = defineEmits(['setName']);
-   emit('setName','New Custom Component!'); //replace with component name you want shown
+   const emit = defineEmits(['setTitle']);
+   emit('setTitle','New Custom Component!'); //replace with component name you want shown
 
 
    //emit and event

@@ -3,12 +3,14 @@ import {inject} from 'vue'
 
 export const useOpenerStore = defineStore('opener',{
 
-  state:() => ({
-    emitter: inject('emitter'),
-    imageSelectorOpen: false,
-    ImageViewerOpen: false,
-    ImageViewerCount: false
-  }),
+  state:() => {
+    return {
+      emitter: inject('emitter'),
+      mbfViewerCount:0,
+      selectibleWidgets:["BiolucidaViewer"]
+    }
+
+  },
   actions:{
     //example of a call to open BiolucidaViewer
     //  opener.openWidget("BiolucidaViewer", [{key:"mbfLink",value:img}])
@@ -19,5 +21,5 @@ export const useOpenerStore = defineStore('opener',{
       this.emitter.emit("SparcDashboard-updateWidget",[widgetName,props]);
     }
   },
-    
+  
 })

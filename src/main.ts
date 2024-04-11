@@ -4,7 +4,6 @@ import { createApp, defineAsyncComponent } from 'vue'
 import { createPinia } from 'pinia'
 import DesignSystemComponentsPlugin from 'sparc-design-system-components-2'
 import mitt from 'mitt'
-import ElementPlus from 'element-plus'
 import App from './App.vue'
 import { useGlobalVarsStore } from './stores/globalVars'
 
@@ -13,9 +12,7 @@ const emitter = mitt();
 app.provide('emitter', emitter); 
 
 const componentMap = [
-    'SubjectNav',
     'ImageSelector',
-    'ImageViewer',
     'LocationNav',
     'FlatmapViewer',
     'BiolucidaViewer'
@@ -31,5 +28,5 @@ const globalVars = useGlobalVarsStore();
 globalVars.componentList = componentMap;
 
 app.use(DesignSystemComponentsPlugin);
-app.use(ElementPlus);
+
 app.mount('#app');

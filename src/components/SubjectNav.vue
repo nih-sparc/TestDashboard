@@ -23,10 +23,9 @@
     </div>
 </template>
 <script setup>
-  import { ref, inject, nextTick} from "vue";
+  import { ref} from "vue";
   import { useOpenerStore } from "../stores/opener";
 
-  const emitter = inject('emitter');
   const opener = useOpenerStore();
 
   const emit = defineEmits(['setTitle'])
@@ -37,9 +36,8 @@
   const imgPath3 = ref("./imgs/sub2.png");
 
 function selectSubject(img){
-    //if(!opener.imageSelectorOpen){
     opener.openWidget("ImageSelector", [{key:"imageSrc",value:img}])
-    //}
+
 }
 </script>
 <style scoped lang="scss">

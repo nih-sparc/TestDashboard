@@ -1,7 +1,7 @@
 <template>
     <div class="dash-header h-10">
       <span><sparc-logo class="w-20 p-2 float-left"></sparc-logo></span>
-     <span class="leading-10 align-bottom px-2.5">Vegus Reference Dashboard</span>
+     <span class="leading-10 align-bottom px-2.5">Vagus Reference Dashboard</span>
      <span class="float-right"><el-button @click="staticMode=!staticMode">Edit Grid</el-button></span>
     </div>
     <el-col v-if="!staticMode">
@@ -15,21 +15,9 @@
       </el-row>
   </el-col> 
     <div  ref="root" class="grid-stack h-screen">
-      <!-- <div class="grid-stack-item" 
-      :gs-id="NavItem.id" :gs-x="NavItem.x" :gs-y="NavItem.y" :gs-w="NavItem.w" :gs-h="NavItem.h" :id="NavItem.id" :key="NavItem.id" 
-      :gs-no-move="NavItem.noMove" :gs-locked="NavItem.locked" :gs-min-height="3">
-          <NavWidget :navType="NavItem.component">
-              <component :is="NavItem.component"></component>
-          </NavWidget>
-      </div> -->
       <div v-for="(w) in DashboardItems" class="grid-stack-item" 
       :gs-x="w.x" :gs-y="w.y" :gs-w="w.w" :gs-h="w.h" :gs-id="w.id" :id="w.id" :key="w.id" :locked="false">
-            <ItemWidget :widgetID="w.id" @remove-widget="removeWidget(w.id)" :static-mode="staticMode">
-              <template #title>
-                  <h3>{{ w.componentName }}</h3>
-              </template>
-              <component class="widget-body" @setTitle="(t)=>w.componentName=t" :widgetID="w.id" :is="w.component" :[w.propName]="w.propVal">
-              </component>
+            <ItemWidget :widgetID="w.id" @remove-widget="removeWidget(w.id)" :static-mode="staticMode" :componentTag="w.component" :componentProperties="w.Props">
             </ItemWidget>
       </div>
     </div>
@@ -67,8 +55,9 @@ let NextId = DashboardItems.value.length;
 onBeforeMount(() => {
   DashboardItems.value = [    { id: "FlatmapViewer-1", x: 0, y: 0, h: 25, w:3, componentName:"Flatmap Viewer",component:"FlatmapViewer" },
     { id: "ImageSelector-2", x: 3, y: 2, h: 20, w:3, componentName:"Image Selector", component:"ImageSelector"},
-    { id: "BiolucidaViewer-3", x: 6, y: 0,h: 25, w:6, componentName:"MBF Viewer", component:"BiolucidaViewer"}]
-
+    { id: "BiolucidaViewer-3", x: 9, y: 0,h: 25, w:6, componentName:"MBF Viewer", component:"BiolucidaViewer"}
+    //,{ id: "BiolucidaViewer-3", x: 6, y: 0,h: 25, w:3, componentName:"MBF Viewer", component:"BiolucidaViewer"}]
+    ]
   });
   onMounted(() => {
     initGridStack();
@@ -106,15 +95,17 @@ watch(()=> staticMode.value, (value) => {
 })
 
 function addNewWidget(name) {
+  // if parameter name then newWidget comes from dropdown. else it comes from emmitter
     if(name){
       NewComponent.Name = name;
       NewComponent.Props = new Map();
     }
-    const node = {id:NewComponent.Name+"-"+NextId,w:2,h:6,autoPosition:true, component: NewComponent.Name, componentName:NewComponent.Name};
-    for(let [key,val] of NewComponent.Props){
-      node.propName=key
-      node.propVal = val;
-    }
+    const node = {id:NewComponent.Name+"-"+NextId,w:2,h:6,autoPosition:true, component: NewComponent.Name, componentName:NewComponent.Name, componentProperties:NewComponent.Props};
+    
+    // for(let [key,val] of NewComponent.Props){
+    //   node.propName=key
+    //   node.propVal = val;
+    // }
     NextId++;
     //add component to items array first. this will update the dom
     DashboardItems.value.push(node);
@@ -200,9 +191,7 @@ function isValidJSON(str) {
     overflow: hidden;
   }
 }
-.widget-body{
-  height: calc( 100% - 40px );
-}
+
 
 
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col">
+    <div class="flex flex-col h-full">
         <div class="bv-metadata text-left p-1 text-sm">
             <p><span>Dataset: </span>
     Dataset Name Here </p>
@@ -11,48 +11,66 @@
     </div>
 </template>
 <script setup>
-  import {ref, watch, inject} from "vue";
+  import {ref, onMounted, onUnmounted, inject} from "vue";
   import { Api } from "../services";
   import {Dataset} from '../assets/Model';
+  import { useOpenerStore } from "../stores/opener";
+
+  const emit = defineEmits(['setTitle','selectWidget']);
 
   const props = defineProps({
     imageID:0,
-    mbfLink: {type:String}
+    mbfLink: {type:String},
+    listening:{
+            tyep:Boolean
+    }
   })
 
   const emitter = inject('emitter');
   let mbfURLSrc =ref(props.mbfLink);
 
+  const opener = useOpenerStore();
 
-    // watch(() => mbfLink.value, (newVal) => {
-    //        console.log(mbfLink);
-    // });
-
+  onMounted(() => {
+    emit('setTitle','MBF Image Viewer');
+    opener.mbfViewerCount++;
+  });
+  onUnmounted(()=>{
+    opener.mbfViewerCount--;
+  })
     emitter.on('mbf-image-selected',(img)=>{
-        mbfURLSrc.value=img;
-    });
-        const getImageURLByID = async(_imageId)=>{
-            let _biolucidaUrl = {};
-            let _response ={};
-            try{
-                await Api.biolucida.getBLVLink(_imageId).then(response =>{
-                    _response = response;
-                    if(_response.status===200){
-                        _biolucidaUrl = response;
-                        mbfLink.value = response.data.link;
-                    }
-                })
-            }catch(e){
-                console.error("couldn't get image url by id");
-            }
+        if(opener.mbfViewerCount>1 && props.listening || opener.mbfViewerCount==1){
+            mbfURLSrc.value=img;
         }
+    });
+
+
+        // const getImageURLByID = async(_imageId)=>{
+        //     let _biolucidaUrl = {};
+        //     let _response ={};
+        //     try{
+        //         await Api.biolucida.getBLVLink(_imageId).then(response =>{
+        //             _response = response;
+        //             if(_response.status===200){
+        //                 _biolucidaUrl = response;
+        //                 mbfLink.value = response.data.link;
+        //             }
+        //         })
+        //     }catch(e){
+        //         console.error("couldn't get image url by id");
+        //     }
+        // }
    // getImageURLByID(21572);
 </script>
 <style scoped lang="scss">
+@import '../assets/delete-when-dsc2-imported/_variables.scss';
 .bv-metadata{
 
     span{
         font-weight: bold;
     }
 }
+.hightlight{
+        border:solid $lightPurple 2px !important;
+    }
 </style>
