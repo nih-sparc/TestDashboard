@@ -1,8 +1,6 @@
 <template>
     <div class="dash-header h-10">
-      <span><sparc-logo class="w-20 p-2 float-left"></sparc-logo></span>
-     <span class="leading-10 align-bottom px-2.5">Vagus Reference Dashboard</span>
-     <span class="float-right"><el-button @click="staticMode=!staticMode">Edit Grid</el-button></span>
+     <span class="float-right m-1"><el-button @click="staticMode=!staticMode">Edit Grid</el-button></span>
     </div>
     <el-col v-if="!staticMode">
       <el-row class="m-12">
@@ -173,7 +171,7 @@ function isValidJSON(str) {
 </script>
 
 <style  lang="scss">
-@import '../assets/delete-when-dsc2-imported/_variables.scss';
+@import './node_modules/sparc-design-system-components-2/src/assets/_variables.scss';
 
 .dash-header {
   background-color: $darkBlue;

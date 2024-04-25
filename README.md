@@ -243,7 +243,6 @@ Here is an example of the SampleComponent.vue file as of 1/26/2024. See github f
 </script>
 <style scoped lang="scss">
 //import SPARC styles
-@import '../assets/delete-when-dsc2-imported/_variables.scss';
 
 
 </style>

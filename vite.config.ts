@@ -1,11 +1,11 @@
-import { fileURLToPath, URL } from 'node:url'
-import { resolve} from 'path'
+import { fileURLToPath, URL } from 'url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
+
 export default defineConfig({
   plugins: [
-    vue(),
+    vue()
   ],
   resolve: {
     alias: {
@@ -14,14 +14,18 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: resolve(__dirname, 'index.js'),
-      name: 'YourLibraryName',
-      fileName: (format) => `sparc-dashboard-beta.${format}.js`,
+      entry: "./src/DashboardPlugin.js",
+      name: 'DashboardPlugin',
+      formats:["es","cjs"],
+      fileName: (format) => (format === "es" ? "index.js" : "index.cjs"),
     },
+    cssCodeSplit:false,
+    outDir:'dist',
     rollupOptions: {
       // Externalize deps that shouldn't be bundled into your library
       external: ['vue'],
       output: {
+
         // Provide global variables to use in the UMD build for externalized deps
         globals: {
           vue: 'Vue',

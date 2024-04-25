@@ -30,7 +30,7 @@ function FlatmapSelected(data){
 
 </script>
 <style scoped lang="scss">
-@import '../assets/delete-when-dsc2-imported/_variables.scss';
+@import './node_modules/sparc-design-system-components-2/src/assets/_variables.scss';
     .flatmap-viewer{
         :deep(.flatmap-container){
             width: 100%;

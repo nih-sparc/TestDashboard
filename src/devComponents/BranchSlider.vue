@@ -50,7 +50,7 @@ watch(value,(newValue)=>{
 
 </script>
 <style scoped lang="scss">
-@import '../assets/delete-when-dsc2-imported/_variables.scss';
+@import './node_modules/sparc-design-system-components-2/src/assets/_variables.scss';
 .branch-slider-wrap{
     display:flex;
     flex-flow:row;
