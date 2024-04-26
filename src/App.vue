@@ -4,8 +4,8 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch} from 'vue';
-//import SparcDashboard from "./components/SparcDashboard.vue"
-//import "../tailwind/output.css"
+import SparcDashboard from "./components/SparcDashboard.vue"
+
 
 
   onMounted(() => {
