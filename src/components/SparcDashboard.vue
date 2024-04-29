@@ -14,7 +14,7 @@
   </el-col> 
     <div  ref="root" class="grid-stack h-screen">
       <div v-for="(w) in DashboardItems" class="grid-stack-item" 
-      :gs-x="w.x" :gs-y="w.y" :gs-w="w.w" :gs-h="w.h" :gs-id="w.id" :id="w.id" :key="w.id" :locked="false">
+      :gs-x="w.x" :gs-y="w.y" :gs-w="w.w" :gs-h="w.h" :gs-id="w.id" :id="w.id" :key="w.id">
             <ItemWidget :widgetID="w.id" @remove-widget="removeWidget(w.id)" :static-mode="staticMode" :componentTag="w.component" :componentProperties="w.Props">
             </ItemWidget>
       </div>
@@ -51,10 +51,10 @@ let NextId = DashboardItems.value.length;
 
 
 onBeforeMount(() => {
-  DashboardItems.value = [    { id: "FlatmapViewer-1", x: 0, y: 0, h: 25, w:3, componentName:"Flatmap Viewer",component:"FlatmapViewer" },
-    { id: "ImageSelector-2", x: 3, y: 2, h: 20, w:3, componentName:"Image Selector", component:"ImageSelector"},
-    { id: "BiolucidaViewer-3", x: 9, y: 0,h: 25, w:6, componentName:"MBF Viewer", component:"BiolucidaViewer"}
-    //,{ id: "BiolucidaViewer-3", x: 6, y: 0,h: 25, w:3, componentName:"MBF Viewer", component:"BiolucidaViewer"}]
+  DashboardItems.value = [    { id: "FlatmapViewer-1", x: 1, y: 0, h: 10, w:2, componentName:"Flatmap Viewer",component:"FlatmapViewer" },
+    { id: "ImageSelector-2", x: 3, y: 1, h: 10, w:2, componentName:"Image Selector", component:"ImageSelector"},
+    { id: "BiolucidaViewer-3", x: 6, y: 0,h: 10, w:5, componentName:"MBF Viewer", component:"BiolucidaViewer"},
+    //{ id: "BiolucidaViewer-4", x: 10, y: 0,h: 8, w:3, componentName:"MBF Viewer", component:"BiolucidaViewer"}
     ]
   });
   onMounted(() => {
@@ -76,13 +76,15 @@ function retrieveDataset(){
 function initGridStack(){
     const options={
       float:true,
-      column: 12,
-      cellHeight: 28,
-      minRow: 6,
+      column:12,
+      cellHeight: "70px",
+      minRow: 12,
       margin:5,
       alwaysShowResizeHandle:true,
-      row:28,
-  
+
+      resizable: {
+        handles: 'e,se,s,sw,w,n'
+      }
     }
     Grid = GridStack.init(options);
     Grid.setStatic(staticMode.value)

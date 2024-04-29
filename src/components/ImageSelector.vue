@@ -24,8 +24,8 @@
     import { Api } from "../services";
     const emitter = inject('emitter');
     //const opener = useOpenerStore();
-
-    const imgPath = ref(null);
+    import imageMod from "../assets/imgs/imgInfo.png"
+    let imgPath = ref(null);
 
     let TableData = ref();
 
@@ -69,7 +69,7 @@ function buildDataTable(Imgs){
         _tempArr.push(column);
     })
     TableData.value=_tempArr;
-    imgPath.value = "./imgs/imgInfo.png";
+    imgPath = imageMod;
 }
 
     emitter.on('selectSubject', (value) => {  
