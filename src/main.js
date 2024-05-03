@@ -10,7 +10,7 @@ import mitt from 'mitt'
  //import DashboardPlugin from "../dist/index"
  //import DashboardPlugin from './DashboardPlugin'
 import { useGlobalVarsStore } from './stores/globalVars'
-import "../tailwind/output.css"
+//import "../tailwind/output.css"
 
  const app = createApp(App);
 app.use(DesignSystemComponentsPlugin);

@@ -1,6 +1,6 @@
 
 import { SparcDashboard } from './components/Index'
-import "../tailwind/output.css"
+//import "../tailwind/output.css"
 import { createPinia } from 'pinia'
 import { defineAsyncComponent } from 'vue'
 import mitt from 'mitt'
