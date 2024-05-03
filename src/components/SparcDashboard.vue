@@ -1,9 +1,9 @@
 <template>
-    <div class="dash-header h-10">
-     <span class="float-right m-1"><el-button @click="staticMode=!staticMode">Edit Grid</el-button></span>
+    <div class="dash-header tw-h-10">
+     <span class="tw-float-right tw-m-1"><el-button @click="staticMode=!staticMode">Edit Grid</el-button></span>
     </div>
     <el-col v-if="!staticMode">
-      <el-row class="m-12">
+      <el-row class="tw-m-12">
         <el-select :value="NewComponent.Name" placeholder="Add New Widget">
           <el-option
             v-for="item in ComponentListOptions" :key="item" :label="item" :value="item" @click="addNewWidget(item)">
@@ -12,7 +12,7 @@
         <el-button type="default" @click="saveDashboard()" disabled >Save Dashboard</el-button>
       </el-row>
   </el-col> 
-    <div  ref="root" class="grid-stack h-screen">
+    <div  ref="root" class="grid-stack tw-h-screen">
       <div v-for="(w) in DashboardItems" class="grid-stack-item" 
       :gs-x="w.x" :gs-y="w.y" :gs-w="w.w" :gs-h="w.h" :gs-id="w.id" :id="w.id" :key="w.id">
             <ItemWidget :widgetID="w.id" @remove-widget="removeWidget(w.id)" :static-mode="staticMode" :componentTag="w.component" :componentProperties="w.Props">
@@ -52,7 +52,7 @@ let NextId = DashboardItems.value.length;
 
 onBeforeMount(() => {
   DashboardItems.value = [    { id: "FlatmapViewer-1", x: 1, y: 0, h: 10, w:2, componentName:"Flatmap Viewer",component:"FlatmapViewer" },
-    { id: "ImageSelector-2", x: 3, y: 1, h: 10, w:2, componentName:"Image Selector", component:"ImageSelector"},
+    { id: "ImageSelector-2", x: 3, y: 1, h: 10, w:3, componentName:"Image Selector", component:"ImageSelector"},
     { id: "BiolucidaViewer-3", x: 6, y: 0,h: 10, w:5, componentName:"MBF Viewer", component:"BiolucidaViewer"},
     //{ id: "BiolucidaViewer-4", x: 10, y: 0,h: 8, w:3, componentName:"MBF Viewer", component:"BiolucidaViewer"}
     ]

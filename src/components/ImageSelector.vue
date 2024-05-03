@@ -2,10 +2,10 @@
     <div class="fill">
         <img :src=imgPath>
     </div>
-    <div class="p-1">
+    <div class="tw-p-1">
         <el-select placeholder="Select Subject"><el-option :value="0">sub 1 </el-option> <el-option :value="1">sub 2</el-option><el-option :value="2">sub 3</el-option></el-select>
     </div>
-    <el-table :data="TableData" class="table-of-images text-sm">
+    <el-table :data="TableData" class="table-of-images tw-text-sm">
             <el-table-column prop="name" label="Name"/>
             <el-table-column prop="size" label="Size"/>
             <el-table-column fixed="right" label="Img">

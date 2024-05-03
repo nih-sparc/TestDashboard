@@ -1,8 +1,8 @@
 <template>
 <div class="flatmap-viewer">
-    <div class="text-left pl-1"><p>select anatomical location</p></div>
+    <div class="tw-text-left tw-pl-1"><p>select anatomical location</p></div>
 
-    <FlatmapVuer class="px-2 py-2" :disableUI="disableFlatmapUI" entry="UBERON:1759" v-on:resource-selected="FlatmapSelected"  v-on:ready="FlatmapReady"/>
+    <FlatmapVuer class="tw-px-2 tw-py-2" :disableUI="disableFlatmapUI" entry="UBERON:1759" v-on:resource-selected="FlatmapSelected"  v-on:ready="FlatmapReady"/>
 
 </div>
 
