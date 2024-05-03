@@ -2,7 +2,7 @@
             <div ref="instance" class="grid-stack-item-content" @click="selectWidget()">
 
                 <div class="tw-flex tw-flex-row tw-items-center tw-justify-between tw-h-10 content-header stick-to-top tw-p-1">
-                    <h3>{{ widgetTitle}}</h3>
+                    <h4>{{ widgetTitle}}</h4>
                     <close v-if="!staticMode" background="#8300BF" color="white" class="close-button" @click="$emit('removeWidget')"></close>
                 </div>
                 <component class="widget-body" @setTitle="(t)=>updateTitle(t)" :is="componentTag" :listening="highlight">
