@@ -1,6 +1,6 @@
 
 <template>
-    <div class="flex flex-col h-full">
+    <div class="tw-flex tw-flex-col tw-h-full">
         <Bar
         id="my-chart-id"
         :options="chartOptions"

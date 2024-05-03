@@ -1,12 +1,12 @@
 <template>
-    <div class="flex flex-col h-full">
-        <div class="bv-metadata text-left p-1 text-sm">
+    <div class="tw-flex tw-flex-col tw-h-full">
+        <div class="bv-metadata tw-text-left tw-p-1 tw-text-sm">
             <p><span>Dataset: </span>
     Dataset Name Here </p>
             <p><span>Metadata: </span>Metadata could go here</p>
         </div>
-        <div class="bio-viewer h-screen flex justify-center">
-            <iframe class="p-1 w-screen" :src="mbfURLSrc" ></iframe>
+        <div class="tw-h-screen tw-flex tw-justify-center">
+            <iframe class="tw-p-1 tw-w-screen" :src="mbfURLSrc" ></iframe>
         </div>
     </div>
 </template>

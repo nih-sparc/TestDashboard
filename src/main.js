@@ -21,7 +21,6 @@ app.provide('emitter', emitter);
 
 const componentMap = [
     'ImageSelector',
-    'LocationNav',
     'FlatmapViewer',
     'BiolucidaViewer',
     'QDBChart'

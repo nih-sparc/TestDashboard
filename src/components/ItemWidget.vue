@@ -1,7 +1,7 @@
 <template>
             <div ref="instance" class="grid-stack-item-content" @click="selectWidget()">
 
-                <div class="flex flex-row items-center justify-between h-10 content-header stick-to-top p-1">
+                <div class="tw-flex tw-flex-row tw-items-center tw-justify-between tw-h-10 tw-content-header stick-to-top tw-p-1">
                     <h3>{{ widgetTitle}}</h3>
                     <close v-if="!staticMode" background="#8300BF" color="white" class="close-button" @click="$emit('removeWidget')"></close>
                 </div>
