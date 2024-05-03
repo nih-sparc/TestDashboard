@@ -15,7 +15,7 @@
   const disableFlatmapUI = true;
 
   const emit = defineEmits(['setTitle']);
-  emit('setTitle','Flatmap Vagus Selector'); 
+  emit('setTitle','Flatmap Selector'); 
 
   const emitter = inject('emitter');
   let Location ="";

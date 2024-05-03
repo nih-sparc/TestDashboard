@@ -65,7 +65,7 @@
 <style scoped lang="scss">
 @import './node_modules/sparc-design-system-components-2/src/assets/_variables.scss';
 .bv-metadata{
-
+    padding-left:10px;
     span{
         font-weight: bold;
     }
@@ -73,4 +73,5 @@
 .hightlight{
         border:solid $lightPurple 2px !important;
     }
+    iframe{padding:0; border:none;}
 </style>
