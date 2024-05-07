@@ -3,9 +3,10 @@
 
                 <div class="tw-flex tw-flex-row tw-items-center tw-justify-between tw-h-10 content-header stick-to-top tw-p-1">
                     <h4>{{ widgetTitle}}</h4>
+                    <div v-if="hasSettings" @click="callOpenSettings=true" ><i>settings</i></div>
                     <close v-if="!staticMode" background="#8300BF" color="white" class="close-button" @click="$emit('removeWidget')"></close>
                 </div>
-                <component class="widget-body" @setTitle="(t)=>updateTitle(t)" :is="componentTag" :listening="highlight">
+                <component class="widget-body" @setTitle="(t)=>updateTitle(t)" @addSettings="hasSettings = true" :is="componentTag" :listening="highlight" :openSettings="callOpenSettings">
               </component>
             </div>
 </template>
@@ -19,6 +20,7 @@
     const emit = defineEmits(['removeWidget']);
 
     const opener = useOpenerStore();
+    const callOpenSettings = ref(false);
 
     const props = defineProps({      
             widgetID:{
@@ -37,9 +39,9 @@
             }
         })
 
+    let hasSettings = ref(false)
 
-
-        //this controls properties of a widget being dynamically opened from another widget.
+        //this controls properties of a widget being dynamically opened from another widget (via the spacdashboard).
         //use case for this might not be needed anymore as we use edit mode and static mode to add widgets. 
     let propName = ref("");
     let propVal = ref("");
