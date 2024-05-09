@@ -23,7 +23,7 @@ const componentMap = [
     'ImageSelector',
     'FlatmapViewer',
     'BiolucidaViewer',
-    'QDBChart'
+    'QDBGraph'
 ]
 componentMap.forEach(comp=>{
     const asyncComponent = defineAsyncComponent(() => import(`./components/${comp}.vue`)); 
