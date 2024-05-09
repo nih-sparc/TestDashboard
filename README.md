@@ -59,46 +59,28 @@ yarn add vue
 yarn add mitt
 yarn add sparc-design-system-components-2
 ```
-### Adding dependencies to your project
+### Importing Dashboard into your project
 
 ```js
 
-import { createApp, defineAsyncComponent } from 'vue'
-import mitt from 'mitt'
-import DesignSystemComponentsPlugin from 'sparc-design-system-components-2'
+
+import { createApp } from 'vue'
 import App from './App.vue'
-//this allows for dynamically importing components
-import { useGlobalVarsStore } from '../node_modules/sparc-dashboard-beta/src/stores/globalVars'
-import { createPinia } from 'pinia'
+import { createPinia } from 'pinia';
+import 'sparc-dashboard-beta/dist/style.css'
+import sparcDesignSystemComponents2Umd from 'sparc-design-system-components-2';
+import {default as SparcDashboard, install as install} from 'sparc-dashboard-beta/dist/index.js'
 
 const app = createApp(App);
+let piniaInstance = createPinia();
+app.use(piniaInstance);
 
-//import mitt and set as emitter
-const emitter = mitt();
-app.provide('emitter', emitter); 
+install(app, piniaInstance); //call the install method and pass in the app and pinia instance
+app.component("SparcDashboard",SparcDashboard) // add the dashboard component to your vue app
 
-//list whichever components you want available and import them dynamically
-const componentMap = [
-    'SubjectNav',
-    'ImageSelector',
-    'ImageViewer',
-    'LocationNav',
-    'FlatmapViewer',
-    'BiolucidaViewer'
-]
-componentMap.forEach(comp=>{
-    const asyncComponent = defineAsyncComponent(() => import(`../node_modules/sparc-dashboard-beta/src/components/${comp}.vue`)); 
-    app.component(comp, asyncComponent);
-})
-
-app.use(createPinia());
-//add list of components to add componet drop down
-const globalVars = useGlobalVarsStore();
-globalVars.componentList = componentMap;
-
-
-app.use(DesignSystemComponentsPlugin);
+app.use(sparcDesignSystemComponents2Umd);
 app.mount('#app');
+
 
 ```
 

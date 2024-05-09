@@ -1,22 +1,15 @@
 {
   "name": "sparc-dashboard-beta",
-  "version": "0.1.95",
+  "version": "0.2.0",
   "author": "Sam Kraft (https://Sparc.Science)",
   "private": false,
   "type": "module",
-  "main": "dist/index.cjs",
-  "module": "dist/index.js",
-  "exports": {
-    ".": "./dist/index.js",
-    "./styles.css": "./dist/style.css"
-  },
-  "browser": {
-    "./styles.css": "./dist/style.css"
-  },
-  "types": "dist/SparcDashboard.d.ts",
+  "main": "./dist/index.js",
   "license": "Apache-2.0",
   "files": [
-    "dist"
+    "dist",
+    "src/stores",
+    "tailwind"
   ],
   "scripts": {
     "dev": "vite & yarn tailwindcss -i ./src/assets/base.css -o ./dist/output.css --watch",

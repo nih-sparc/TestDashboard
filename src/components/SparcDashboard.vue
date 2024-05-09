@@ -51,8 +51,8 @@ let NextId = DashboardItems.value.length;
 
 
 onBeforeMount(() => {
-  DashboardItems.value = [    { id: "FlatmapViewer-1", x: 1, y: 0, h: 10, w:2, componentName:"Flatmap Viewer",component:"FlatmapViewer" },
-    { id: "ImageSelector-2", x: 3, y: 1, h: 10, w:3, componentName:"Image Selector", component:"ImageSelector"},
+  DashboardItems.value = [    { id: "FlatmapViewer-1", x: 0, y: 0, h: 8, w:2, componentName:"Flatmap Viewer",component:"FlatmapViewer" },
+    { id: "ImageSelector-2", x: 3, y: 0, h: 8, w:3, componentName:"Image Selector", component:"ImageSelector"},
     { id: "BiolucidaViewer-3", x: 6, y: 0,h: 10, w:5, componentName:"MBF Viewer", component:"BiolucidaViewer"},
     //{ id: "BiolucidaViewer-4", x: 10, y: 0,h: 8, w:3, componentName:"MBF Viewer", component:"BiolucidaViewer"}
     ]

@@ -1,7 +1,6 @@
 
-import { SparcDashboard } from './components/Index'
+import  SparcDashboard  from './components/SparcDashboard.vue'
 import "../tailwind/output.css"
-import { createPinia } from 'pinia'
 import { defineAsyncComponent } from 'vue'
 import mitt from 'mitt'
 import { useGlobalVarsStore } from './stores/globalVars'
@@ -10,13 +9,12 @@ import '../node_modules/sparc-design-system-components-2/dist/style.css';
 
   //for auto install -----------------------------------------------------------------------------------------------------------------
   
-export default {
-  install: (app) => {
+export function install(app, pinia){
 
     const emitter = mitt();
     app.provide('emitter', emitter); 
     //app.config.globalProperties.$emitter = emitter;
-    app.use(createPinia());
+    //app.use(createPinia());
   
     const componentMap = [
         'ImageSelector',
@@ -30,23 +28,12 @@ export default {
     })
 
     //add list of components to add componet drop down
-    const globalVars = useGlobalVarsStore();
+    const globalVars = useGlobalVarsStore(pinia);
     globalVars.componentList = componentMap;
 
     app.component("SparcDashboard", SparcDashboard);
-  },
-};
-export {SparcDashboard};
-// Auto-install when vue is found (eg. in browser via <script> tag)
-// let GlobalVue = null;
-// if (typeof window !== 'undefined') {
-// 	GlobalVue = window.Vue;
-// } else if (typeof global !== 'undefined') {
-// 	GlobalVue = global.Vue;
-// }
-// if (GlobalVue) {
-// 	GlobalVue.use(sparcDash);
-// }
-//------------------------------------------------------------------------------------------------------------------------------------
+  }
+export default SparcDashboard;
+
   
 

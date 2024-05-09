@@ -15,7 +15,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: "./src/DashboardPlugin.js",
-      name: 'DashboardPlugin',
+      name: 'SparcDashboard',
       formats:["es","cjs"],
       fileName: (format) => (format === "es" ? "index.js" : "index.cjs"),
     },
@@ -34,3 +34,4 @@ export default defineConfig({
     },
   },
 })
+
