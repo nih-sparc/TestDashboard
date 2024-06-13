@@ -69,13 +69,13 @@ import App from './App.vue'
 import { createPinia } from 'pinia';
 import 'sparc-dashboard-beta/dist/style.css'
 import sparcDesignSystemComponents2Umd from 'sparc-design-system-components-2';
-import {default as SparcDashboard, install as install} from 'sparc-dashboard-beta/dist/index.js'
+import {default as SparcDashboard, installDashboard as install} from 'sparc-dashboard-beta/dist/index.js'
 
 const app = createApp(App);
 let piniaInstance = createPinia();
 app.use(piniaInstance);
 
-install(app, piniaInstance); //call the install method and pass in the app and pinia instance
+installDashboard(app, piniaInstance); //call the install method and pass in the app and pinia instance
 app.component("SparcDashboard",SparcDashboard) // add the dashboard component to your vue app
 
 app.use(sparcDesignSystemComponents2Umd);

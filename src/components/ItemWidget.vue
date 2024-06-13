@@ -3,15 +3,18 @@
 
                 <div class="tw-flex tw-flex-row tw-items-center tw-justify-between tw-h-10 content-header stick-to-top tw-p-1">
                     <h4>{{ widgetTitle}}</h4>
-                    <close v-if="!staticMode" background="#8300BF" color="white" class="close-button" @click="$emit('removeWidget')"></close>
+                    <DownloadIcon></DownloadIcon>
+                    <close-icon v-if="!staticMode" background="#8300BF" color="white" class="close-button" @click="$emit('removeWidget')"></close-icon>
                 </div>
-                <component class="widget-body"  @setTitle="(t)=>updateTitle(t)" :is="componentTag" :listening="highlight">
-      
-                </component>
+                <div class="widget-body">
+                    <component   @setTitle="(t)=>updateTitle(t)" :is="componentTag" :listening="highlight"></component>
+                </div>
             </div>
 </template>
 <script setup>
-    import Close from './icons/Close.vue';
+    import CloseIcon from './icons/CloseIcon.vue';
+    import DownloadIcon from './icons/DownloadIcon.vue'
+    import GraphIcon from './icons/GraphIcon.vue'
     import { ref, inject, computed, watch, provide} from 'vue';
     import { useOpenerStore } from "../stores/opener";
 

@@ -9,7 +9,7 @@ import '../node_modules/sparc-design-system-components-2/dist/style.css';
 
   //for auto install -----------------------------------------------------------------------------------------------------------------
   
-export function install(app, pinia){
+export function installDashboard (app, pinia){
 
     const emitter = mitt();
     app.provide('emitter', emitter); 

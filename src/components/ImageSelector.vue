@@ -18,7 +18,7 @@
 
 </template>
 <script setup>
-    import { ref, inject, onUnmounted, onMounted, nextTick } from "vue";
+    import { ref, inject, nextTick } from "vue";
     import { useOpenerStore } from "../stores/opener";
     import {Dataset} from '../assets/Model';
     import { Api } from "../services";
