@@ -3,43 +3,59 @@
 <el-dialog
     v-model="dialogVisible"
     title="QDB Graph Settings"
-    width="1000"
+    width="90%"
     :append-to-body="true"
   >
     <div class="tw-p-1">
       <label>Select Your Visualization: </label>
-      {{ selectedVisual }}
+      {{ selectedVisual }} 
       <div><el-button v-for="v in  visualizations" @click="changeVisualization(v)" 
         :class="{ 'secondary': v!=selectedVisual }" >{{ v }}</el-button></div>
     </div>
       <slot>
-        <div class="tw-border-solid" v-for="gm in gMList">
-          <label>Select Metric</label>
-          <el-select  v-model="selectedMetric" placeholder="select Metric">
-            <el-option
-              v-for="m in metricList" :key="m" :label="m" :value="m" @click="getAspectList(m)">
-            </el-option>
-          </el-select>
-
-          <div v-if="selectedVisual=='Scatter'">
-            <label>y-axis:</label>
-    
-            <el-select  v-model="selectedX" placeholder="select label">
-              <el-option
-                v-for="a in aspectList" :key="a" :label="a" :value="a" @click="changeXaxis(a)">
-              </el-option>
-            </el-select>
-            <label>x-axis:</label>
-    
-            <el-select  v-model="selectedY" placeholder="select label">
-              <el-option
-                v-for="a in aspectList" :key="a" :label="a" :value="a" @click="changeYaxis(a)">
+        <div v-for="gm in gMList">
+          <el-row class="tw-space-x-40">
+          <div class="tw-flex">
+          <div class="tw-p-1">
+            <label >{{ gMList.indexOf(gm)+1+": " }}</label>
+            <el-select v-model="gm._metric" placeholder="select Metric" class=" tw-w-40">
+              <el-option 
+                v-for="m in metricList" :key="m" :label="m" :value="m" @click="selectMetric(m, gm)">
               </el-option>
             </el-select>
           </div>
-          <el-button @click="removeMetric(gm)"></el-button>
+  
+          <div v-if="selectedVisual=='Scatter'" class="tw-flex">
+            <div class="tw-p-1">
+              <label>x-axis:</label>
+              <el-select v-model="gm._xAspect" placeholder="select x-axis" class=" tw-w-40">
+                <el-option
+                  v-for="a in aspectList" :key="a" :label="a" :value="a" @click="changeAxis('_x',a,gm)">
+                </el-option>
+              </el-select>
+            </div>
+            <div class="tw-p-1">
+              <label>y-axis:</label>
+              <el-select v-model="gm._yAspect" placeholder="select y-axis" class=" tw-w-40">
+                <el-option
+                  v-for="a in aspectList" :key="a" :label="a" :value="a" @click="changeAxis('_y',a,gm)">
+                </el-option>
+              </el-select>
+            </div>
+          </div>
         </div>
-        <el-button @click="addMetric()">add Metric</el-button>
+          <div class="tw-flex tw-p-1">
+            <div class="demo-color-block">
+              <el-color-picker v-model="gm.backgroundColor" />
+            </div>
+            <el-input v-model="gm.label" placeholder="Legend" class="tw-w-40 tw-h-8"></el-input>
+            <el-button v-if="gMList.indexOf(gm)>0" @click="removeMetric(gm)">-</el-button>
+          </div>
+          
+        </el-row>
+        </div>
+      
+        <el-button @click="addMetric()">+</el-button>
       </slot>
 
     <template #footer>
@@ -54,7 +70,7 @@
 </template>
 <script setup>
 
-import { ref, onMounted, watch, reactive } from 'vue'
+import { ref, onMounted, watch, shallowRef, toRaw } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import {VisualizationMap, GraphSettingsObject} from "./GraphModel.js"
 import { Api } from "../../services";
@@ -70,7 +86,7 @@ const props = defineProps({
     settingsData:{default:{}},
 })
 //copy property data
-const newGraphData = new GraphSettingsObject(props.settingsData);
+const newGraphData = ref(new GraphSettingsObject(props.settingsData));
 onMounted(()=>{
   getMetricList();
 })
@@ -87,35 +103,36 @@ watch(dialogVisible, (newVal) => {
 
 // on Save------------------------------------------------------
 function updateGraph(){
-  getDataPointsFromQDB();
+  emit('update-chart',toRaw(newGraphData.value))
   dialogVisible.value=false
 }
 
 //visualizations ---------------------------------------------
 const visualizations =  Array.from(VisualizationMap.keys());
-let selectedVisual = ref(newGraphData.visualizationName);
+let selectedVisual = shallowRef(newGraphData.value.visualization);
 //const foo = newGraphData.value;
 function changeVisualization(graphName){
     selectedVisual.value = graphName ;
     //highlight button
-    newGraphData.visualization = VisualizationMap.get(graphName);
+    newGraphData.value.visualization = graphName;
 }
 //multi metric options -----------------------------------------
-const gMList = ref(newGraphData.datasets);
+const gMList = shallowRef(newGraphData.value.datasets);
 function addMetric(){
-    newGraphData.addDataset();
+    newGraphData.value.addMetric();
+    gMList.value= newGraphData.value.datasets;
 }
 function removeMetric(metric){
-  if(gMList.value.length>1){
-    const index = gMList.value.indexOf(metric);
-    gMList.value.slice(index,1);
-  }
+  newGraphData.value.removeMetric(metric);
+  // if(gMList.value.length>1){
+  //   const index = gMList.value.indexOf(metric);
+  //   gMList.value.slice(index,1);
+  // }
 }
 //metrics ------------------------------------------------------
 const metricList = ref([]);
-const selectedMetric = ref("");
-const selectedX = ref("");
-const selectedY = ref("");
+//const selectedMetric = ref("");
+
 const getMetricList = async ()=>{
   let _metric_list = {};
   let _response = {};
@@ -124,13 +141,18 @@ const getMetricList = async ()=>{
             _response = response;
         })
         if (_response.status === 200) {
-        _metric_list = _response.data.result;
-            metricList.value = _metric_list.map(m=>m.label);
+          _metric_list = _response.data.result;
+          metricList.value = _metric_list.map(m=>m.label);
         }
     }catch(e){
         console.error("couldn't fetch classes/metrics from QDB");
         console.log(e)
     }
+  }
+  function selectMetric(selectedMetric, targetMetric){
+      const i = newGraphData.value.datasets.indexOf(targetMetric);
+      newGraphData.value.datasets[i]._metric = selectedMetric;
+      getAspectList(selectedMetric);
   }
 //aspects --------------------------------------------------------
 const aspectList = ref([]);
@@ -151,54 +173,35 @@ const getAspectList = async(metric)=>{
   }
 }
 
-function changeXaxis(x){
-  selectedX.value = x;
+function changeAxis(axis, aspect, metric){
+    const metricIndex = newGraphData.value.datasets.indexOf(metric);
+    newGraphData.value.datasets[metricIndex][axis] = aspect;
+    getDataByAspect(axis,aspect,metricIndex);
 }
-function changeYaxis(y){
-  selectedY.value=y;
-}
+
 
 //---------------------------------------------------------------
-const getDataPointsFromQDB = async()=>{
-  let _response = {};
-  let _xAxis = {};
-  let _yAxis = {};
-  try{
-    await Api.qdb.getDataByAspect(selectedMetric.value, selectedX.value).then(response=>{
-      _response = response;
-    })
-    if(_response.status===200){
-      _xAxis = _response.data.result;
-
-      await Api.qdb.getDataByAspect(selectedMetric.value, selectedY.value).then(response=>{
+const getDataByAspect = async(axis,aspect,metricIndex)=>{
+    try{
+      let _response = {};
+      let _axisData = {};
+      const metricName = newGraphData.value.datasets[metricIndex]._metric;
+      await Api.qdb.getDataByAspect(metricName,aspect).then(response=>{
         _response = response;
+        if(_response.status===200){
+           _axisData = _response.data.result;
+           if(_axisData && _axisData.length){
+              newGraphData.value.addDataToMetric(axis,_axisData,metricIndex);
+           }
+        }
       })
-      if(_response.status===200){
-        _yAxis = _response.data.result;
-        pointData(_xAxis,_yAxis);
-        emit('update-chart',newGraphData)
-      }
     }
-
-  }catch(e){
-    console.error("could not fetch data points from qdb");
-    console.log(e);
-  }
+    catch(e){
+      console.error("could not fetch data points from qdb");
+      console.log(e);
+    }
 }
 
-function pointData(xAxis,yAxis){
-  //match up where inst is the same and agg_type = instance
- // let results = xAxis.filter(o1 => y.some(o2 => o1.id === o2.id));
- let pointDataArray=[];
- xAxis.forEach(x => {
-    const yMatch = yAxis.find(y => y.inst === x.inst && y.agg_type=="instance" && x.agg_type==="instance");
-    if(yMatch){
-      pointDataArray.push({"x":x.value,"y":x.value});
-    }
-  });
-  newGraphData.datasets.data = pointDataArray;
-  //get value from each pair
-}
 const handleClose = () => {
  // ElMessageBox.confirm('Hello World')
  alert("yo")
@@ -211,5 +214,10 @@ const handleClose = () => {
 }
 
 </script>
-<style>
+<style scoped>
+.demo-color-block {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
 </style>

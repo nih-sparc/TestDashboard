@@ -4,7 +4,7 @@
     <div class="tw-flex tw-flex-col tw-h-full">
       <component
       id="my-chart-id"
-      :is="visualization"
+      :is="visualizationComponent"
       :options="chartOptions"
       :data="chartData">
     </component>
@@ -14,18 +14,18 @@
       :show-dialog="settingsVisible"
       @close-dialog="settingsVisible = false"
       @update-chart="(x)=>updateChart(x)"
-      :data="graphSettings"
+      :settingsData="graphSettingsObject"
       >
         
       </GraphSettings>
 </template>
 <script setup>
 
-  import {ref, onBeforeMount} from "vue";
+  import {ref, onBeforeMount, shallowRef} from "vue";
   import { Bar, Scatter, Pie, Line  } from 'vue-chartjs'
   import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale,PointElement, LineElement } from 'chart.js'
   ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement)
-  import {GraphSettingsObject} from "../devComponents/QDBGraph/GraphModel.js"
+  import {GraphSettingsObject, VisualizationMap} from "../devComponents/QDBGraph/GraphModel.js"
   import GraphSettings from '../devComponents/QDBGraph/QDBGraphSettings.vue'
   defineOptions({
   inheritAttrs: false
@@ -36,20 +36,28 @@
   const settingsVisible=ref(false);
 
   //retrieve saved settings if exist
-  let graphSettings = getSavedGraphSettings();
-  let visualization = graphSettings.visualization;
-  const chartData = ref(graphSettings.returnSettingsData(Bar));
-    
-const chartOptions = ref({
+  let graphSettingsObject = getSavedGraphSettings();
+ // let visualization = ref(graphSettings.visualization);
+  let visualizationComponent = shallowRef(VisualizationMap.get(graphSettingsObject.visualization));
+  graphSettingsObject.datasets[0].data=[40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11];
+  const chartData = ref(graphSettingsObject.returnSettingsData()); 
+  const chartOptions = ref({
         responsive: true,
         maintainAspectRatio: false
       });
 
 //called by Graph Settings component
-function updateChart(newGraphData){
-  if(visualization !=newGraphData.visualization){ChartJS.destroy}
-  visualization=newGraphData.visualization;
-  chartData.value = newGraphData.returnSettingsData(visualization);
+function updateChart(data){
+//  if(visualization !=data.visualization){ChartJS.destroy}
+//this doesn't work
+console.log(data)
+  graphSettingsObject =  data;
+  console.log(graphSettingsObject.returnSettingsData())
+  //this works
+ // graphSettings.datasets[0].data =  [{"x":1,"y":2}];
+  //idk what is going on. 
+  chartData.value = graphSettingsObject.returnSettingsData();
+  visualizationComponent.value=VisualizationMap.get(data.visualization)
 }
 
 function getSavedGraphSettings(){

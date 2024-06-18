@@ -7,27 +7,43 @@ VisualizationMap.set("Line",Line);
 class GraphMetric {
     constructor(data = {}){
         this.data = data.data? data.data:[];
-        this.label = data.label || "";
+        this.label = data.label || "QDB Data";
         this.fill = data.fill || "";
-        this.borderColor = data.borderColor || "red";
-        this.backgroundColor = data.backgroundColor || "";
+        this.borderColor = data.borderColor || "";
+        this.backgroundColor = data.backgroundColor || "#f87979";
+        this._x = {};
+        this._y = {};
+        this._xAspect = "";
+        this._yAspect = "";
+        this._metric = "";
     }
+    pointDataForScatter(){
+        let pointDataArray=[];
+        this._x.forEach(x => {
+            const yMatch = this._y.find(y => y.inst === x.inst && y.agg_type=="instance" && x.agg_type==="instance");
+            if(yMatch){
+            pointDataArray.push({"x":x.value,"y":x.value});
+            }
+        });
+            this.data = pointDataArray;
+        }
+    
 }
 
 export class GraphSettingsObject {
     constructor(settingsObj = {}){
-        this.visualization = settingsObj.visualization || Bar;
-        this._visualizationName = "";
+        this.visualization = settingsObj.visualization || "Bar";
         //attributes associated with chart data
         this.labels = settingsObj.labels || [""]
         this.datasets = settingsObj.datasets?settingsObj.datasets: [new GraphMetric()];
     }
-    get visualizationName(){
-        return this.getVName(VisualizationMap,this.visualization)
+    get component(){
+        return VisualizationMap.get(this.visualization);
     }
-    returnSettingsData(visualization){
+
+    returnSettingsData(visualization =this.visualization){
         switch(visualization) {
-            case Bar:
+            case "Bar":
                 return {
                     labels: [
                         'January',
@@ -43,20 +59,16 @@ export class GraphSettingsObject {
                         'November',
                         'December'
                       ],
-                      datasets: [
-                        {
-                          label: 'Data One',
-                          backgroundColor: '#f87979',
-                          data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
-                        }
-                      ]
+                      datasets: this.datasets
                 }
-            case Scatter:
+            case "Scatter":
+                this.datasets.forEach((metric)=>{
+                    metric.pointDataForScatter();
+                })
                 return {
-                    datasets: this.GraphMetric
-                    //]{x:1,y:2},{x:2,y:3}]
+                    datasets: this.datasets
                 }
-            case Line:
+            case "Line":
                 return {  
                     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
                 datasets: [
@@ -71,8 +83,25 @@ export class GraphSettingsObject {
                 return {};
         }
     }
-    addDataset(){
-        this.datasets.push(new GraphMetric);
+    addMetric(data, label, fill, borderColor, backgroundColor){
+        const tempObj = {
+            "data":data,
+            "label":label,
+            "fill":fill,
+            "borderColor":borderColor,
+            "backgroundColor":backgroundColor
+                        }
+        this.datasets.push(new GraphMetric(tempObj));
+    }
+    addDataToMetric(axis,data,metricIndex){     
+        this.datasets[metricIndex][axis] = metricIndex>-1? data: {};
+    }
+    removeMetric(metric){
+        const index = this.datasets.indexOf(metric);
+        this.datasets.splice(index,1);
+    }
+    clearAllMetrics(){
+        this.datasets = [new GraphMetric];
     }
     parseJson(json){
         Object.assign(this,json);

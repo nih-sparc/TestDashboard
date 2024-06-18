@@ -8,7 +8,7 @@ import '../node_modules/sparc-design-system-components-2/dist/style.css';
 import mitt from 'mitt'
  import App from './App.vue'
 import { useGlobalVarsStore } from './stores/globalVars'
-import "../tailwind/output.css"
+import "../dist/output.css"
 
  const app = createApp(App);
 app.use(DesignSystemComponentsPlugin);
