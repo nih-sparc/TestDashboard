@@ -15,17 +15,17 @@
       <slot>
         <div v-for="gm in gMList">
           <el-row class="tw-space-x-40">
+
           <div class="tw-flex">
-          <div class="tw-p-1">
-            <label >{{ gMList.indexOf(gm)+1+": " }}</label>
-            <el-select v-model="gm._metric" placeholder="select Metric" class=" tw-w-40">
-              <el-option 
-                v-for="m in metricList" :key="m" :label="m" :value="m" @click="selectMetric(m, gm)">
-              </el-option>
-            </el-select>
-          </div>
-  
-          <div v-if="selectedVisual=='Scatter'" class="tw-flex">
+            <div class="tw-p-1">
+              <label >{{ gMList.indexOf(gm)+1+": " }}</label>
+              <el-select v-model="gm._metric" placeholder="select Metric" class=" tw-w-40">
+                <el-option 
+                  v-for="m in metricList" :key="m" :label="m" :value="m" @click="selectMetric(m, gm)">
+                </el-option>
+              </el-select>
+            </div>
+        
             <div class="tw-p-1">
               <label>x-axis:</label>
               <el-select v-model="gm._xAspect" placeholder="select x-axis" class=" tw-w-40">
@@ -34,7 +34,8 @@
                 </el-option>
               </el-select>
             </div>
-            <div class="tw-p-1">
+
+            <div v-if="selectedVisual=='Scatter' || selectedVisual=='Line'" class="tw-p-1" >
               <label>y-axis:</label>
               <el-select v-model="gm._yAspect" placeholder="select y-axis" class=" tw-w-40">
                 <el-option
@@ -43,15 +44,17 @@
               </el-select>
             </div>
           </div>
-        </div>
-          <div class="tw-flex tw-p-1">
+
+        
+          <div class="tw-p-1 tw-flex">
             <div class="demo-color-block">
               <el-color-picker v-model="gm.backgroundColor" />
             </div>
             <el-input v-model="gm.label" placeholder="Legend" class="tw-w-40 tw-h-8"></el-input>
             <el-button v-if="gMList.indexOf(gm)>0" @click="removeMetric(gm)">-</el-button>
           </div>
-          
+
+   
         </el-row>
         </div>
       
@@ -112,15 +115,17 @@ const visualizations =  Array.from(VisualizationMap.keys());
 let selectedVisual = shallowRef(newGraphData.value.visualization);
 //const foo = newGraphData.value;
 function changeVisualization(graphName){
+    newGraphData.value.clearAllMetrics();
     selectedVisual.value = graphName ;
-    //highlight button
     newGraphData.value.visualization = graphName;
 }
 //multi metric options -----------------------------------------
 const gMList = shallowRef(newGraphData.value.datasets);
+watch(()=>newGraphData.value.datasets, (newVal) => {
+       gMList.value = newGraphData.value.datasets;
+   });
 function addMetric(){
     newGraphData.value.addMetric();
-    gMList.value= newGraphData.value.datasets;
 }
 function removeMetric(metric){
   newGraphData.value.removeMetric(metric);
@@ -152,6 +157,7 @@ const getMetricList = async ()=>{
   function selectMetric(selectedMetric, targetMetric){
       const i = newGraphData.value.datasets.indexOf(targetMetric);
       newGraphData.value.datasets[i]._metric = selectedMetric;
+      newGraphData.value.datasets[i].clearAllAspects();
       getAspectList(selectedMetric);
   }
 //aspects --------------------------------------------------------

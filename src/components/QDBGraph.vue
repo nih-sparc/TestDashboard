@@ -48,16 +48,10 @@
 
 //called by Graph Settings component
 function updateChart(data){
-//  if(visualization !=data.visualization){ChartJS.destroy}
-//this doesn't work
-console.log(data)
-  graphSettingsObject =  data;
-  console.log(graphSettingsObject.returnSettingsData())
-  //this works
- // graphSettings.datasets[0].data =  [{"x":1,"y":2}];
-  //idk what is going on. 
+  graphSettingsObject = data.clone();
   chartData.value = graphSettingsObject.returnSettingsData();
-  visualizationComponent.value=VisualizationMap.get(data.visualization)
+  visualizationComponent.value=VisualizationMap.get(graphSettingsObject.visualization);
+  
 }
 
 function getSavedGraphSettings(){

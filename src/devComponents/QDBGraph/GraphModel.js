@@ -11,8 +11,8 @@ class GraphMetric {
         this.fill = data.fill || "";
         this.borderColor = data.borderColor || "";
         this.backgroundColor = data.backgroundColor || "#f87979";
-        this._x = {};
-        this._y = {};
+        this._x = [];
+        this._y = [];
         this._xAspect = "";
         this._yAspect = "";
         this._metric = "";
@@ -26,8 +26,29 @@ class GraphMetric {
             }
         });
             this.data = pointDataArray;
-        }
-    
+    }
+    pointDataForBar(){
+        let pointDataArray=this._x.map(p=>p.value);
+        this.data = pointDataArray;
+    }    
+    clearAllAspects(){
+        this._xAspect="";
+        this._yAspect="";
+    }
+    clone() {
+        const clonedMetric = new GraphMetric();
+        clonedMetric.data = [...this.data];
+        clonedMetric.label = this.label;
+        clonedMetric.fill = this.fill;
+        clonedMetric.borderColor = this.borderColor;
+        clonedMetric.backgroundColor = this.backgroundColor;
+        clonedMetric._x = [...this._x];
+        clonedMetric._y = [...this._y];
+        clonedMetric._xAspect = this._xAspect;
+        clonedMetric._yAspect = this._yAspect;
+        clonedMetric._metric = this._metric;
+        return clonedMetric;
+      }
 }
 
 export class GraphSettingsObject {
@@ -40,25 +61,25 @@ export class GraphSettingsObject {
     get component(){
         return VisualizationMap.get(this.visualization);
     }
-
+    setLabels(){
+        function repeat(num,whatTo){
+            var arr = [];
+            for(var i=0;i<num;i++){
+                arr.push(whatTo);
+            }
+            return arr;
+        }
+        var n = this.datasets[0].data.length;
+        return repeat(n,"");
+    }
     returnSettingsData(visualization =this.visualization){
         switch(visualization) {
             case "Bar":
+                this.datasets.forEach((metric)=>{
+                    metric.pointDataForBar();
+                })
                 return {
-                    labels: [
-                        'January',
-                        'February',
-                        'March',
-                        'April',
-                        'May',
-                        'June',
-                        'July',
-                        'August',
-                        'September',
-                        'October',
-                        'November',
-                        'December'
-                      ],
+                    labels: this.setLabels(),
                       datasets: this.datasets
                 }
             case "Scatter":
@@ -69,15 +90,12 @@ export class GraphSettingsObject {
                     datasets: this.datasets
                 }
             case "Line":
+                this.datasets.forEach((metric)=>{
+                    metric.pointDataForBar();
+                })
                 return {  
-                    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [
-                  {
-                    label: 'Data One',
-                    backgroundColor: '#f87979',
-                    data: [40, 39, 10, 40, 39, 80, 40]
-                  }
-                ]
+                    labels: this.setLabels(),
+                    datasets: this.datasets
             }
             default:
                 return {};
@@ -112,4 +130,11 @@ export class GraphSettingsObject {
               return key;
           }
     }
+    clone() {
+        const clonedSettings = new GraphSettingsObject();
+        clonedSettings.visualization = this.visualization;
+        clonedSettings.labels = [...this.labels];
+        clonedSettings.datasets = this.datasets.map(dataset => dataset.clone());
+        return clonedSettings;
+      }
 }
