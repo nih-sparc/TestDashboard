@@ -3,25 +3,23 @@
 
                 <div class="tw-flex tw-flex-row tw-items-center tw-justify-between tw-h-10 content-header stick-to-top tw-p-1">
                     <h4>{{ widgetTitle}}</h4>
-                    <div v-if="hasSettings" @click="callOpenSettings=true" ><i>settings</i></div>
-                    <close v-if="!staticMode" background="#8300BF" color="white" class="close-button" @click="$emit('removeWidget')"></close>
+                    <DownloadIcon></DownloadIcon>
+                    <close-icon v-if="!staticMode" background="#8300BF" color="white" class="close-button" @click="$emit('removeWidget')"></close-icon>
                 </div>
-                <component class="widget-body" @setTitle="(t)=>updateTitle(t)" @addSettings="hasSettings = true" :is="componentTag" :listening="highlight" :openSettings="callOpenSettings">
-              </component>
+
+                    <component class="widget-body"  @setTitle="(t)=>updateTitle(t)" :is="componentTag" :listening="highlight"></component>
+
             </div>
 </template>
 <script setup>
-    import Close from './icons/Close.vue';
-    import { ref, inject, computed, watch} from 'vue';
+    import CloseIcon from './icons/CloseIcon.vue';
+    import DownloadIcon from './icons/DownloadIcon.vue'
+    import GraphIcon from './icons/GraphIcon.vue'
+    import { ref, inject, computed, watch, provide} from 'vue';
     import { useOpenerStore } from "../stores/opener";
 
-    const emitter = inject('emitter');
-
     const emit = defineEmits(['removeWidget']);
-
     const opener = useOpenerStore();
-    const callOpenSettings = ref(false);
-
     const props = defineProps({      
             widgetID:{
                 type:String,
@@ -38,9 +36,6 @@
                 
             }
         })
-
-    let hasSettings = ref(false)
-
         //this controls properties of a widget being dynamically opened from another widget (via the spacdashboard).
         //use case for this might not be needed anymore as we use edit mode and static mode to add widgets. 
     let propName = ref("");

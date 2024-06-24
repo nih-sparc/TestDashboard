@@ -1,62 +1,69 @@
 
 <template>
+    <button @click="settingsVisible=true" ><i>settings</i></button> 
     <div class="tw-flex tw-flex-col tw-h-full">
-        <Bar
-        id="my-chart-id"
-        :options="chartOptions"
-        :data="chartData"
-    />
+      <component
+      id="my-chart-id"
+      :is="visualizationComponent"
+      :options="chartOptions"
+      :data="chartData">
+    </component>
     </div>
-    <div>
-      <label>x-axis:</label>
-      <el-select :value="labels" placeholder="select label">
-          <el-option
-            v-for="x in xAxis" :key="x" :label="x" :value="x" @click="updateGraph(x)">
-          </el-option>
-        </el-select>
-    </div>
+
+      <GraphSettings    
+      :show-dialog="settingsVisible"
+      @close-dialog="settingsVisible = false"
+      @update-chart="(x)=>updateChart(x)"
+      :settingsData="graphSettingsObject"
+      >
+        
+      </GraphSettings>
 </template>
 <script setup>
-  import {ref} from "vue";
-  import { Bar } from 'vue-chartjs'
-  import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
-  import qdbPlugin from '../plugins/QDBApiClient.js'
-  const emit = defineEmits(['setTitle']);
-  emit('setTitle','Quantitative Graph')
-  emit('addSettings');
-  ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
-  const props = defineProps({
+  import {ref, onBeforeMount, shallowRef} from "vue";
+  import { Bar, Scatter, Pie, Line  } from 'vue-chartjs'
+  import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale,PointElement, LineElement } from 'chart.js'
+  ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement)
+  import {GraphSettingsObject, VisualizationMap} from "../devComponents/QDBGraph/GraphModel.js"
+  import GraphSettings from '../devComponents/QDBGraph/QDBGraphSettings.vue'
+  defineOptions({
+  inheritAttrs: false
   })
-  const xAxis = ref(["Months", "Years"])
+  const emit = defineEmits(['setTitle']);
+  emit('setTitle','QDB Graph')
 
-  const years = ["2019","2020","2021"]
-  const months = [ 'January', 'February', 'March' ]
-  const labels = ref(months)
-  const chartData = ref({
-        labels: labels.value,
-        datasets: [ { data: [40, 20, 12] } ]
-      });
-    
-const chartOptions = ref({
-        responsive: true
+  const settingsVisible=ref(false);
+
+  //retrieve saved settings if exist
+  let graphSettingsObject = getSavedGraphSettings();
+ // let visualization = ref(graphSettings.visualization);
+  let visualizationComponent = shallowRef(VisualizationMap.get(graphSettingsObject.visualization));
+  graphSettingsObject.datasets[0].data=[40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11];
+  const chartData = ref(graphSettingsObject.returnSettingsData()); 
+  const chartOptions = ref({
+        responsive: true,
+        maintainAspectRatio: false
       });
 
-function updateGraph(type){
-  //switch statement 
-  if(type=="Years"){
-    labels.value = years;
-  }else{
-    labels.value = months;
-  }
-  updateChart();
+//called by Graph Settings component
+function updateChart(data){
+  graphSettingsObject = data.clone();
+  chartData.value = graphSettingsObject.returnSettingsData();
+  visualizationComponent.value=VisualizationMap.get(graphSettingsObject.visualization);
+  
 }
-function updateChart(){
-  chartData.value = {
-        labels: labels.value,
-        datasets: [ { data: [40, 20, 12] } ]
-      };
+
+function getSavedGraphSettings(){
+   //temporarily return with no settings
+   let hasSavedSettings = false;
+   if(hasSavedSettings){
+    return new GraphSettingsObject();
+   }else{
+    return new GraphSettingsObject();
+   }
 }
+
 </script>
 <style scoped lang="scss">
 @import './node_modules/sparc-design-system-components-2/src/assets/_variables.scss';

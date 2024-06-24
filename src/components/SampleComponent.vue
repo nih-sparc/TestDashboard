@@ -12,6 +12,10 @@
 
     import { ref, defineEmits, inject, watch, onMounted, onUnmounted } from 'vue';
     import { useOpenerStore } from '../stores/opener';
+    //this is included so that your component does not inherit props or attributes that you do not explicitly declare 
+    defineOptions({
+        inheritAttrs: false
+    })
 
     //allows you to emit events that can be caught by other components. 
     const emitter = inject('emitter');

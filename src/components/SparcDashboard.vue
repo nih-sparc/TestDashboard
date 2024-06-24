@@ -1,6 +1,6 @@
 <template>
     <div class="dash-header tw-h-10">
-     <span class="tw-float-right tw-m-1"><el-button @click="staticMode=!staticMode">Edit Grid</el-button></span>
+     <span class="tw-float-left tw-m-1"><el-button @click="staticMode=!staticMode">{{ editGridButton }}</el-button></span>
     </div>
     <el-col v-if="!staticMode">
       <el-row class="tw-m-12">
@@ -9,7 +9,7 @@
             v-for="item in ComponentListOptions" :key="item" :label="item" :value="item" @click="addNewWidget(item)">
           </el-option>
         </el-select>
-        <el-button type="default" @click="saveDashboard()" disabled >Save Dashboard</el-button>
+        <el-button v-if="debug" type="default" @click="saveDashboard()" disabled >Save Dashboard</el-button>
       </el-row>
   </el-col> 
     <div  ref="root" class="grid-stack tw-h-screen">
@@ -34,28 +34,31 @@ import {Dataset} from '../assets/Model';
 import "gridstack/dist/gridstack.min.css";
 import "gridstack/dist/gridstack-extra.min.css";
 
+const debug = false;
 const _emitter = inject('emitter');
 const _globalVars = useGlobalVarsStore();
 let _DatasetImgs = ref({});
+let editGridButton = ref("Edit Grid")
 
 let Grid = null;
 const root = ref(null);
+
 let NavItem = ref({});
-let DashboardItems = ref([
-]);
+let DashboardItems = ref([]);
 let staticMode = ref(true);
 getItemsFromLS();
 let ComponentListOptions = _globalVars.componentList;
 let NewComponent = {};
 let NextId = DashboardItems.value.length;
 
+const dBItems = debug ? [{ id: "ODBGraph-1", x: 0, y: 0, h: 4, w:3, componentName:"Flatmap Viewer",component:"QDBGraph" }] : 
+[{ id: "FlatmapViewer-1", x: 0, y: 0, h: 8, w:2, componentName:"Flatmap Viewer",component:"FlatmapViewer" },
+    { id: "ImageSelector-2", x: 2, y: 0, h: 8, w:3, componentName:"Image Selector", component:"ImageSelector"},
+    { id: "BiolucidaViewer-3", x: 5, y: 0,h: 10, w:5, componentName:"MBF Viewer", component:"BiolucidaViewer"}]
+
 
 onBeforeMount(() => {
-  DashboardItems.value = [    { id: "FlatmapViewer-1", x: 0, y: 0, h: 8, w:2, componentName:"Flatmap Viewer",component:"FlatmapViewer" },
-    { id: "ImageSelector-2", x: 3, y: 0, h: 8, w:3, componentName:"Image Selector", component:"ImageSelector"},
-    { id: "BiolucidaViewer-3", x: 6, y: 0,h: 10, w:5, componentName:"MBF Viewer", component:"BiolucidaViewer"},
-    //{ id: "BiolucidaViewer-4", x: 10, y: 0,h: 8, w:3, componentName:"MBF Viewer", component:"BiolucidaViewer"}
-    ]
+  DashboardItems.value = dBItems;
   });
   onMounted(() => {
     initGridStack();
@@ -91,7 +94,8 @@ function initGridStack(){
 }
 //All additional Functions - - - - - - - - -- - - - - --  -- - -- - - - - - - -  --
 watch(()=> staticMode.value, (value) => {
-  Grid.setStatic(value)
+  Grid.setStatic(value);
+  editGridButton.value = !value?"Save Grid":"Edit Grid";
 })
 
 function addNewWidget(name) {

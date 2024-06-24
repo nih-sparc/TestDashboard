@@ -18,12 +18,16 @@
 
 </template>
 <script setup>
-    import { ref, inject, onUnmounted, onMounted, nextTick } from "vue";
+    import { ref, inject, nextTick } from "vue";
     import { useOpenerStore } from "../stores/opener";
     import {Dataset} from '../assets/Model';
     import { Api } from "../services";
     const emitter = inject('emitter');
-    //const opener = useOpenerStore();
+
+    defineOptions({
+        inheritAttrs: false
+    })    
+    
     import imageMod from "../assets/imgs/imgInfo.png"
     let imgPath = ref(null);
 
@@ -43,6 +47,8 @@ emitter.on('anatomical-location-selected',(location)=>{
 });
 //on update
 const getImagesFromDataset = async (datasetId)=>{
+    datasetId=353;
+    TableData.value=[];
             let _biolucidaImageData = {};
             let _response = {};
             try{

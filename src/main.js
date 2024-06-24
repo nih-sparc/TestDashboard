@@ -7,15 +7,13 @@ import DesignSystemComponentsPlugin from 'sparc-design-system-components-2'
 import '../node_modules/sparc-design-system-components-2/dist/style.css';
 import mitt from 'mitt'
  import App from './App.vue'
- //import DashboardPlugin from "../dist/index"
- //import DashboardPlugin from './DashboardPlugin'
 import { useGlobalVarsStore } from './stores/globalVars'
-import "../tailwind/output.css"
+import "../dist/output.css"
 
  const app = createApp(App);
 app.use(DesignSystemComponentsPlugin);
 app.use(createPinia());
-//app.use(DashboardPlugin);
+
 const emitter = mitt();
 app.provide('emitter', emitter); 
 

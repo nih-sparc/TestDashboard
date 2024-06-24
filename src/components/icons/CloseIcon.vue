@@ -16,7 +16,7 @@
   
   <script>
   export default {
-    name: "Close",
+    name: "CloseIcon",
     props: {
       width: {
         type: Number,
