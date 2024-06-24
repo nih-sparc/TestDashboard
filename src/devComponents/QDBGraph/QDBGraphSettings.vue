@@ -27,7 +27,7 @@
             </div>
         
             <div class="tw-p-1">
-              <label>x-axis:</label>
+              <label class="tw-font-bold">x-axis:</label>
               <el-select v-model="gm._xAspect" placeholder="select x-axis" class=" tw-w-40">
                 <el-option
                   v-for="a in aspectList" :key="a" :label="a" :value="a" @click="changeAxis('_x',a,gm)">
@@ -36,7 +36,7 @@
             </div>
 
             <div v-if="selectedVisual=='Scatter' || selectedVisual=='Line'" class="tw-p-1" >
-              <label>y-axis:</label>
+              <label class="tw-font-bold" >y-axis:</label>
               <el-select v-model="gm._yAspect" placeholder="select y-axis" class=" tw-w-40">
                 <el-option
                   v-for="a in aspectList" :key="a" :label="a" :value="a" @click="changeAxis('_y',a,gm)">
@@ -46,12 +46,18 @@
           </div>
 
         
-          <div class="tw-p-1 tw-flex">
-            <div class="demo-color-block">
+          <div class="tw-flex">
+
+            <div class="tw-p-1">
+              <label class="tw-font-bold">Label: </label>
+              <el-input v-model="gm.label" placeholder="Legend" class="tw-w-40 tw-h-8"></el-input>
+            </div>
+            <div class="tw-p-1">
+              <el-button v-if="gMList.indexOf(gm)>0" @click="removeMetric(gm)">-</el-button>
+            </div>
+            <div class="demo-color-block tw-p-1">
               <el-color-picker v-model="gm.backgroundColor" />
             </div>
-            <el-input v-model="gm.label" placeholder="Legend" class="tw-w-40 tw-h-8"></el-input>
-            <el-button v-if="gMList.indexOf(gm)>0" @click="removeMetric(gm)">-</el-button>
           </div>
 
    
