@@ -1,6 +1,8 @@
 <template>
-<div class="flatmap-viewer">
-    <div class="tw-text-left tw-pl-1"><p>select anatomical location</p></div>
+<div class="flatmap-viewer tw-p-0">
+    <div class="tw-text-left tw-pl-1">
+        <p><b>Current Location: </b>{{ locationLabel }}</p>
+    </div>
 
     <FlatmapVuer class="tw-px-2 tw-py-2" :disableUI="disableFlatmapUI" entry="UBERON:1759" v-on:resource-selected="FlatmapSelected"  v-on:ready="FlatmapReady"/>
 
@@ -13,17 +15,24 @@
   import { useOpenerStore } from "../stores/opener";
   FlatmapVuer.props.flatmapAPI.default="https://mapcore-demo.org/devel/flatmap/v4/";
   const disableFlatmapUI = true;
+  let FlatmapReady = false;
+
+
 
   const emit = defineEmits(['setTitle']);
   emit('setTitle','Flatmap Selector'); 
 
   const emitter = inject('emitter');
-  let Location ="";
+  
+  let locationId = "";
+  const locationLabel = ref("None selected");
   
 function FlatmapSelected(data){
-    Location = data.feature.featureId;
+    if(locationId===data.feature.featureId){return;}
+    locationId = data.feature.featureId;
+    locationLabel.value = data.label;
     //send to image selector
-    emitter.emit("anatomical-location-selected",353)
+    emitter.emit("anatomical-location-selected",locationId)
 }
 
 

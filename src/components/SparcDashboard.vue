@@ -34,7 +34,7 @@ import {Dataset} from '../assets/Model';
 import "gridstack/dist/gridstack.min.css";
 import "gridstack/dist/gridstack-extra.min.css";
 
-const debug = true;
+const debug = false;
 const _emitter = inject('emitter');
 const _globalVars = useGlobalVarsStore();
 let _DatasetImgs = ref({});
@@ -42,6 +42,7 @@ let editGridButton = ref("Edit Grid")
 
 let Grid = null;
 const root = ref(null);
+
 let NavItem = ref({});
 let DashboardItems = ref([]);
 let staticMode = ref(true);

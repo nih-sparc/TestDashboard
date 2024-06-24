@@ -6,9 +6,9 @@
                     <DownloadIcon></DownloadIcon>
                     <close-icon v-if="!staticMode" background="#8300BF" color="white" class="close-button" @click="$emit('removeWidget')"></close-icon>
                 </div>
-                <div class="widget-body">
-                    <component   @setTitle="(t)=>updateTitle(t)" :is="componentTag" :listening="highlight"></component>
-                </div>
+
+                    <component class="widget-body"  @setTitle="(t)=>updateTitle(t)" :is="componentTag" :listening="highlight"></component>
+
             </div>
 </template>
 <script setup>

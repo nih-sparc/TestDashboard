@@ -7,7 +7,7 @@ VisualizationMap.set("Line",Line);
 class GraphMetric {
     constructor(data = {}){
         this.data = data.data? data.data:[];
-        this.label = data.label || "QDB Data";
+        this.label = data.label || "";
         this.fill = data.fill || "";
         this.borderColor = data.borderColor || "";
         this.backgroundColor = data.backgroundColor || "#f87979";
