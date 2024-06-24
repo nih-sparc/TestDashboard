@@ -1,6 +1,6 @@
 
 import  SparcDashboard  from './components/SparcDashboard.vue'
-import "../tailwind/output.css"
+import "../dist/output.css"
 import { defineAsyncComponent } from 'vue'
 import mitt from 'mitt'
 import { useGlobalVarsStore } from './stores/globalVars'
@@ -18,7 +18,7 @@ export function installDashboard (app, pinia){
   
     const componentMap = [
         'ImageSelector',
-        'QDBChart',
+        'QDBGraph',
         'FlatmapViewer',
         'BiolucidaViewer'
     ]

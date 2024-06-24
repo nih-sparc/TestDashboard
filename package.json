@@ -1,6 +1,6 @@
 {
   "name": "sparc-dashboard-beta",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": "Sam Kraft (https://Sparc.Science)",
   "private": false,
   "type": "module",
@@ -9,11 +9,12 @@
   "files": [
     "dist",
     "src/stores",
+    "src/devComponents",
     "tailwind"
   ],
   "scripts": {
     "dev": "vite & yarn tailwindcss -i ./src/assets/base.css -o ./dist/output.css --watch",
-    "build": "tsc & vite build",
+    "build": "tsc & vite build; yarn tailwindcss -i ./src/assets/base.css -o ./dist/output.css",
     "preview": "vite preview",
     "build-only": "vite build; yarn tailwindcss -i ./src/assets/base.css -o ./dist/output.css",
     "release:beta": "npm publish --tag beta",

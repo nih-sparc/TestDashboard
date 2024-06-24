@@ -30,7 +30,7 @@
               <label class="tw-font-bold">x-axis:</label>
               <el-select v-model="gm._xAspect" placeholder="select x-axis" class=" tw-w-40">
                 <el-option
-                  v-for="a in aspectList" :key="a" :label="a" :value="a" @click="changeAxis('_x',a,gm)">
+                  v-for="a in gm._aspectList" :key="a" :label="a" :value="a" @click="changeAxis('_x',a,gm)">
                 </el-option>
               </el-select>
             </div>
@@ -39,7 +39,7 @@
               <label class="tw-font-bold" >y-axis:</label>
               <el-select v-model="gm._yAspect" placeholder="select y-axis" class=" tw-w-40">
                 <el-option
-                  v-for="a in aspectList" :key="a" :label="a" :value="a" @click="changeAxis('_y',a,gm)">
+                  v-for="a in gm._aspectList" :key="a" :label="a" :value="a" @click="changeAxis('_y',a,gm)">
                 </el-option>
               </el-select>
             </div>
@@ -162,13 +162,14 @@ const getMetricList = async ()=>{
   }
   function selectMetric(selectedMetric, targetMetric){
       const i = newGraphData.value.datasets.indexOf(targetMetric);
-      newGraphData.value.datasets[i]._metric = selectedMetric;
+      const dataset = newGraphData.value.datasets[i];
+      dataset._metric = selectedMetric;
       newGraphData.value.datasets[i].clearAllAspects();
-      getAspectList(selectedMetric);
+      getAspectList(selectedMetric, dataset);
   }
 //aspects --------------------------------------------------------
-const aspectList = ref([]);
-const getAspectList = async(metric)=>{
+//const aspectList = ref([]);
+const getAspectList = async(metric, dataset)=>{
   let _aspect_list = {};
   let _response = {};
   try{
@@ -177,10 +178,10 @@ const getAspectList = async(metric)=>{
       })
       if (_response.status === 200) {
         _aspect_list = _response.data.result;
-          aspectList.value = _aspect_list.map(a=>a.label);
+        dataset._aspectList = _aspect_list.map(a=>a.label);
       }
   }catch(e){
-      console.error("couldn't fetch aspects of "+m+" from QDB");
+      console.error("couldn't fetch aspects of "+metric+" from QDB");
       console.log(e)
   }
 }

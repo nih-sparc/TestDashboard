@@ -15,6 +15,7 @@ class GraphMetric {
         this._y = [];
         this._xAspect = "";
         this._yAspect = "";
+        this._aspectList=[];
         this._metric = "";
     }
     pointDataForScatter(){
