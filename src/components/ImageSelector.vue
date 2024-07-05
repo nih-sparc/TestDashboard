@@ -20,7 +20,7 @@
 <script setup>
     import { ref, inject, nextTick } from "vue";
     import { useOpenerStore } from "../stores/opener";
-    import {Dataset} from '../assets/Model';
+    import { TableObject} from "../devComponents/ImageSelector/ImageModel"
     import { Api } from "../services";
     const emitter = inject('emitter');
 
@@ -29,9 +29,10 @@
     })    
     
     import imageMod from "../assets/imgs/imgInfo.png"
-    let imgPath = ref(null);
-
-    let TableData = ref();
+    const imgPath = ref(null);
+    const imageArray = ref(null);
+    const imageType = ref("");
+    const TableData = ref();
 
     const emit = defineEmits(['setTitle'])
     emit('setTitle','MUSE Image Selector');
@@ -39,11 +40,13 @@
 function selectImage(index){
     let img = TableData.value[index].path;
     emitter.emit("mbf-image-selected",img);
-//  opener.openWidget("BiolucidaViewer", [{key:"mbfLink",value:img}])
 }
 
-emitter.on('anatomical-location-selected',(location)=>{
-    getImagesFromDataset(location);
+emitter.on('MBFImageArray-Update',(imageArray)=>{
+    //buildDataTable
+    imageArray.value = new TableObject(imageArray);
+
+    TableData.value = imageArray.value.buildTableMBF();
 });
 //on update
 const getImagesFromDataset = async (datasetId)=>{
@@ -57,6 +60,7 @@ const getImagesFromDataset = async (datasetId)=>{
                 })
                 if (_response.status === 200) {
                 _biolucidaImageData = _response;
+                //buildTable needs to belong to ImageModel/s 
                 buildDataTable(Object.assign(new Dataset(_biolucidaImageData.data.dataset_images)).Imgs);
                 }
             }catch(e){

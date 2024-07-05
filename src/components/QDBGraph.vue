@@ -48,6 +48,7 @@
 
 //called by Graph Settings component
 function updateChart(data){
+  //graphSettingsObject needs to be entirely new obj in order for chartData to update on the DOM
   graphSettingsObject = data.clone();
   chartData.value = graphSettingsObject.returnSettingsData();
   visualizationComponent.value=VisualizationMap.get(graphSettingsObject.visualization);
