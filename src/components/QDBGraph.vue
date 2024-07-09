@@ -63,6 +63,7 @@ function getSavedGraphSettings(){
    }else{
     return new GraphSettingsObject();
    }
+   
 }
 
 </script>
