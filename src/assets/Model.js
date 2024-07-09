@@ -13,8 +13,9 @@ class Img
 export class Dataset
 {
     constructor(dataset){
-        this.Imgs = [];
-        dataset.forEach((img)=>this.Imgs.push(new Img(img)));
+        this.name = dataset.ImgName,
+        this.size = "...",
+        this.path = dataset.Path
     }
 }
 

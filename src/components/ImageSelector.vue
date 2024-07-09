@@ -20,7 +20,7 @@
 <script setup>
     import { ref, inject, nextTick } from "vue";
     import { useOpenerStore } from "../stores/opener";
-    import {Dataset} from '../assets/Model';
+    import { TableObject} from "../devComponents/ImageSelector/ImageModel"
     import { Api } from "../services";
     const emitter = inject('emitter');
 
@@ -29,9 +29,10 @@
     })    
     
     import imageMod from "../assets/imgs/imgInfo.png"
-    let imgPath = ref(null);
-
-    let TableData = ref();
+    const imgPath = ref(null);
+    const imageArray = ref(null);
+    const imageType = ref("");
+    const TableData = ref();
 
     const emit = defineEmits(['setTitle'])
     emit('setTitle','MUSE Image Selector');
@@ -39,11 +40,14 @@
 function selectImage(index){
     let img = TableData.value[index].path;
     emitter.emit("mbf-image-selected",img);
-//  opener.openWidget("BiolucidaViewer", [{key:"mbfLink",value:img}])
 }
 
-emitter.on('anatomical-location-selected',(location)=>{
-    getImagesFromDataset(location);
+emitter.on('MBFImageArray-Update',(imageArray)=>{
+    //buildDataTable
+    //imageArray.value = new TableObject(imageArray);
+
+    //TableData.value = imageArray.value.buildTableMBF();
+    getImagesFromDataset();
 });
 //on update
 const getImagesFromDataset = async (datasetId)=>{
@@ -57,16 +61,20 @@ const getImagesFromDataset = async (datasetId)=>{
                 })
                 if (_response.status === 200) {
                 _biolucidaImageData = _response;
-                buildDataTable(Object.assign(new Dataset(_biolucidaImageData.data.dataset_images)).Imgs);
+                //buildTable needs to belong to ImageModel/s 
+                imageArray.value = new TableObject(_biolucidaImageData.data.dataset_images);
+                TableData.value = imageArray.value.buildTableSPARC();
+                //buildDataTable(Object.assign(new TableObject(_biolucidaImageData.data.dataset_images)));
                 }
             }catch(e){
                 console.error("couldn't fetch images from dataset");
             }
         }
 
-function buildDataTable(Imgs){
+function buildDataTable(tbleObj){
+    const imgs = tbleObj.SparcImageArray;
     let _tempArr=[];
-    Imgs.forEach((img)=>{
+    imgs.forEach((img)=>{
         let column = {
             name:img.ImgName,
             size: "...",
