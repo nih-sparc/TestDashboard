@@ -44,9 +44,10 @@ function selectImage(index){
 
 emitter.on('MBFImageArray-Update',(imageArray)=>{
     //buildDataTable
-    imageArray.value = new TableObject(imageArray);
+    //imageArray.value = new TableObject(imageArray);
 
-    TableData.value = imageArray.value.buildTableMBF();
+    //TableData.value = imageArray.value.buildTableMBF();
+    getImagesFromDataset();
 });
 //on update
 const getImagesFromDataset = async (datasetId)=>{
@@ -61,16 +62,19 @@ const getImagesFromDataset = async (datasetId)=>{
                 if (_response.status === 200) {
                 _biolucidaImageData = _response;
                 //buildTable needs to belong to ImageModel/s 
-                buildDataTable(Object.assign(new Dataset(_biolucidaImageData.data.dataset_images)).Imgs);
+                imageArray.value = new TableObject(_biolucidaImageData.data.dataset_images);
+                TableData.value = imageArray.value.buildTableSPARC();
+                //buildDataTable(Object.assign(new TableObject(_biolucidaImageData.data.dataset_images)));
                 }
             }catch(e){
                 console.error("couldn't fetch images from dataset");
             }
         }
 
-function buildDataTable(Imgs){
+function buildDataTable(tbleObj){
+    const imgs = tbleObj.SparcImageArray;
     let _tempArr=[];
-    Imgs.forEach((img)=>{
+    imgs.forEach((img)=>{
         let column = {
             name:img.ImgName,
             size: "...",

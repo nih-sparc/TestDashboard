@@ -12,7 +12,10 @@ class MBFImageObject {
  class SparcImageObject
 {
     constructor(data){
-        this.id = data.id;
+        this.id = data.image_id;
+        this.name = data.image_id,
+        this.size = "...",
+        this.path = data.share_link
     }
 }
 export class TableObject{
@@ -29,6 +32,18 @@ export class TableObject{
                 name:img.id,
                 size: "...",
                 path: ""
+            }
+            _tempArr.push(column);
+        })
+        return _tempArr;
+    }
+    buildTableSPARC(){
+        let _tempArr=[];
+        this.SparcImageArray.forEach((img)=>{
+            let column = {
+                name:img.id,
+                size: "...",
+                path: img.path
             }
             _tempArr.push(column);
         })
