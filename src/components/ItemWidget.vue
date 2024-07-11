@@ -1,22 +1,21 @@
 <template>
-            <div ref="instance" class="grid-stack-item-content" @click="selectWidget()">
-
-                <div class="tw-flex tw-flex-row tw-items-center tw-justify-between tw-h-10 content-header stick-to-top tw-p-1">
-                    <h4>{{ widgetTitle}}</h4>
-                    <DownloadIcon></DownloadIcon>
-                    <close-icon v-if="!staticMode" background="#8300BF" color="white" class="close-button" @click="$emit('removeWidget')"></close-icon>
-                </div>
-
-                    <component class="widget-body"  @setTitle="(t)=>updateTitle(t)" :is="componentTag" :listening="highlight"></component>
-
+            <div ref="instance" class="grid-stack-item-content widget-body" @click="selectWidget()">
+                <component v-slot="slotProps" :is="componentTag" :listening="highlight" @appendToHead="appendIconsToHeader()">
+             
+                    <DashHeader :widgetName="slotProps.widgetName" :staticMode="staticMode">
+                        <component v-for="icon in slotProps.childIcons" :is="icon.comp" @click="icon.event" class="tw-p-1"></component>
+                        <DownloadIcon></DownloadIcon>
+                        <close-icon v-if="!staticMode" background="#8300BF" color="white" class="close-button" @click="$emit('removeWidget')"></close-icon>
+                    </DashHeader>
+                </component> 
             </div>
 </template>
 <script setup>
     import CloseIcon from './icons/CloseIcon.vue';
     import DownloadIcon from './icons/DownloadIcon.vue'
-    import GraphIcon from './icons/GraphIcon.vue'
     import { ref, inject, computed, watch, provide} from 'vue';
     import { useOpenerStore } from "../stores/opener";
+    import DashHeader from "./DashHeader.vue";
 
     const emit = defineEmits(['removeWidget']);
     const opener = useOpenerStore();
@@ -36,8 +35,8 @@
                 
             }
         })
-        //this controls properties of a widget being dynamically opened from another widget (via the spacdashboard).
-        //use case for this might not be needed anymore as we use edit mode and static mode to add widgets. 
+    //this controls properties of a widget being dynamically opened from another widget (via the spacdashboard).
+    //use case for this might not be needed anymore as we use edit mode and static mode to add widgets. 
     let propName = ref("");
     let propVal = ref("");
     watch(() => props.componentProperties, (newVal, oldVal) => {
@@ -48,12 +47,6 @@
 
 //-----------------------------------------------------------------------------
     let instance = ref(null);
-
-    let widgetTitle = ref("");
-    function updateTitle(t){
-        widgetTitle.value = t;
-    }
-
     let highlight = ref(false)
     
 
@@ -69,7 +62,7 @@
 <style scoped lang="scss">
 @import './node_modules/sparc-design-system-components-2/src/assets/_variables.scss';
 
-.content-header{
+:deep(.content-header){
     border-bottom: 1px solid $mediumGrey;
     
     h3{
@@ -104,7 +97,7 @@
     width:100%;
     }
 }
-.stick-to-top{
+:deep(.stick-to-top){
     position: sticky;
     top: 0;
     width: 100%;

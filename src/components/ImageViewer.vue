@@ -1,4 +1,7 @@
 <template>
+    <div class="content-header stick-to-top tw-flex tw-flex-row tw-items-center tw-justify-between tw-h-10 tw-p-1">                    
+      <slot></slot>
+    </div>
     <div class="metadata-imgV">
 
     </div>

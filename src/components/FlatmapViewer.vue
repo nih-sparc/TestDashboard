@@ -1,12 +1,14 @@
-<template>
-<div class="flatmap-viewer tw-p-0">
-    <div class="tw-text-left tw-pl-1">
-        <p><b>Current Location: </b>{{ locationLabel }}</p>
+<template>                  
+    <slot :widgetName="widgetName"></slot>
+
+    <div class="flatmap-viewer tw-p-0">
+        <div class="tw-text-left tw-pl-1">
+            <p><b>Current Location: </b>{{ locationLabel }}</p>
+        </div>
+
+        <FlatmapVuer class="tw-px-2 tw-py-2" :disableUI="disableFlatmapUI" entry="UBERON:1759" v-on:resource-selected="FlatmapSelected"  v-on:ready="FlatmapReady"/>
+
     </div>
-
-    <FlatmapVuer class="tw-px-2 tw-py-2" :disableUI="disableFlatmapUI" entry="UBERON:1759" v-on:resource-selected="FlatmapSelected"  v-on:ready="FlatmapReady"/>
-
-</div>
 
 </template>
 <script setup>
@@ -21,8 +23,7 @@
   const locationStore = useLocationStore();
   locationStore.init()
 
-  const emit = defineEmits(['setTitle']);
-  emit('setTitle','Flatmap Selector'); 
+  const widgetName = ref('Flatmap Selector');
 
   const emitter = inject('emitter');
   

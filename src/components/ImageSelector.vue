@@ -1,4 +1,6 @@
-<template>
+<template>              
+      <slot :widgetName="widgetName"></slot>
+
     <div class="fill">
         <img :src=imgPath>
     </div>
@@ -34,8 +36,7 @@
     const imageType = ref("");
     const TableData = ref();
 
-    const emit = defineEmits(['setTitle'])
-    emit('setTitle','MUSE Image Selector');
+    const widgetName = ref('MUSE Image Selector');
 
 function selectImage(index){
     let img = TableData.value[index].path;
