@@ -7,7 +7,7 @@ export const useLocationStore = defineStore('locationSelected', () => {
   const emitter = inject('emitter');
     function init(){
 
-      emitter.on('anatomical-location-selected',(location)=>{
+      emitter.on('FlatmapViewer-anatomicalLocationSelected',(location)=>{
         if(location && location.min && location.max){
           getRegionMinMax(location.min,location.max);
         }
@@ -60,7 +60,7 @@ const getPackageIds = async(instances)=>{
     }
   }
   ImagesArray = ImagesArray.filter(x=>x.id_type!=="quantdb"&& x.id);
-  emitter.emit('MBFImageArray-Update',ImagesArray);
+  emitter.emit('locationSelect-MBFImageArrayUpdate',ImagesArray);
 }
 //https://services.scicrunch.io/quantdb/api/1/values/quant?aspect=distance-via-reva-ft-sample-id-normalized-v1&subject=sub-f001&value-quant-min=0.0&value-quant-max=0.1
 

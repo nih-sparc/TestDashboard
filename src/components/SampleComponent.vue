@@ -21,37 +21,33 @@
         inheritAttrs: false
     })
 
+    const widgetName = ref('New Custom Component!');//replace with component name you want shown
+    
+    //add icon to header. must import your icon as shown above ex: import GraphIcon from './icons/GraphIcon.vue'
+    //this is optional and can be deleted
+    const childIcons=shallowRef([{"comp":GraphIcon,"event":testIcon}]);
+    function testIcon(){alert("test icon function")};
+
+    //emit a custom event that you name
+    //if you create an event that you want available for other widgets/users, please document it under Events in the README.md
     //allows you to emit events that can be caught by other components. 
     const emitter = inject('emitter');
-
-    const props = defineProps({
-        widgetName:{
-                type:String,
-                required:true
-        }
-    })
-    
-    const widgetName = ref('New Custom Component!');//replace with component name you want shown
-    function testIcon(){alert("test icon function")}
-    //add icon to header
-    const childIcons=shallowRef([{"comp":GraphIcon,"event":testIcon}])
-
-    //emit and event
-    let payload ={}
+    let payload ={} //can be any type
     emitter.emit('SampleComponent-eventName',payload);
 
     //catch an event
-    // This catches when a new widget is added to the sparc dashboard main component
+    // This is an active event that gets called by the ImageSelector component when a user clicks the "open" button on an image.
     //see Events in documentation for all available events
-    emitter.on('SparcDashboard-addNewWidget', (value) => {  
+    emitter.on('ImageSelector-mbfImageSelected', (value) => {  
         //do something
     });
 
 </script>
 <style scoped lang="scss">
-//import SPARC styles
+//import SPARC styles if you want to have access to them. 
 @import './node_modules/sparc-design-system-components-2/src/assets/_variables.scss';
 
+//example of class styles
 .sample-component{
     height:500px;
     width:400px;

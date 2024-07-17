@@ -16,14 +16,21 @@ class GraphMetric {
         this._xAspect = "";
         this._yAspect = "";
         this._aspectList=[];
-        this._metric = "";
+        this.metric = "";
+    }
+    set _metric(value){
+        if(value==="random data") this.ranomizeData();
+        this.metric =value;
+    }
+    get _metric(){
+        return this.metric;
     }
     pointDataForScatter(){
         let pointDataArray=[];
         this._x.forEach(x => {
             const yMatch = this._y.find(y => y.inst === x.inst && y.agg_type=="instance" && x.agg_type==="instance");
             if(yMatch){
-            pointDataArray.push({"x":x.value,"y":x.value});
+            pointDataArray.push({"x":x.value,"y":yMatch.value});
             }
         });
             this.data = pointDataArray;
@@ -31,7 +38,17 @@ class GraphMetric {
     pointDataForBar(){
         let pointDataArray=this._x.map(p=>p.value);
         this.data = pointDataArray;
-    }    
+    }  
+    ranomizeData(){
+        let tempArr=[];
+        let tempArr1 = [];
+        for(var i=0;i<100;i++){
+            tempArr.push({"inst":i,"agg_type":"instance","value":Math.floor(Math.random()*101)});
+            tempArr1.push({"inst":i,"agg_type":"instance","value":Math.floor(Math.random()*101)});
+        }
+        this._y = tempArr;
+        this._x = tempArr1;
+    }  
     clearAllAspects(){
         this._xAspect="";
         this._yAspect="";

@@ -163,6 +163,7 @@ const getMetricList = async ()=>{
     }
   }
   function selectMetric(selectedMetric, targetMetric){
+    if(selectedMetric==="random data"){return;}
       const i = newGraphData.value.datasets.indexOf(targetMetric);
       const dataset = newGraphData.value.datasets[i];
       dataset._metric = selectedMetric;

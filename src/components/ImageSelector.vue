@@ -40,10 +40,10 @@
 
 function selectImage(index){
     let img = TableData.value[index].path;
-    emitter.emit("mbf-image-selected",img);
+    emitter.emit("ImageSelector-mbfImageSelected",img);
 }
 
-emitter.on('MBFImageArray-Update',(imageArray)=>{
+emitter.on('locationSelect-MBFImageArrayUpdate',(imageArray)=>{
     //buildDataTable
     //imageArray.value = new TableObject(imageArray);
 

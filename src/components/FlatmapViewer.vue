@@ -36,7 +36,7 @@ function FlatmapSelected(data){
     locationLabel.value = data.label;
     const locationMinMax = tempMapToMinMax(locationId);
     //send to image selector
-    emitter.emit("anatomical-location-selected",locationMinMax)
+    emitter.emit("FlatmapViewer-anatomicalLocationSelected",locationMinMax)
 }
 //this function is my temp work around to not having the map return anything useful
 function tempMapToMinMax(id){
