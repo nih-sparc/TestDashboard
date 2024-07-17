@@ -112,7 +112,7 @@ const componentMap = [
     'ImageSelector',
     'FlatmapViewer',
     'BiolucidaViewer',
-    'QDBGraph'
+    'QDBGraph',
    'SampleComponent'
     ]
 ```
@@ -138,21 +138,22 @@ This is your default template. Customize however you like with html and vue 3 ma
     </div>
 </template>
 ```
-### Header
+## Header
 
-## Set Name
+### Set Name
 
 This line in your setup script allows you to set the header to your widget name. It does not have to match to file name. 
 ```
     const widgetName = ref('New Custom Component!');//replace with component name you want shown
  ```
 DO NOT DELETE SLOT
+
 This is where your header is set. Do not delete or change the name
 ```
 <slot :widgetName="widgetName"></slot>
 ```
 
-## Set Icons
+### Set Icons
 
 There are default icons on the header. A download one and a close icon (when in edit mode). 
 You can add a custom icon to your widget's header and send it a function. 
@@ -207,7 +208,15 @@ emitter.on('ImageSelector-mbfImageSelected', (value) => {
        //do something
    });
 ```
+***FlatmapViewer-selectImage***
+- Thrown when user selects segment of Flatmap Viewer (FlatmapViewer.vue) 
+```
+    emitter.on('FlatmapViewer-selectImage', (selectedImage) => { 
+        //do something
+    });
+```
 
+## Sample Component
 
 Here is an example of the SampleComponent.vue file as of 7/17/2024. See github for latest versions
 
