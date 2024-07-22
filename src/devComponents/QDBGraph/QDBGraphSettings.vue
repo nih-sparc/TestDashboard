@@ -14,7 +14,7 @@
     </div>
       <slot>
         <div v-for="gm in gMList">
-          <el-row class="tw-space-x-40">
+          <el-row>
 
           <div class="tw-flex">
             <div class="tw-p-1">
@@ -52,11 +52,12 @@
               <label class="tw-font-bold">Label: </label>
               <el-input v-model="gm.label" placeholder="Legend" class="tw-w-40 tw-h-8"></el-input>
             </div>
-            <div class="tw-p-1">
-              <el-button v-if="gMList.indexOf(gm)>0" @click="removeMetric(gm)">-</el-button>
-            </div>
+
             <div class="demo-color-block tw-p-1">
               <el-color-picker v-model="gm.backgroundColor" />
+            </div>
+            <div class="tw-p-1">
+              <el-button v-if="gMList.indexOf(gm)>0" @click="removeMetric(gm)">-</el-button>
             </div>
           </div>
 
