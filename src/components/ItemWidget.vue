@@ -1,9 +1,9 @@
 <template>
-            <div ref="instance" class="grid-stack-item-content widget-body" @click="selectWidget()">
-                <component v-slot="slotProps" :is="componentTag" :listening="highlight" @appendToHead="appendIconsToHeader()">
+            <div ref="instance" class="grid-stack-item-content" @click="selectWidget()">
+                <component class="widget-body" v-slot="slotProps" :is="componentTag" :listening="highlight">
              
                     <DashHeader :widgetName="slotProps.widgetName" :staticMode="staticMode">
-                        <component v-for="icon in slotProps.childIcons" :is="icon.comp" @click="icon.event" class="tw-p-1"></component>
+                        <component class="tw-p-1" v-for="icon in slotProps.childIcons" :is="icon.comp" @click="icon.event" ></component>
                         <DownloadIcon></DownloadIcon>
                         <close-icon v-if="!staticMode" background="#8300BF" color="white" class="close-button" @click="$emit('removeWidget')"></close-icon>
                     </DashHeader>
@@ -64,7 +64,7 @@
 
 :deep(.content-header){
     border-bottom: 1px solid $mediumGrey;
-    
+    overflow: hidden;
     h3{
         margin:10px;
     }
@@ -76,7 +76,7 @@
         padding:8px;
     }
 }
-.widget-body{
+:deep(.widget-body){
   height: calc( 100% - 40px );
 }
 .grid-stack-item-content {

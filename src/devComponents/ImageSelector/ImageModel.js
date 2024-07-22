@@ -14,7 +14,7 @@ class MBFImageObject {
     constructor(data){
         this.id = data.image_id;
         this.name = data.image_id,
-        this.size = "...",
+        this.size = (Math.random()*10).toFixed(2)+"mb",
         this.path = data.share_link
     }
 }
@@ -30,7 +30,7 @@ export class TableObject{
         this.MBFImageObject.forEach((img)=>{
             let column = {
                 name:img.id,
-                size: "...",
+                size: (Math.random()*10).toFixed(2)+"mb",
                 path: ""
             }
             _tempArr.push(column);
@@ -42,7 +42,7 @@ export class TableObject{
         this.SparcImageArray.forEach((img)=>{
             let column = {
                 name:img.id,
-                size: "...",
+                size: (Math.random()*10).toFixed(2)+"mb",
                 path: img.path
             }
             _tempArr.push(column);

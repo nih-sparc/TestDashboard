@@ -1,5 +1,6 @@
 <template>              
       <slot :widgetName="widgetName"></slot>
+<div  v-bind="$attrs">
 
     <div class="fill">
         <img :src=imgPath>
@@ -16,7 +17,7 @@
                 </template> 
             </el-table-column>
      </el-table>
-
+    </div>
 
 </template>
 <script setup>
@@ -78,7 +79,7 @@ function buildDataTable(tbleObj){
     imgs.forEach((img)=>{
         let column = {
             name:img.ImgName,
-            size: "...",
+            size: Math.random()*10+"mb",
             path: img.Path
         }
         _tempArr.push(column);

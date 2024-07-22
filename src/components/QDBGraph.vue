@@ -4,7 +4,7 @@
   <slot :widgetName="widgetName" :childIcons="childIcons">
   </slot>
 
-    <div class="tw-flex tw-flex-col tw-h-full">
+    <div v-bind="$attrs"  class="tw-flex tw-flex-col tw-h-full">
       <component
       id="my-chart-id"
       :is="visualizationComponent"

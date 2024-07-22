@@ -1,8 +1,7 @@
 <template>                  
     <slot :widgetName="widgetName"></slot>
-
-    <div class="flatmap-viewer tw-p-0">
-        <div class="tw-text-left tw-pl-1">
+    <div v-bind="$attrs" class="flatmap-viewer tw-p-0">
+        <div class="tw-text-left tw-pl-1" style="height: 50px;font-size:20px;line-height: 20px;margin: 4px 0 5px 0">
             <p><b>Current Location: </b>{{ locationLabel }}</p>
         </div>
 
@@ -17,6 +16,15 @@
   import { useOpenerStore } from "../stores/opener";
   import { useLocationStore} from "../stores/locationSelect";
   FlatmapVuer.props.flatmapAPI.default="https://mapcore-demo.org/devel/flatmap/v4/";
+    defineOptions({
+        inheritAttrs: false
+    })
+  const props = defineProps({
+    listening:{
+            tyep:Boolean
+    }
+  })
+
   const disableFlatmapUI = true;
   let FlatmapReady = false;
 

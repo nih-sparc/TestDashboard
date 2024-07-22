@@ -2,7 +2,7 @@
           
     <slot :widgetName="widgetName"></slot>
     
-    <div class="tw-flex tw-flex-col tw-h-full">
+    <div v-bind="$attrs"  class="tw-flex tw-flex-col tw-h-full">
         <div class="bv-metadata tw-text-left tw-p-1 tw-text-sm">
             <!-- <p><span>Dataset: </span>
     Dataset Name Here </p>
