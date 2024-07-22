@@ -1,4 +1,7 @@
-<template>
+<template>              
+      <slot :widgetName="widgetName"></slot>
+<div  v-bind="$attrs">
+
     <div class="fill">
         <img :src=imgPath>
     </div>
@@ -14,7 +17,7 @@
                 </template> 
             </el-table-column>
      </el-table>
-
+    </div>
 
 </template>
 <script setup>
@@ -34,15 +37,14 @@
     const imageType = ref("");
     const TableData = ref();
 
-    const emit = defineEmits(['setTitle'])
-    emit('setTitle','MUSE Image Selector');
+    const widgetName = ref('MUSE Image Selector');
 
 function selectImage(index){
     let img = TableData.value[index].path;
-    emitter.emit("mbf-image-selected",img);
+    emitter.emit("ImageSelector-mbfImageSelected",img);
 }
 
-emitter.on('MBFImageArray-Update',(imageArray)=>{
+emitter.on('locationSelect-MBFImageArrayUpdate',(imageArray)=>{
     //buildDataTable
     //imageArray.value = new TableObject(imageArray);
 
@@ -77,7 +79,7 @@ function buildDataTable(tbleObj){
     imgs.forEach((img)=>{
         let column = {
             name:img.ImgName,
-            size: "...",
+            size: Math.random()*10+"mb",
             path: img.Path
         }
         _tempArr.push(column);

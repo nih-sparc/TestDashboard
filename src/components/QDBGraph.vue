@@ -1,7 +1,10 @@
 
 <template>
-    <button @click="settingsVisible=true" ><i>settings</i></button> 
-    <div class="tw-flex tw-flex-col tw-h-full">
+  <!-- slot for dynamic header -->
+  <slot :widgetName="widgetName" :childIcons="childIcons">
+  </slot>
+
+    <div v-bind="$attrs"  class="tw-flex tw-flex-col tw-h-full">
       <component
       id="my-chart-id"
       :is="visualizationComponent"
@@ -21,19 +24,23 @@
 </template>
 <script setup>
 
-  import {ref, onBeforeMount, shallowRef} from "vue";
+  import {ref, onMounted, shallowRef} from "vue";
   import { Bar, Scatter, Pie, Line  } from 'vue-chartjs'
   import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale,PointElement, LineElement } from 'chart.js'
   ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement)
   import {GraphSettingsObject, VisualizationMap} from "../devComponents/QDBGraph/GraphModel.js"
   import GraphSettings from '../devComponents/QDBGraph/QDBGraphSettings.vue'
+  import GraphIcon from "./icons/GraphIcon.vue";
+
   defineOptions({
   inheritAttrs: false
   })
-  const emit = defineEmits(['setTitle']);
-  emit('setTitle','QDB Graph')
 
+  const widgetName = ref("QDB Graph");
   const settingsVisible=ref(false);
+  function openSettings(){settingsVisible.value=true}
+  //add icon to header
+  const childIcons=shallowRef([{"comp":GraphIcon,"event":openSettings}])
 
   //retrieve saved settings if exist
   let graphSettingsObject = getSavedGraphSettings();
@@ -63,6 +70,7 @@ function getSavedGraphSettings(){
    }else{
     return new GraphSettingsObject();
    }
+   
 }
 
 </script>

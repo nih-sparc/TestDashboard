@@ -21,7 +21,7 @@
               <label >{{ gMList.indexOf(gm)+1+": " }}</label>
               <el-select v-model="gm._metric" placeholder="select Metric" class=" tw-w-40">
                 <el-option 
-                  v-for="m in metricList" :key="m" :label="m" :value="m" @click="selectMetric(m, gm)">
+                  v-for="m in metricList" :key="m" :label="m" :value="m" @click="selectMetric(m, gm)">{{ m }}
                 </el-option>
               </el-select>
             </div>
@@ -79,7 +79,7 @@
 </template>
 <script setup>
 
-import { ref, onMounted, watch, shallowRef, toRaw } from 'vue'
+import { ref, onMounted, watch, shallowRef, toRaw, computed } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import {VisualizationMap, GraphSettingsObject} from "./GraphModel.js"
 import { Api } from "../../services";
@@ -125,7 +125,7 @@ function changeVisualization(graphName){
     selectedVisual.value = graphName ;
     newGraphData.value.visualization = graphName;
 }
-//multi metric options -----------------------------------------
+//multi metric options gMList = global metric-----------------------------------------
 const gMList = shallowRef(newGraphData.value.datasets);
 watch(()=>newGraphData.value.datasets, (newVal) => {
        gMList.value = newGraphData.value.datasets;
@@ -140,9 +140,9 @@ function removeMetric(metric){
   //   gMList.value.slice(index,1);
   // }
 }
-//metrics ------------------------------------------------------
+//metric options within gMList------------------------------------------------------
+
 const metricList = ref([]);
-//const selectedMetric = ref("");
 
 const getMetricList = async ()=>{
   let _metric_list = {};
@@ -153,7 +153,9 @@ const getMetricList = async ()=>{
         })
         if (_response.status === 200) {
           _metric_list = _response.data.result;
-          metricList.value = _metric_list.map(m=>m.label);
+          _metric_list = _metric_list.map(m=>m.label);
+          _metric_list.push("random data");
+          metricList.value = _metric_list;
         }
     }catch(e){
         console.error("couldn't fetch classes/metrics from QDB");
@@ -161,6 +163,7 @@ const getMetricList = async ()=>{
     }
   }
   function selectMetric(selectedMetric, targetMetric){
+    if(selectedMetric==="random data"){return;}
       const i = newGraphData.value.datasets.indexOf(targetMetric);
       const dataset = newGraphData.value.datasets[i];
       dataset._metric = selectedMetric;

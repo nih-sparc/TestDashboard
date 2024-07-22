@@ -52,9 +52,9 @@ let NewComponent = {};
 let NextId = DashboardItems.value.length;
 
 const dBItems = debug ? [{ id: "ODBGraph-1", x: 0, y: 0, h: 4, w:3, componentName:"Flatmap Viewer",component:"QDBGraph" }] : 
-[{ id: "FlatmapViewer-1", x: 0, y: 0, h: 8, w:2, componentName:"Flatmap Viewer",component:"FlatmapViewer" },
-    { id: "ImageSelector-2", x: 2, y: 0, h: 8, w:3, componentName:"Image Selector", component:"ImageSelector"},
-    { id: "BiolucidaViewer-3", x: 5, y: 0,h: 10, w:5, componentName:"MBF Viewer", component:"BiolucidaViewer"}]
+[{ id: "FlatmapViewer-1", x: 0, y: 0, h: 8, w:2, componentName:"Flatmap Viewer",component:"FlatmapViewer" },]
+    // { id: "ImageSelector-2", x: 2, y: 0, h: 8, w:3, componentName:"Image Selector", component:"ImageSelector"},
+    // { id: "BiolucidaViewer-3", x: 5, y: 0,h: 10, w:5, componentName:"MBF Viewer", component:"BiolucidaViewer"}]
 
 
 onBeforeMount(() => {

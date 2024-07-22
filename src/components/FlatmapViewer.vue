@@ -1,12 +1,13 @@
-<template>
-<div class="flatmap-viewer tw-p-0">
-    <div class="tw-text-left tw-pl-1">
-        <p><b>Current Location: </b>{{ locationLabel }}</p>
+<template>                  
+    <slot :widgetName="widgetName"></slot>
+    <div v-bind="$attrs" class="flatmap-viewer tw-p-0">
+        <div class="tw-text-left tw-pl-1" style="height: 50px;font-size:20px;line-height: 20px;margin: 4px 0 5px 0">
+            <p><b>Current Location: </b>{{ locationLabel }}</p>
+        </div>
+
+        <FlatmapVuer class="tw-px-2 tw-py-2" :disableUI="disableFlatmapUI" entry="UBERON:1759" v-on:resource-selected="FlatmapSelected"  v-on:ready="FlatmapReady"/>
+
     </div>
-
-    <FlatmapVuer class="tw-px-2 tw-py-2" :disableUI="disableFlatmapUI" entry="UBERON:1759" v-on:resource-selected="FlatmapSelected"  v-on:ready="FlatmapReady"/>
-
-</div>
 
 </template>
 <script setup>
@@ -15,14 +16,22 @@
   import { useOpenerStore } from "../stores/opener";
   import { useLocationStore} from "../stores/locationSelect";
   FlatmapVuer.props.flatmapAPI.default="https://mapcore-demo.org/devel/flatmap/v4/";
+    defineOptions({
+        inheritAttrs: false
+    })
+  const props = defineProps({
+    listening:{
+            tyep:Boolean
+    }
+  })
+
   const disableFlatmapUI = true;
   let FlatmapReady = false;
 
   const locationStore = useLocationStore();
   locationStore.init()
 
-  const emit = defineEmits(['setTitle']);
-  emit('setTitle','Flatmap Selector'); 
+  const widgetName = ref('Flatmap Selector');
 
   const emitter = inject('emitter');
   
@@ -35,7 +44,7 @@ function FlatmapSelected(data){
     locationLabel.value = data.label;
     const locationMinMax = tempMapToMinMax(locationId);
     //send to image selector
-    emitter.emit("anatomical-location-selected",locationMinMax)
+    emitter.emit("FlatmapViewer-anatomicalLocationSelected",locationMinMax)
 }
 //this function is my temp work around to not having the map return anything useful
 function tempMapToMinMax(id){

@@ -1,9 +1,12 @@
 <template>
-    <div class="tw-flex tw-flex-col tw-h-full">
+          
+    <slot :widgetName="widgetName"></slot>
+    
+    <div v-bind="$attrs"  class="tw-flex tw-flex-col tw-h-full">
         <div class="bv-metadata tw-text-left tw-p-1 tw-text-sm">
-            <p><span>Dataset: </span>
+            <!-- <p><span>Dataset: </span>
     Dataset Name Here </p>
-            <p><span>Metadata: </span>Metadata could go here</p>
+            <p><span>Metadata: </span>Metadata could go here</p> -->
         </div>
         <div class="tw-h-screen tw-flex tw-justify-center">
             <iframe class="tw-p-1 tw-w-screen" :src="mbfURLSrc" ></iframe>
@@ -16,7 +19,8 @@
   import {Dataset} from '../assets/Model';
   import { useOpenerStore } from "../stores/opener";
 
-  const emit = defineEmits(['setTitle','selectWidget']);
+  const widgetName = ref('MBF Image Viewer');
+  const emit = defineEmits(['selectWidget']);
 
   const props = defineProps({
     imageID:0,
@@ -32,13 +36,12 @@
   const opener = useOpenerStore();
 
   onMounted(() => {
-    emit('setTitle','MBF Image Viewer');
     opener.mbfViewerCount++;
   });
   onUnmounted(()=>{
     opener.mbfViewerCount--;
   })
-    emitter.on('mbf-image-selected',(img)=>{
+    emitter.on('ImageSelector-mbfImageSelected',(img)=>{
         if(opener.mbfViewerCount>1 && props.listening || opener.mbfViewerCount==1){
             mbfURLSrc.value=img;
         }
