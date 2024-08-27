@@ -14,54 +14,64 @@
     </div>
       <slot>
         <div v-for="gm in gMList">
-          <el-row class="tw-space-x-40">
+          <el-row class="tw-space-x-40 tw-m-2 border-division">
 
-          <div class="tw-flex">
-            <div class="tw-p-1">
-              <label >{{ gMList.indexOf(gm)+1+": " }}</label>
-              <el-select v-model="gm._metric" placeholder="select Metric" class=" tw-w-40">
-                <el-option 
-                  v-for="m in metricList" :key="m" :label="m" :value="m" @click="selectMetric(m, gm)">{{ m }}
-                </el-option>
-              </el-select>
-            </div>
+            <div class="tw-flex tw-flex-col">
+              <el-row>
+                <div class="tw-p-1">
+                  <label >{{ gMList.indexOf(gm)+1+": " }}</label>
+                  <el-select v-model="gm._metric" placeholder="select Metric" class=" tw-w-40">
+                    <el-option 
+                      v-for="m in metricList" :key="m" :label="m" :value="m" @click="selectMetric(m, gm)">{{ m }}
+                    </el-option>
+                  </el-select>
+                </div>
+              </el-row>
+              <el-row>
+                <div class="tw-p-1">
+                  <label class="tw-font-bold">x-axis:</label>
+                  <el-select v-model="gm._xAspect" placeholder="select x-axis" class=" tw-w-40">
+                    <el-option
+                      v-for="a in gm._aspectList" :key="a" :label="a" :value="a" @click="changeAxis('_x',a,gm)">
+                    </el-option>
+                  </el-select>
+                </div>
         
-            <div class="tw-p-1">
-              <label class="tw-font-bold">x-axis:</label>
-              <el-select v-model="gm._xAspect" placeholder="select x-axis" class=" tw-w-40">
-                <el-option
-                  v-for="a in gm._aspectList" :key="a" :label="a" :value="a" @click="changeAxis('_x',a,gm)">
-                </el-option>
-              </el-select>
-            </div>
+                <div v-if="selectedVisual!=='Bar'" class="tw-p-1" >
+                  <label class="tw-font-bold" >y-axis:</label>
+                  <el-select v-model="gm._yAspect" placeholder="select y-axis" class=" tw-w-40">
+                    <el-option
+                      v-for="a in gm._aspectList" :key="a" :label="a" :value="a" @click="changeAxis('_y',a,gm)">
+                    </el-option>
+                  </el-select>
+                </div>
+              </el-row>
 
-            <div v-if="selectedVisual=='Scatter' || selectedVisual=='Line'" class="tw-p-1" >
-              <label class="tw-font-bold" >y-axis:</label>
-              <el-select v-model="gm._yAspect" placeholder="select y-axis" class=" tw-w-40">
-                <el-option
-                  v-for="a in gm._aspectList" :key="a" :label="a" :value="a" @click="changeAxis('_y',a,gm)">
-                </el-option>
-              </el-select>
             </div>
-          </div>
-
-        
-          <div class="tw-flex">
-
-            <div class="tw-p-1">
-              <label class="tw-font-bold">Label: </label>
-              <el-input v-model="gm.label" placeholder="Legend" class="tw-w-40 tw-h-8"></el-input>
+            <div v-if="selectedVisual=='Distribution'" class="tw-flex tw-flex-col">
+              <div>
+                <label>Dist:</label>
+                <el-input v-model="gm.distValue"></el-input>
+                <el-select v-model="gm.distPercentage">
+                  <el-option :value="false" label="num">num</el-option>
+                  <el-option :value="true" label="%">%</el-option>
+                </el-select>
+              </div>
             </div>
-            <div class="tw-p-1">
-              <el-button v-if="gMList.indexOf(gm)>0" @click="removeMetric(gm)">-</el-button>
+          
+            <div class="tw-flex tw-flex-col">
+              <div class="tw-p-1">
+                <label class="tw-font-bold">Label: </label>
+                <el-input v-model="gm.label" placeholder="Legend" class="tw-w-40 tw-h-8"></el-input>
+              </div>
+              <div class="tw-p-1">
+                <el-button v-if="gMList.indexOf(gm)>0" @click="removeMetric(gm)">-</el-button>
+              </div>
+              <div class="demo-color-block tw-p-1">
+                <el-color-picker v-model="gm.backgroundColor" />
+              </div>
             </div>
-            <div class="demo-color-block tw-p-1">
-              <el-color-picker v-model="gm.backgroundColor" />
-            </div>
-          </div>
-
-   
-        </el-row>
+          </el-row>
         </div>
       
         <el-button @click="addMetric()">+</el-button>
@@ -188,7 +198,7 @@ const getAspectList = async(metric, dataset)=>{
       console.log(e)
   }
 }
-
+//change value of x or y axis
 function changeAxis(axis, aspect, metric){
     const metricIndex = newGraphData.value.datasets.indexOf(metric);
     newGraphData.value.datasets[metricIndex][axis] = aspect;
@@ -235,5 +245,13 @@ const handleClose = () => {
   display: flex;
   align-items: center;
   margin-bottom: 16px;
+}
+.border-division{
+  border-bottom: solid gray 1px;
+
+}
+.border-division div {
+  flex: 1 1 0;
+  min-height: 20px;
 }
 </style>

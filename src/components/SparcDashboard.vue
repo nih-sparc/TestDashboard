@@ -34,7 +34,7 @@ import {Dataset} from '../assets/Model';
 import "gridstack/dist/gridstack.min.css";
 import "gridstack/dist/gridstack-extra.min.css";
 
-const debug = false;
+const debug = true;
 const _emitter = inject('emitter');
 const _globalVars = useGlobalVarsStore();
 let _DatasetImgs = ref({});
