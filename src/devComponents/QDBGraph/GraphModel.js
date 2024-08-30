@@ -3,6 +3,7 @@ export const VisualizationMap = new Map()
 VisualizationMap.set("Scatter",Scatter);
 VisualizationMap.set("Bar", Bar);
 VisualizationMap.set("Line",Line);
+VisualizationMap.set("Distribution", Bar)
 
 class GraphMetric {
     constructor(data = {}){
@@ -11,12 +12,15 @@ class GraphMetric {
         this.fill = data.fill || "";
         this.borderColor = data.borderColor || "";
         this.backgroundColor = data.backgroundColor || "#f87979";
-        this._x = [];
+        this._x = []; //array of points
         this._y = [];
-        this._xAspect = "";
-        this._yAspect = "";
+        this._xAspect = ""; //name of aspect
+        this.xLabels = [];
+        this._yAspect = ""; 
         this._aspectList=[];
         this.metric = "";
+        this.distValue = data.distValue || "";
+        this.distPercentage = data.distPercentage || false;
     }
     set _metric(value){
         if(value==="random data") this.ranomizeData();
@@ -38,7 +42,53 @@ class GraphMetric {
     pointDataForBar(){
         let pointDataArray=this._x.map(p=>p.value);
         this.data = pointDataArray;
-    }  
+    }
+    organizeDistribution(){
+        if(!this.distValue || this._x.length ===0){return;}
+        let [min,max] = this.findMinMax();
+        const range = max-min;
+
+        let groupings = this.distPercentage ? range*(this.distValue*.01) : parseFloat(this.distValue);
+        if(range>10){groupings = Math.ceil(groupings)} //this needs to be set by user somehow
+        const groupingCount =  range%groupings>0.1?Math.floor(range/groupings)+1:range/groupings;
+
+        let newXArray = [];
+        let labelsArray = [];
+        let oldARray = this._x;
+        for(let x=0;x<groupingCount;x++){
+            let count = 0;
+            let start = min;
+            let stop = min+groupings;
+            if(x===(groupingCount-1)){stop++}
+
+            this._x.forEach(point=>{
+                if(point.value>=start&&point.value<stop){ 
+                    count++;
+                }
+            })
+            newXArray.push(count);
+            labelsArray.push(start.toFixed(2) + " - " + (min+groupings).toFixed(2))
+            min = stop;
+        }
+        this.data = newXArray;
+        this.xLabels = labelsArray;
+        //check each value and put into range (or just count)
+        //return
+    }
+    findMinMax(){
+        const xArr = this._x;
+        let min =xArr[0].value;
+        let max = xArr[0].value;
+        for (var i = 0; i < xArr.length; i++) {
+          if (xArr[i].value > max ) {
+            max = xArr[i].value;
+          }
+          if(xArr[i].value < min){
+            min = xArr[i].value;
+          }
+        }
+        return [min, max];
+    }
     ranomizeData(){
         let tempArr=[];
         let tempArr1 = [];
@@ -65,6 +115,8 @@ class GraphMetric {
         clonedMetric._xAspect = this._xAspect;
         clonedMetric._yAspect = this._yAspect;
         clonedMetric._metric = this._metric;
+        clonedMetric.distValue = this.distValue;
+        clonedMetric.distPercentage = this.distPercentage;
         return clonedMetric;
       }
 }
@@ -115,6 +167,16 @@ export class GraphSettingsObject {
                     labels: this.setLabels(),
                     datasets: this.datasets
             }
+            case "Distribution":
+                let labelArray = [];
+                this.datasets.forEach((metric)=>{
+                    metric.organizeDistribution();
+                    labelArray = metric.xLabels;
+                })
+                return{
+                    labels: labelArray,
+                    datasets: this.datasets
+                }
             default:
                 return {};
         }

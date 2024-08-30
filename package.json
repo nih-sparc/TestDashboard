@@ -28,7 +28,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@abi-software/flatmapvuer": "^0.6.1-vue3.8",
+    "@abi-software/flatmapvuer": "^1.4.1",
     "@tsconfig/node21": "^21.0.1",
     "axios": "^1.6.7",
     "chart.js": "^4.4.2",
