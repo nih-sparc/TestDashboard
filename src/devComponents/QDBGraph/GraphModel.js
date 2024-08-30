@@ -15,6 +15,7 @@ class GraphMetric {
         this._x = []; //array of points
         this._y = [];
         this._xAspect = ""; //name of aspect
+        this.xLabels = [];
         this._yAspect = ""; 
         this._aspectList=[];
         this.metric = "";
@@ -43,15 +44,16 @@ class GraphMetric {
         this.data = pointDataArray;
     }
     organizeDistribution(){
-        if(!this.distValue || !this._x){return;}
+        if(!this.distValue || this._x.length ===0){return;}
         let [min,max] = this.findMinMax();
         const range = max-min;
 
-        const groupings = this.distPercentage ? range*(this.distValue*.01) : parseFloat(this.distValue);
+        let groupings = this.distPercentage ? range*(this.distValue*.01) : parseFloat(this.distValue);
         if(range>10){groupings = Math.ceil(groupings)} //this needs to be set by user somehow
-        const groupingCount =  range%groupings>0.1?range/groupings+1:range/groupings;
+        const groupingCount =  range%groupings>0.1?Math.floor(range/groupings)+1:range/groupings;
 
         let newXArray = [];
+        let labelsArray = [];
         let oldARray = this._x;
         for(let x=0;x<groupingCount;x++){
             let count = 0;
@@ -65,11 +67,11 @@ class GraphMetric {
                 }
             })
             newXArray.push(count);
+            labelsArray.push(start.toFixed(2) + " - " + (min+groupings).toFixed(2))
             min = stop;
         }
-        console.log(newXArray);
-        console.log(oldARray)
         this.data = newXArray;
+        this.xLabels = labelsArray;
         //check each value and put into range (or just count)
         //return
     }
@@ -166,11 +168,13 @@ export class GraphSettingsObject {
                     datasets: this.datasets
             }
             case "Distribution":
+                let labelArray = [];
                 this.datasets.forEach((metric)=>{
                     metric.organizeDistribution();
+                    labelArray = metric.xLabels;
                 })
                 return{
-                    labels: this.setLabels(),
+                    labels: labelArray,
                     datasets: this.datasets
                 }
             default:

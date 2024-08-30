@@ -17,9 +17,10 @@
           <el-row class="tw-space-x-40 tw-m-2 border-division">
 
             <div class="tw-flex tw-flex-col">
+              <label class="tw-font-bold" >{{ gMList.indexOf(gm)+1+": " }} Metric: </label>
               <el-row>
                 <div class="tw-p-1">
-                  <label >{{ gMList.indexOf(gm)+1+": " }}</label>
+
                   <el-select v-model="gm._metric" placeholder="select Metric" class=" tw-w-40">
                     <el-option 
                       v-for="m in metricList" :key="m" :label="m" :value="m" @click="selectMetric(m, gm)">{{ m }}
@@ -29,7 +30,7 @@
               </el-row>
               <el-row>
                 <div class="tw-p-1">
-                  <label class="tw-font-bold">x-axis:</label>
+                  <label>x-axis:</label>
                   <el-select v-model="gm._xAspect" placeholder="select x-axis" class=" tw-w-40">
                     <el-option
                       v-for="a in gm._aspectList" :key="a" :label="a" :value="a" @click="changeAxis('_x',a,gm)">
@@ -37,8 +38,8 @@
                   </el-select>
                 </div>
         
-                <div v-if="selectedVisual!=='Bar'" class="tw-p-1" >
-                  <label class="tw-font-bold" >y-axis:</label>
+                <div v-if="selectedVisual==='Scatter'" class="tw-p-1" >
+                  <label >y-axis:</label>
                   <el-select v-model="gm._yAspect" placeholder="select y-axis" class=" tw-w-40">
                     <el-option
                       v-for="a in gm._aspectList" :key="a" :label="a" :value="a" @click="changeAxis('_y',a,gm)">
@@ -50,8 +51,8 @@
             </div>
             <div v-if="selectedVisual=='Distribution'" class="tw-flex tw-flex-col">
               <div>
-                <label>Dist:</label>
-                <el-input v-model="gm.distValue"></el-input>
+                <label class="tw-font-bold">Distribution:</label>
+                <el-input type="number" v-model.number="gm.distValue"></el-input>
                 <el-select v-model="gm.distPercentage">
                   <el-option :value="false" label="num">num</el-option>
                   <el-option :value="true" label="%">%</el-option>
@@ -60,15 +61,13 @@
             </div>
           
             <div class="tw-flex tw-flex-col">
-              <div class="tw-p-1">
-                <label class="tw-font-bold">Label: </label>
+              <label class="tw-font-bold">Label: </label>
+              <div class="tw-p-1 demo-color-block">
                 <el-input v-model="gm.label" placeholder="Legend" class="tw-w-40 tw-h-8"></el-input>
+                <el-color-picker v-model="gm.backgroundColor" />
               </div>
               <div class="tw-p-1">
-                <el-button v-if="gMList.indexOf(gm)>0" @click="removeMetric(gm)">-</el-button>
-              </div>
-              <div class="demo-color-block tw-p-1">
-                <el-color-picker v-model="gm.backgroundColor" />
+                <el-button style="height: 20px;" v-if="gMList.indexOf(gm)>0" @click="removeMetric(gm)">-</el-button>
               </div>
             </div>
           </el-row>
@@ -248,10 +247,11 @@ const handleClose = () => {
 }
 .border-division{
   border-bottom: solid gray 1px;
-
+  padding:.5rem;
 }
 .border-division div {
   flex: 1 1 0;
   min-height: 20px;
+
 }
 </style>

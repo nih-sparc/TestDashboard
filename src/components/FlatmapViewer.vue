@@ -5,7 +5,7 @@
             <p><b>Current Location: </b>{{ locationLabel }}</p>
         </div>
 
-        <FlatmapVuer class="tw-px-2 tw-py-2" :disableUI="disableFlatmapUI" entry="UBERON:1759" v-on:resource-selected="FlatmapSelected"  v-on:ready="FlatmapReady"/>
+        <FlatmapVuer class="tw-px-2 tw-py-2" uuid="685d19d1-cd68-5b0b-b721-de635b98de5f" :disableUI="disableFlatmapUI" entry="UBERON:1759" v-on:resource-selected="FlatmapSelected"  v-on:ready="FlatmapReady"/>
 
     </div>
 
@@ -15,7 +15,7 @@
   import {FlatmapVuer, MultiFlatmapVuer} from '@abi-software/flatmapvuer';
   import { useOpenerStore } from "../stores/opener";
   import { useLocationStore} from "../stores/locationSelect";
-  FlatmapVuer.props.flatmapAPI.default="https://mapcore-demo.org/devel/flatmap/v4/";
+  FlatmapVuer.props.flatmapAPI.default="https://mapcore-demo.org/curation/flatmap/";
     defineOptions({
         inheritAttrs: false
     })
@@ -39,51 +39,18 @@
   const locationLabel = ref("None selected");
   
 function FlatmapSelected(data){
-    if(locationId===data.feature.featureId){return;}
-    locationId = data.feature.featureId;
     locationLabel.value = data.label;
+    if(!data.feature.location || locationId===data.feature.location){return;}
+    locationId = data.feature.location;
     const locationMinMax = tempMapToMinMax(locationId);
     //send to image selector
     emitter.emit("FlatmapViewer-anatomicalLocationSelected",locationMinMax)
 }
 //this function is my temp work around to not having the map return anything useful
 function tempMapToMinMax(id){
-    switch(id) {
-            case 3:
-                return {
-                    min: 0.0,
-                    max: 0.1
-                }
-            case 6:
-                return {
-                    min: 0.1,
-                    max: 0.2
-                }
-            case 11:
-                return {
-                    min: 0.2,
-                    max: 0.3
-                }
-            case 11:
-                return {
-                    min: 0.3,
-                    max: 0.4
-                }
-            case 14:
-                return {
-                    min: 0.4,
-                    max: 0.5
-                }
-            case 50:
-                return {
-                    min: 0.5,
-                    max: 0.7
-                }
-            default:
-                return {
-                    min:0.7,
-                    max:0.8
-                };
+    return{
+            min:id-.1,
+            max:id+.1
         }
 }
 
