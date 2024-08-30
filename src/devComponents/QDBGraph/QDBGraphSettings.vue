@@ -14,8 +14,28 @@
     </div>
       <slot>
         <div v-for="gm in gMList">
+
           <el-row class="tw-space-x-40 tw-m-2 border-division">
 
+          <div class="tw-flex">
+            <div class="tw-p-1">
+              <label >{{ gMList.indexOf(gm)+1+": " }}</label>
+              <el-select v-model="gm._metric" placeholder="select Metric" class=" tw-w-40">
+                <el-option 
+                  v-for="m in metricList" :key="m" :label="m" :value="m" @click="selectMetric(m, gm)">{{ m }}
+                </el-option>
+              </el-select>
+            </div>
+        
+            <div class="tw-p-1">
+              <label class="tw-font-bold">x-axis:</label>
+              <el-select v-model="gm._xAspect" placeholder="select x-axis" class=" tw-w-40">
+                <el-option
+                  v-for="a in gm._aspectList" :key="a" :label="a" :value="a" @click="changeAxis('_x',a,gm)">
+                </el-option>
+              </el-select>
+            </div>
+            
             <div class="tw-flex tw-flex-col">
               <label class="tw-font-bold" >{{ gMList.indexOf(gm)+1+": " }} Metric: </label>
               <el-row>
@@ -49,6 +69,7 @@
               </el-row>
 
             </div>
+
             <div v-if="selectedVisual=='Distribution'" class="tw-flex tw-flex-col">
               <div>
                 <label class="tw-font-bold">Distribution:</label>
@@ -71,6 +92,7 @@
               </div>
             </div>
           </el-row>
+
         </div>
       
         <el-button @click="addMetric()">+</el-button>

@@ -97,11 +97,6 @@
     width:100%;
     }
 }
-:deep(.stick-to-top){
-    position: sticky;
-    top: 0;
-    width: 100%;
-}
 .focus-from-Img-View{
         border:solid $lightPurple 2px !important;
     }
