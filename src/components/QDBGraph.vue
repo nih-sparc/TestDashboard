@@ -46,7 +46,7 @@
   let graphSettingsObject = getSavedGraphSettings();
  // let visualization = ref(graphSettings.visualization);
   let visualizationComponent = shallowRef(VisualizationMap.get(graphSettingsObject.visualization));
-  graphSettingsObject.datasets[0].data=[40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11];
+  //graphSettingsObject.datasets?graphSettingsObject.datasets[0].data=[40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]:"";
   const chartData = ref(graphSettingsObject.returnSettingsData()); 
   const chartOptions = ref({
         responsive: true,
