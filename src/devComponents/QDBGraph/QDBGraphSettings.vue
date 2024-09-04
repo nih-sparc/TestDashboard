@@ -13,84 +13,63 @@
         :class="{ 'secondary': v!=selectedVisual }" >{{ v }}</el-button></div>
     </div>
       <slot>
+        <div v-if="selectedVisual=='Distribution'" class="tw-flex tw-m-2">
+            <div class="tw-font-bold tw-m-1">Distribution:</div>
+            <el-input type="number" v-model.number="newGraphData.distValue" class=" tw-w-20"></el-input>
+            <el-select v-model="newGraphData.distPercentage" class="tw-w-20">
+              <el-option :value="false" label="num" >num</el-option>
+              <el-option :value="true" label="%">%</el-option>
+            </el-select>
+            <div class="tw-font-bold tw-m-1 tw-ps-3">Auto Range X:</div>
+            <el-switch v-model="newGraphData.autoXRange"></el-switch>
+            <el-input v-model="newGraphData.rangeXMin" :disabled="newGraphData.autoXRange" placeholder="Min" class=" tw-w-20"></el-input>
+            <el-input v-model="newGraphData.rangeXMax" :disabled="newGraphData.autoXRange" placeholder="Max" class=" tw-w-20"></el-input>
+            <div class="tw-font-bold tw-m-1 tw-ps-3">Auto Range Y:</div>
+            <el-switch v-model="newGraphData.autoYRange" :disabled="true"></el-switch>
+            <el-input v-model="newGraphData.rangeYMin" :disabled="newGraphData.autoYRange" placeholder="Min" class=" tw-w-20"></el-input>
+            <el-input v-model="newGraphData.rangeYMax" :disabled="newGraphData.autoYRange" placeholder="Max" class=" tw-w-20"></el-input>
+
+        </div>
         <div v-for="gm in gMList">
 
-          <el-row class="tw-space-x-40 tw-m-2 border-division">
-
-          <div class="tw-flex">
-            <div class="tw-p-1">
-              <label >{{ gMList.indexOf(gm)+1+": " }}</label>
-              <el-select v-model="gm._metric" placeholder="select Metric" class=" tw-w-40">
-                <el-option 
-                  v-for="m in metricList" :key="m" :label="m" :value="m" @click="selectMetric(m, gm)">{{ m }}
-                </el-option>
-              </el-select>
-            </div>
-        
-            <div class="tw-p-1">
-              <label class="tw-font-bold">x-axis:</label>
-              <el-select v-model="gm._xAspect" placeholder="select x-axis" class=" tw-w-40">
-                <el-option
-                  v-for="a in gm._aspectList" :key="a" :label="a" :value="a" @click="changeAxis('_x',a,gm)">
-                </el-option>
-              </el-select>
-            </div>
+          <el-row class="tw-m-2 border-division">
             
-            <div class="tw-flex tw-flex-col">
-              <label class="tw-font-bold" >{{ gMList.indexOf(gm)+1+": " }} Metric: </label>
-              <el-row>
-                <div class="tw-p-1">
+              <div class="tw-font-bold tw-m-1 tw-p-1">{{ gMList.indexOf(gm)+1+": " }} 
+              </div>
 
-                  <el-select v-model="gm._metric" placeholder="select Metric" class=" tw-w-40">
-                    <el-option 
-                      v-for="m in metricList" :key="m" :label="m" :value="m" @click="selectMetric(m, gm)">{{ m }}
-                    </el-option>
-                  </el-select>
-                </div>
-              </el-row>
-              <el-row>
-                <div class="tw-p-1">
-                  <label>x-axis:</label>
-                  <el-select v-model="gm._xAspect" placeholder="select x-axis" class=" tw-w-40">
-                    <el-option
-                      v-for="a in gm._aspectList" :key="a" :label="a" :value="a" @click="changeAxis('_x',a,gm)">
-                    </el-option>
-                  </el-select>
-                </div>
-        
-                <div v-if="selectedVisual==='Scatter'" class="tw-p-1" >
-                  <label >y-axis:</label>
-                  <el-select v-model="gm._yAspect" placeholder="select y-axis" class=" tw-w-40">
-                    <el-option
-                      v-for="a in gm._aspectList" :key="a" :label="a" :value="a" @click="changeAxis('_y',a,gm)">
-                    </el-option>
-                  </el-select>
-                </div>
-              </el-row>
-
-            </div>
-
-            <div v-if="selectedVisual=='Distribution'" class="tw-flex tw-flex-col">
-              <div>
-                <label class="tw-font-bold">Distribution:</label>
-                <el-input type="number" v-model.number="gm.distValue"></el-input>
-                <el-select v-model="gm.distPercentage">
-                  <el-option :value="false" label="num">num</el-option>
-                  <el-option :value="true" label="%">%</el-option>
+              <div class="tw-p-1">
+                <el-select v-model="gm._metric" placeholder="Metric" class=" tw-w-40">
+                  <el-option 
+                    v-for="m in metricList" :key="m" :label="m" :value="m" @click="selectMetric(m, gm)">{{ m }}
+                  </el-option>
                 </el-select>
               </div>
-            </div>
-          
+  
+              <div class="tw-p-1">
+                <el-select v-model="gm._xAspect" placeholder="x-axis" class=" tw-w-40">
+                  <el-option
+                    v-for="a in gm._aspectList" :key="a" :label="a" :value="a" @click="changeAxis('_x',a,gm)">
+                  </el-option>
+                </el-select>
+              </div>
+      
+              <div class="tw-p-1" >
+                <el-select :disabled="selectedVisual!=='Scatter'" v-model="gm._yAspect" placeholder="y-axis" class=" tw-w-40">
+                  <el-option
+                    v-for="a in gm._aspectList" :key="a" :label="a" :value="a" @click="changeAxis('_y',a,gm)">
+                  </el-option>
+                </el-select>
+              </div>
+
             <div class="tw-flex tw-flex-col">
-              <label class="tw-font-bold">Label: </label>
               <div class="tw-p-1 demo-color-block">
                 <el-input v-model="gm.label" placeholder="Legend" class="tw-w-40 tw-h-8"></el-input>
                 <el-color-picker v-model="gm.backgroundColor" />
               </div>
-              <div class="tw-p-1">
+            </div>
+            <div class="tw-p-1">
                 <el-button style="height: 20px;" v-if="gMList.indexOf(gm)>0" @click="removeMetric(gm)">-</el-button>
               </div>
-            </div>
           </el-row>
 
         </div>
@@ -268,12 +247,12 @@ const handleClose = () => {
   margin-bottom: 16px;
 }
 .border-division{
-  border-bottom: solid gray 1px;
-  padding:.5rem;
+  /* border-bottom: solid gray 1px;
+  padding:.5rem; */
 }
 .border-division div {
-  flex: 1 1 0;
-  min-height: 20px;
+  /* flex: 1 1 0;
+  min-height: 20px; */
 
 }
 </style>

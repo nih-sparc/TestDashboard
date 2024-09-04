@@ -21,6 +21,12 @@ class GraphMetric {
         this.metric = "";
         this.distValue = data.distValue || "";
         this.distPercentage = data.distPercentage || false;
+        this.rangeXMin = data.rangeXMin || null;
+        this.rangeXMax = data.rangeXMax || null;
+        this.rangeYMin = data.rangeYMin || null;
+        this.rangeYMax = data.rangeYMax || null;
+        this.autoXRange = data.autoXRange || true;
+        this.autoYRange = data.autoYRange || true;
     }
     set _metric(value){
         if(value==="random data") this.ranomizeData();
@@ -45,7 +51,14 @@ class GraphMetric {
     }
     organizeDistribution(){
         if(!this.distValue || this._x.length ===0){return;}
-        let [min,max] = this.findMinMax();
+
+        let min,max = 0;
+        if(this.autoXRange){
+            [min,max] = this.findMinMax();
+        }else{
+            min=this.rangeXMin;
+            max = this.rangeXMax;
+        }
         const range = max-min;
 
         let groupings = this.distPercentage ? range*(this.distValue*.01) : parseFloat(this.distValue);
@@ -54,7 +67,7 @@ class GraphMetric {
 
         let newXArray = [];
         let labelsArray = [];
-        let oldARray = this._x;
+
         for(let x=0;x<groupingCount;x++){
             let count = 0;
             let start = min;
@@ -117,6 +130,12 @@ class GraphMetric {
         clonedMetric._metric = this._metric;
         clonedMetric.distValue = this.distValue;
         clonedMetric.distPercentage = this.distPercentage;
+        clonedMetric.rangeXMin = this.rangeXMin;
+        clonedMetric.rangeXMax = this.rangeXMax;
+        clonedMetric.rangeYMin = this.rangeYMin; 
+        clonedMetric.rangeYMax = this.rangeYMax; 
+        clonedMetric.autoXRange = this.autoXRange; 
+        clonedMetric.autoYRange = this.autoYRange;
         return clonedMetric;
       }
 }
@@ -126,10 +145,90 @@ export class GraphSettingsObject {
         this.visualization = settingsObj.visualization || "Bar";
         //attributes associated with chart data
         this.labels = settingsObj.labels || [""]
-        this.datasets = settingsObj.datasets?settingsObj.datasets: [new GraphMetric()];
+        this._distValue = settingsObj.distValue || 5;
+        this._distPercentage = settingsObj.distPercentage || true;
+        this._rangeXMin = settingsObj.rangeXMin || "";
+        this._rangeXMax = settingsObj.rangeXMax || "";
+        this._rangeYMin = settingsObj.rangeYMin || "";
+        this._rangeYMax = settingsObj.rangeYMax || "";
+        this._autoXRange = settingsObj.autoXRange || true;
+        this._autoYRange = settingsObj.autoYRange || true;
+        this.datasets = settingsObj.datasets ? settingsObj.datasets: [new GraphMetric(this)]
     }
     get component(){
         return VisualizationMap.get(this.visualization);
+    }
+    set distPercentage(value){
+        this.datasets.forEach((d)=>{
+            d.distPercentage = value;
+        })
+        this._distPercentage = value;
+    }
+    get distPercentage(){
+        return this._distPercentage;
+    }
+    set distValue(value){
+        this.datasets.forEach((d)=>{
+            d.distValue = value;
+        })
+        this._distValue = value;
+    }
+    get distValue(){
+        return this._distValue;
+    }
+    set rangeXMin(value){
+        this.datasets.forEach((d)=>{
+            d.rangeXMin = parseFloat(value);
+        })
+        this._rangeXMin = value;
+    }
+    get rangeXMin(){
+        return this._rangeXMin;
+    }
+    set rangeXMax(value){
+        this.datasets.forEach((d)=>{
+            d.rangeXMax = parseFloat(value);
+        })
+        this._rangeXMax = value;
+    }
+    get rangeXMax(){
+        return this._rangeXMax;
+    }
+    set rangeYMin(value){
+        this.datasets.forEach((d)=>{
+            d.rangeYMin = parseFloat(value);
+        })
+        this._rangeYMin = value;
+    }
+    get rangeYMin(){
+        return this._rangeYMin;
+    }
+    set rangeYMax(value){
+        this.datasets.forEach((d)=>{
+            d.rangeYMax= parseFloat(value);
+        })
+        this._rangeYMax = value;
+    }
+    get rangeYMax(){
+        return this._rangeYMax;
+    }
+    set autoXRange(value){
+        this.datasets.forEach((d)=>{
+            d.autoXRange= value;
+        })
+        this._autoXRange = value;
+    }
+    get autoXRange(){
+        return this._autoXRange;
+    }
+    set autoYRange(value){
+        this.datasets.forEach((d)=>{
+            d.autoYRange= value;
+        })
+        this._autoYRange = value;
+    }
+    get autoYRange(){
+        return this._autoYRange;
     }
     setLabels(){
         function repeat(num,whatTo){
@@ -187,7 +286,15 @@ export class GraphSettingsObject {
             "label":label,
             "fill":fill,
             "borderColor":borderColor,
-            "backgroundColor":backgroundColor
+            "backgroundColor":backgroundColor,
+            "distValue":this.distValue,
+            "distPercentage":this.distPercentage,
+            "rangeXMin" : this.rangeXMin, 
+            "rangeXMax" : this.rangeXMax,
+            "rangeYMin" : this.rangeYMin,
+            "rangeYMax" : this.rangeYMax, 
+            "autoXRange" : this.autoXRange, 
+            "autoYRange" : this.autoYRange
                         }
         this.datasets.push(new GraphMetric(tempObj));
     }
@@ -199,7 +306,8 @@ export class GraphSettingsObject {
         this.datasets.splice(index,1);
     }
     clearAllMetrics(){
-        this.datasets = [new GraphMetric];
+        this.datasets = [];
+        this.addMetric();
     }
     parseJson(json){
         Object.assign(this,json);
@@ -215,6 +323,14 @@ export class GraphSettingsObject {
         clonedSettings.visualization = this.visualization;
         clonedSettings.labels = [...this.labels];
         clonedSettings.datasets = this.datasets.map(dataset => dataset.clone());
+        clonedSettings.distValue = this.distValue;
+        clonedSettings.distPercentage = this.distPercentage;
+        clonedSettings.rangeXMin = this.rangeXMin;
+        clonedSettings.rangeXMax = this.rangeXMax;
+        clonedSettings.rangeYMin = this.rangeYMin; 
+        clonedSettings.rangeYMax = this.rangeYMax; 
+        clonedSettings.autoXRange = this.autoXRange; 
+        clonedSettings.autoYRange = this.autoYRange;
         return clonedSettings;
       }
 }
