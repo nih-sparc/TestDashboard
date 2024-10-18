@@ -11,11 +11,15 @@ class MBFImageObject {
 }
  class SparcImageObject
 {
-    constructor(data){
-        this.id = data.image_id;
-        this.name = data.image_id,
+    constructor(data, packageId){ //hits.hits[n]_source.dataset, hits.hits[n]_id
+        this.id = data.image_id; 
+        this.name = data.name || "SPARC_Schwaber_HeartB_section39-section374.jpx"; //item.name - truncate it
+        this.description = data.item? data.item.description: "Image file associated with the accompanying xml file, viewable in TissueMapper", //item.description
         this.size = (Math.random()*10).toFixed(2)+"mb",
-        this.path = data.share_link
+        this.path = data.share_link; 
+        this.sparcID = data //pennsieve.organization.identifier
+        this.packageId = packageId;
+        
     }
 }
 export class TableObject{
@@ -29,7 +33,8 @@ export class TableObject{
         let _tempArr=[];
         this.MBFImageObject.forEach((img)=>{
             let column = {
-                name:img.id,
+                name:img.name,
+                description: img.description,
                 size: (Math.random()*10).toFixed(2)+"mb",
                 path: ""
             }
@@ -42,7 +47,8 @@ export class TableObject{
         this.SparcImageArray.forEach((img)=>{
             let column = {
                 name:img.id,
-                size: (Math.random()*10).toFixed(2)+"mb",
+                description: img.description,
+                coord: "0.5-0.55",
                 path: img.path
             }
             _tempArr.push(column);

@@ -34,7 +34,7 @@ const props = defineProps({
 .content-header{
     border-bottom: 1px solid $mediumGrey;
     background-color: #ebedf0;
-    z-index: 100;
+    z-index: 3;
     h3{
         margin:10px;
     }

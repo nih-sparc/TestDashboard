@@ -52,7 +52,7 @@ let NewComponent = {};
 let NextId = DashboardItems.value.length;
 
 
-const dBItems = debug ? [{ id: "ODBGraph-1", x: 0, y: 0, h: 6, w:4, componentName:"Flatmap Viewer",component:"QDBGraph" }] : 
+const dBItems = debug ? [{ id: "TextWidget-1", x: 0, y: 0, h: 1, w:4, componentName:"Text",component:"TextWidget" }] : 
 [{ id: "FlatmapViewer-1", x: 0, y: 0, h: 8, w:2, componentName:"Flatmap Viewer",component:"FlatmapViewer" },
     { id: "ImageSelector-2", x: 2, y: 0, h: 8, w:3, componentName:"Image Selector", component:"ImageSelector"},
     { id: "BiolucidaViewer-3", x: 5, y: 0,h: 11, w:7, componentName:"MBF Viewer", component:"BiolucidaViewer"},
