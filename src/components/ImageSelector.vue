@@ -49,6 +49,7 @@ function selectImage(index){
 
 watch(() => GlobalVars.MBF_IMAGE_ARRAY, (newVal, oldVal) => {
     getImagesFromDataset()
+    //buildTableFromImages()
 })
 //emitter.on('locationSelect-MBFImageArrayUpdate',(imageArray)=>{
     //buildDataTable
@@ -74,6 +75,7 @@ const getImagesFromDataset = async (datasetId)=>{
                 if (_response.status === 200) {
                 _biolucidaImageData = _response;
                 //buildTable needs to belong to ImageModel/s 
+                console.log(_biolucidaImageData.data.dataset_images)
                 ImageArray.value = new TableObject(_biolucidaImageData.data.dataset_images);
                 TableData.value = ImageArray.value.buildTableSPARC();
                 //buildDataTable(Object.assign(new TableObject(_biolucidaImageData.data.dataset_images)));
@@ -83,20 +85,10 @@ const getImagesFromDataset = async (datasetId)=>{
             }
         }
 
-// function buildDataTable(tbleObj){
-//     const imgs = tbleObj.SparcImageArray;
-//     let _tempArr=[];
-//     imgs.forEach((img)=>{
-//         let column = {
-//             name:img.ImgName,
-//             size: Math.random()*10+"mb",
-//             path: img.Path
-//         }
-//         _tempArr.push(column);
-//     })
-//     TableData.value=_tempArr;
-//     imgPath = imageMod;
-// }
+    function buildTableFromImages(images){
+        ImageArray.value = new TableObject(images);
+        TableData.value = ImageArray.value.buildTableSPARC();
+    }
 
     emitter.on('selectSubject', (value) => {  
         imgPath.value = value;

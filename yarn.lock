@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@abi-software/flatmap-viewer@3.2.0":
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/@abi-software/flatmap-viewer/-/flatmap-viewer-3.2.0.tgz#cbba0592a4a035cc7baa2e94277df4b50937ae0c"
-  integrity sha512-RSWMtecVemIu9Eg8V63ULu3zlTuKi7pcy/mcB15ZTqjh6p31yH2hPWcuLLpSeHMlM9z/hWqZYUH6gU7+Pqal9A==
+"@abi-software/flatmap-viewer@^3.2.2":
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/@abi-software/flatmap-viewer/-/flatmap-viewer-3.2.2.tgz#4717203c2d8ba4e6250ebe6abfbcec72892f666d"
+  integrity sha512-ttYasoZAho1PwHuHJ2f+EyoKanw5Zm14LqQfUkm4yHtk/tmnCb9QYcGvTbRSu4UKErpVbselfWdvd8cm3jm0sg==
   dependencies:
     "@deck.gl/core" "^9.0.17"
     "@deck.gl/geo-layers" "^9.0.18"
@@ -31,12 +31,12 @@
     minisearch "^2.2.1"
     polylabel "^2.0.1"
 
-"@abi-software/flatmapvuer@1.5.6-beta.0":
-  version "1.5.6-beta.0"
-  resolved "https://registry.yarnpkg.com/@abi-software/flatmapvuer/-/flatmapvuer-1.5.6-beta.0.tgz#7d8affa5f3cf8d4e82610649628a67237f45fc11"
-  integrity sha512-rO4HRUjVk0KOyLnWB65qsiug9eyqYEXzPW8dWzlyruLiLRbaoInLOdrMZb9VN/4GtDi7PkRB2lPnSf0rC4YZgA==
+"@abi-software/flatmapvuer@1.5.6-beta.3":
+  version "1.5.6-beta.3"
+  resolved "https://registry.yarnpkg.com/@abi-software/flatmapvuer/-/flatmapvuer-1.5.6-beta.3.tgz#4bd4076af0b62d78a3137f2a7081c72ea44cf1de"
+  integrity sha512-lS0T5CUxsCPXc+p/rrISvBk2As3ut/H9cSP3HmweoHAzYBxViCu6zEzrU/BJ4SiQ3k8AB133AT86O15dB5fLmw==
   dependencies:
-    "@abi-software/flatmap-viewer" "3.2.0"
+    "@abi-software/flatmap-viewer" "^3.2.2"
     "@abi-software/map-utilities" "^1.1.2"
     "@abi-software/sparc-annotation" "0.3.1"
     "@abi-software/svg-sprite" "^1.0.1"

@@ -1,8 +1,14 @@
 <template>                  
     <slot :widgetName="widgetName"></slot>
+    <button v-if="debug" @click="debugCall">test selection</button>
     <div v-bind="$attrs" class="flatmap-viewer tw-p-0">
         <div class="tw-text-left tw-pl-1 flatmap-text" >
-            <p><b>Current Location: </b>{{ locationLabel }}</p>
+            <sparc-tooltip placement="top-left" content="select location on flatmap to filter the image selector">
+                            <template #item>
+                                <el-icon color="#8300BF"><InfoFilled /></el-icon>
+                            </template>
+                        </sparc-tooltip>
+                        <p><b>Current Location: </b>{{ locationLabel }}</p>
         </div>
 
         <FlatmapVuer class="tw-px-2 tw-py-2" ref="flatmapRef" :disableUI="disableFlatmapUI" entry="UBERON:0001759" v-on:resource-selected="FlatmapSelected"  v-on:ready="FlatmapReady"/>
@@ -25,7 +31,7 @@
             tyep:Boolean
     }
   })
-
+  const debug = false;
   const disableFlatmapUI = true;
   let FlatmapReady = false;
 
@@ -46,6 +52,9 @@ function FlatmapSelected(data){
     //send to image selector
     locationStore.getLocationFromMinMax(locationId-.1,locationId+.1)
     }
+}
+function debugCall(){
+    locationStore.getLocationFromMinMax(.1,.15);
 }
 function showMarker(){
     if (data.eventType === 'click') {      
@@ -75,11 +84,17 @@ function addBufferToMinMax(id){
     .flatmap-viewer{
         display: flex;
         flex-direction: column;
+
         .flatmap-text{
+            display:flex;
             height: 50px;
             font-size:20px;
             line-height: 20px;
             margin: 4px;
+            .el-tooltip__trigger{
+                padding: 16px 5px 0 0;
+                font-size: 12px;
+            }
         }
 
         :deep(.flatmap-container){

@@ -2,8 +2,13 @@
             <div ref="instance" class="grid-stack-item-content" @click="selectWidget()">
                 <component v-slot="slotProps" :class="{'widget-body':hasHeader}" :is="componentTag" :listening="highlight" @remove-header="hasHeader=false">
                     <DashHeader :widgetName="slotProps.widgetName" :staticMode="staticMode">
-                        <component class="tw-p-1" v-for="icon in slotProps.childIcons" :is="icon.comp" @click="icon.event" ></component>
-                        <DownloadIcon></DownloadIcon>
+
+                        <sparc-tooltip placement="bottom-left" :content="icon.tooltip" v-for="icon in slotProps.childIcons">
+                            <template #item>
+                                <component class="tw-p-1"  :is="icon.comp" @click="icon.event" ></component>
+                            </template>
+                        </sparc-tooltip>
+                        <!-- <DownloadIcon></DownloadIcon> -->
                         <close-icon v-if="!staticMode" background="#8300BF" color="white" class="close-button" @click="$emit('removeWidget')"></close-icon>
                     </DashHeader>
                 </component> 

@@ -40,7 +40,7 @@
   const settingsVisible=ref(false);
   function openSettings(){settingsVisible.value=true}
   //add icon to header
-  const childIcons=shallowRef([{"comp":GraphIcon,"event":openSettings}])
+  const childIcons=shallowRef([{"comp":GraphIcon,"event":openSettings,"tooltip":"open graph settings"}])
 
   //retrieve saved settings if exist
   let graphSettingsObject = getSavedGraphSettings();
