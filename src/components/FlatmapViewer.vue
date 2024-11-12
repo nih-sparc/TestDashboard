@@ -11,7 +11,7 @@
                         <p><b>Current Location: </b>{{ locationLabel }}</p>
         </div>
 
-        <FlatmapVuer class="tw-px-2 tw-py-2" ref="flatmapRef" :disableUI="disableFlatmapUI" entry="UBERON:0001759" v-on:resource-selected="FlatmapSelected"  v-on:ready="FlatmapReady"/>
+        <FlatmapVuer class="tw-px-2 tw-py-2" uuid="3b9344c0-4d66-5944-9261-e426d8664f7c" :disableUI="disableFlatmapUI" entry="UBERON:0001759" v-on:resource-selected="FlatmapSelected"  v-on:ready="FlatmapReady"/>
 
     </div>
 
