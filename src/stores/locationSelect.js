@@ -1,20 +1,28 @@
 import { ref, inject } from 'vue'
 import { defineStore } from 'pinia'
 import { Api } from "../services";
-
+import {useGlobalVarsStore} from "../stores/globalVars"
+const GlobalVars = useGlobalVarsStore();
 
 export const useLocationStore = defineStore('locationSelected', () => {
   const emitter = inject('emitter');
-    function init(){
 
-      emitter.on('FlatmapViewer-anatomicalLocationSelected',(location)=>{
-        if(location && location.min && location.max){
-          getRegionMinMax(location.min,location.max);
-        }
-      });
+  //this was used to add this event listener to a component
+    function init(){
+      // emitter.on('FlatmapViewer-anatomicalLocationSelected',(location)=>{
+      //   if(location && location.min && location.max){
+      //     getRegionMinMax(location.min,location.max);
+      //   }
+      // });
     }
 
-//call for min/max
+function getLocationFromMinMax(min,max){
+  if(min && max){
+    getRegionMinMax(min, max);
+  }
+}
+//user has selected a location on the flatmap
+//use coord system from 0-1 to call qdb for a list of instances of images within that range 
 const getRegionMinMax = async(min, max, subject)=>{
     subject = "sub-f001";
     let _instance_list = {};
@@ -37,7 +45,8 @@ function handleMinMaxRequest(results){
     getPackageIds(instances)
 }
 
-//call for min/max
+//send in instanceIds to get the package Ids associated with them. 
+// call only takes 1 instance id at a time currently
 
 const getPackageIds = async(instances)=>{
   let ImagesArray = [];
@@ -46,6 +55,7 @@ const getPackageIds = async(instances)=>{
       let _response = {};
       const instance = instances[i].inst || null;
       const dataset = instances[i].dataset || null;
+      GlobalVars.datasetID = dataset;
       try{
           await Api.qdb.getImagesByInstance(dataset,instance).then(response =>{
               _response = response;
@@ -60,22 +70,46 @@ const getPackageIds = async(instances)=>{
     }
   }
   ImagesArray = ImagesArray.filter(x=>x.id_type!=="quantdb"&& x.id);
-  emitter.emit('locationSelect-MBFImageArrayUpdate',ImagesArray);
+  getMetadataForImages(ImagesArray)
 }
-//https://services.scicrunch.io/quantdb/api/1/values/quant?aspect=distance-via-reva-ft-sample-id-normalized-v1&subject=sub-f001&value-quant-min=0.0&value-quant-max=0.1
+//call for actual metadata you can use
+const getMetadataForImages= async(images)=>{
+  console.log(images)
+  let withMetadata = {};
+  let _response = {};
+    try{
 
-// call for each dataset and instance/segment
-//https://services.scicrunch.io/quantdb/api/1/objects?dataset=aa43eda8-b29a-4c25-9840-ecbd57598afc&inst=sam-c-seg-15c
-//check for unique inst and dataset... and later clarify what the min/max ones are
+      var config = { headers: {'Content-Type': 'application/json',}}
+      //packageids from image obj
+      const packageIdList = images.map(i=>i.id)
+      var data = JSON.stringify({
+        "track_total_hits": true,
+        "query": {
+          "terms": {
+            "path_metadata.remote_id.keyword": 
+              //packageIdList
+              ["package:e5934c93-244a-4e84-84ec-4a931a30f6a4", "package:cbfda02a-e982-40fb-b7cb-8bb5c70e24d6"]
+            
+          }
+        }
+      });
+      //call for metadata
+      await Api.fli.getFileLevelData(data,config).then(response =>{
+          _response = response;
+      })
+      if (_response.status === 200) {
+        withMetadata = _response.data.result;
+        console.log(withMetadata);
+      }
+  }catch(e){
+      console.error("couldn't get metadata from list of images from File Level Index");
+      console.log(e)
+  }
 
-//if you get all of those then you will have a package id for each one that is associated with one jpg2000 (hopefully)
-//user clicks on image
-//that's when you need this call to get an image
-//https://sparc.biolucida.net/api/v1/imagemap/sharelink/N:package:ad977506-77bf-4f3b-93b3-41f6426c0b44/268
-//package id and dataset id... but need to clarify dataset id. 
-//then you get biolucida image path... uhg. 
+  GlobalVars.MBF_IMAGE_ARRAY = images;
+}
 
   const componentList = ref([""]);
   const navigatorType = ref("LocationNav");//default 
-  return { init, navigatorType }
+  return { init, navigatorType, getLocationFromMinMax }
 })
