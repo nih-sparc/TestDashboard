@@ -48,7 +48,7 @@ function FlatmapSelected(data){
     locationLabel.value = data.label;
     if(!data.feature.location || locationId===data.feature.location){return;}
     locationId = data.feature.location;
-    const locationMinMax = addBufferToMinMax(locationId);
+    //const locationMinMax = addBufferToMinMax(locationId);
     //send to image selector
     locationStore.getLocationFromMinMax(locationId-.1,locationId+.1)
     }

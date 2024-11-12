@@ -74,7 +74,6 @@ const getPackageIds = async(instances)=>{
 }
 //call for actual metadata you can use
 const getMetadataForImages= async(images)=>{
-  console.log(images)
   let withMetadata = {};
   let _response = {};
     try{
@@ -88,7 +87,7 @@ const getMetadataForImages= async(images)=>{
           "terms": {
             "path_metadata.remote_id.keyword": 
               //packageIdList
-              ["package:e5934c93-244a-4e84-84ec-4a931a30f6a4", "package:cbfda02a-e982-40fb-b7cb-8bb5c70e24d6"]
+              ["package:e5934c93-244a-4e84-84ec-4a931a30f6a4","package:e5934c93-244a-4e84-84ec-4a931a30f6a4"]
             
           }
         }
@@ -98,15 +97,15 @@ const getMetadataForImages= async(images)=>{
           _response = response;
       })
       if (_response.status === 200) {
-        withMetadata = _response.data.result;
-        console.log(withMetadata);
+        withMetadata = _response.data.hits.hits;
+        //map to image objectl. include datasetid and packageid
+        GlobalVars.MBF_IMAGE_ARRAY = withMetadata;
       }
   }catch(e){
       console.error("couldn't get metadata from list of images from File Level Index");
       console.log(e)
   }
 
-  GlobalVars.MBF_IMAGE_ARRAY = images;
 }
 
   const componentList = ref([""]);

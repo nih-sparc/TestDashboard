@@ -5,18 +5,15 @@
     <div class="fill">
         <img :src=imgPath>
     </div>
-    <!-- <div class="tw-p-1">
-        <el-select placeholder="Select Subject"><el-option :value="0">sub 1 </el-option> <el-option :value="1">sub 2</el-option><el-option :value="2">sub 3</el-option></el-select>
-    </div> -->
-    <el-table :data="TableData" class="table-of-images tw-text-sm">
-            <el-table-column prop="name" label="Name"/>
-            <el-table-column prop="description" label="Description"/>
-            <el-table-column prop="coord" label="Location"/>
-            <el-table-column fixed="right" label="Img">
-                <template #default="scope">
-                    <el-button link type="primary" size="small" @click="selectImage(scope.$index)">Open</el-button>
-                </template> 
-            </el-table-column>
+    <el-table 
+    :data="TableData" 
+    class="table-of-images tw-text-sm"
+    highlight-current-row
+    @current-change="handleCurrentChange"
+    >
+            <el-table-column prop="description" label="Description"  width="200" show-overflow-tooltip/>
+            <el-table-column prop="sex" label="Sex"/>
+            <el-table-column prop="age" label="Age"/>
      </el-table>
     </div>
 
@@ -34,67 +31,49 @@
         inheritAttrs: false
     })    
     
-    import imageMod from "../assets/imgs/imgInfo.png"
     const imgPath = ref(null);
     const ImageArray = ref(null);
-    const imageType = ref("");
     const TableData = ref();
 
     const widgetName = ref('MUSE Image Selector');
 
-function selectImage(index){
-    let img = TableData.value[index].path;
-    emitter.emit("ImageSelector-mbfImageSelected",img);
+
+const currentRow = ref();
+
+const handleCurrentChange = (val, index) => {
+  currentRow.value = val;
+  getBiolucidaLink(currentRow);
 }
 
 watch(() => GlobalVars.MBF_IMAGE_ARRAY, (newVal, oldVal) => {
-    getImagesFromDataset()
-    //buildTableFromImages()
+    //convert to non-reactive object before passing it through the model. this avoids unexpected behavior
+    const imageArray = JSON.parse(JSON.stringify(newVal));
+    buildTableFromImages(imageArray);
 })
-//emitter.on('locationSelect-MBFImageArrayUpdate',(imageArray)=>{
-    //buildDataTable
-    //ImageArray.value = new TableObject(imageArray);
-
-    //TableData.value = ImageArray.value.buildTableMBF();
-    //this is the code for the work around. the above code is all that's needed when we get the image array. 
-   // getImagesFromDataset();
-//});
-
-
 
 //on update
-const getImagesFromDataset = async (datasetId)=>{
-    datasetId=353;
-    TableData.value=[];
-            let _biolucidaImageData = {};
-            let _response = {};
-            try{
-                await Api.biolucida.searchDataset(datasetId).then(response =>{
-                    _response = response;
-                })
-                if (_response.status === 200) {
-                _biolucidaImageData = _response;
-                //buildTable needs to belong to ImageModel/s 
-                console.log(_biolucidaImageData.data.dataset_images)
-                ImageArray.value = new TableObject(_biolucidaImageData.data.dataset_images);
-                TableData.value = ImageArray.value.buildTableSPARC();
-                //buildDataTable(Object.assign(new TableObject(_biolucidaImageData.data.dataset_images)));
-                }
-            }catch(e){
-                console.error("couldn't fetch images from dataset");
-            }
+const getBiolucidaLink = async (dataset)=>{
+    const sparcId = dataset.value.sparcId;
+    const packageId = dataset.value.id;
+    let share_link = "";
+    let _response = {};
+    try{
+        await Api.biolucida.getShareLink(packageId,sparcId).then(response =>{
+            _response = response;
+        })
+        if (_response.status === 200) {
+            share_link= _response.data.share_link;
+            GlobalVars.MBF_SHARE_LINK= share_link;
         }
+    }catch(e){
+        console.error("couldn't fetch images from dataset");
+    }
+}
 
     function buildTableFromImages(images){
         ImageArray.value = new TableObject(images);
         TableData.value = ImageArray.value.buildTableSPARC();
     }
-
-    emitter.on('selectSubject', (value) => {  
-        imgPath.value = value;
-        imgPath2.value = "./imgs/imgSel.png";
-        imgPath3.value = "./imgs/imgSel2.png";
-    });
 
 </script>
 <style scoped>

@@ -9,7 +9,12 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
  
   //component objects
   const MBF_IMAGE_ARRAY = ref([]);
+  const MBF_SHARE_LINK = ref("");
 
-
-  return { componentList, navigatorType, MBF_IMAGE_ARRAY, datasetID }
+  return { 
+    componentList, 
+    navigatorType, 
+    MBF_IMAGE_ARRAY, 
+    datasetID, 
+    MBF_SHARE_LINK }
 })

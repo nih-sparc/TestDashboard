@@ -6,40 +6,38 @@
 
     </div>
     <div ref="instance" class="viewer-img">
-        <img :src=props.imageSrc> 
+        <img :src=shareLink> 
     </div>
 </template>
 <script setup>
 
-    import { ref, defineEmits, inject, watch, onMounted, onUnmounted } from 'vue';
-    //import { useOpenerStore } from '../stores/opener';
-
-    const emitter = inject('emitter');
-    //const opener = useOpenerStore();
+    import { ref, defineEmits, watch} from 'vue';
+    import {useGlobalVarsStore} from "../stores/globalVars"
 
     const props = defineProps({
         title:{
                 type:String,
                 required:true
-            },  
-        imageSrc:{
-            type:String
-        },
+            }, 
         listening:{
             tyep:Boolean
         }
     })
-
-    const listening = ref(false);
-
     
     const emit = defineEmits(['setTitle']);
     emit('setTitle','MUSE Image Viewer');
 
+    const GlobalVars = useGlobalVarsStore();
+    const shareLink = ref("");
+    watch(() => GlobalVars.MBF_SHARE_LINK, (newVal, oldVal) => {
+        console.log(newVal)
+        shareLink.value = newVal;
+        console.log(shareLink.value)
+    })
     //uses widgetID to specify own wrapper
-    watch(() => props.listening, (newVal, oldVal) => {
-           //emitter.emit('select-widget'+props.widgetID, newVal);
-    });
+    // watch(() => props.listening, (newVal, oldVal) => {
+    //        //emitter.emit('select-widget'+props.widgetID, newVal);
+    // });
 
 </script>
 <style scoped lang="scss">
