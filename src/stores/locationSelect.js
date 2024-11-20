@@ -80,14 +80,14 @@ const getMetadataForImages= async(images)=>{
 
       var config = { headers: {'Content-Type': 'application/json',}}
       //packageids from image obj
-      const packageIdList = images.map(i=>i.id)
+      const packageIdList = images.map(i=>"package:"+i.id)
       var data = JSON.stringify({
         "track_total_hits": true,
         "query": {
           "terms": {
             "path_metadata.remote_id.keyword": 
               //packageIdList
-              ["package:e5934c93-244a-4e84-84ec-4a931a30f6a4","package:e5934c93-244a-4e84-84ec-4a931a30f6a4"]
+              ["package:e5934c93-244a-4e84-84ec-4a931a30f6a4",  "package:2e294d01-a9d3-4e43-a798-89acb2004a68","package:3d2ff4af-0d5f-40e1-a041-22713ba5f81f","N:package:a1afeb63-073c-462e-9856-ced4e8c57382","N:package:d85f3014-6841-43fe-a173-120b9ac4fff6"]
             
           }
         }
