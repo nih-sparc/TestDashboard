@@ -55,6 +55,7 @@ watch(() => GlobalVars.MBF_IMAGE_ARRAY, (newVal, oldVal) => {
 const getBiolucidaLink = async (dataset)=>{
     const sparcId = dataset.value.sparcId;
     const packageId = dataset.value.id;
+    GlobalVars.MBF_IMAGE_NAME = packageId;
     let share_link = "";
     let _response = {};
     try{
