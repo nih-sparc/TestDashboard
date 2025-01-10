@@ -78,6 +78,9 @@ const getBiolucidaLink = async (dataset)=>{
 
 </script>
 <style scoped>
+:deep(.el-table__row){
+    cursor:pointer;
+}
     .selector-body{
         
     }
