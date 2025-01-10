@@ -11,7 +11,7 @@
                         <p><b>Current Location: </b>{{ locationLabel }}</p>
         </div>
 
-        <FlatmapVuer class="tw-px-2 tw-py-2" uuid="3b9344c0-4d66-5944-9261-e426d8664f7c" :disableUI="disableFlatmapUI" entry="UBERON:0001759" v-on:resource-selected="FlatmapSelected"  v-on:ready="FlatmapReady"/>
+        <FlatmapVuer class="tw-px-2 tw-py-2" :disableUI="disableFlatmapUI" entry="UBERON:0001759" v-on:resource-selected="FlatmapSelected"  v-on:ready="FlatmapReady"/>
 
     </div>
 
@@ -23,7 +23,8 @@
   import { useLocationStore} from "../stores/locationSelect";
   import "@abi-software/flatmapvuer/dist/style.css";
   FlatmapVuer.props.flatmapAPI.default="https://mapcore-demo.org/curation/flatmap/";
-    defineOptions({
+
+defineOptions({
         inheritAttrs: false
     })
   const props = defineProps({
@@ -32,6 +33,7 @@
     }
   })
   const debug = false;
+  const GlobalVars = useGlobalVarsStore();
   const disableFlatmapUI = true;
   let FlatmapReady = false;
 
@@ -45,8 +47,10 @@
 function FlatmapSelected(data){
     if (data.eventType === 'click') { 
    // showMarker(data);
-    locationLabel.value = data.label;
+
     if(!data.feature.location || locationId===data.feature.location){return;}
+    locationLabel.value = data.label;
+    GlobalVars.FLATMAP_LOCATION = data.label ? data.label: "";
     locationId = data.feature.location;
     //const locationMinMax = addBufferToMinMax(locationId);
     //send to image selector
@@ -102,7 +106,7 @@ function addBufferToMinMax(id){
         }
         :deep(.flatmap-tooltip-popup){
             z-index: 4;
-            position:fixed;
+            position:relative;
             max-width: 170px !important;
         }
 
