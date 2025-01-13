@@ -20,7 +20,6 @@
 </template>
 <script setup>
     import { ref, inject, nextTick, watch } from "vue";
-    import { useOpenerStore } from "../stores/opener";
     import { TableObject} from "../devComponents/ImageSelector/ImageModel"
     import { Api } from "../services";
     import {useGlobalVarsStore} from "../stores/globalVars"

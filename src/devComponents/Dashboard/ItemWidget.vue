@@ -15,15 +15,15 @@
             </div>
 </template>
 <script setup>
-    import CloseIcon from './icons/CloseIcon.vue';
-    import DownloadIcon from './icons/DownloadIcon.vue'
+    import CloseIcon from '../../components/icons/CloseIcon.vue';
+    import DownloadIcon from '../../components/icons/DownloadIcon.vue'
     import { ref, inject, computed, watch, reactive} from 'vue';
-    import { useOpenerStore } from "../stores/opener";
+    import { useGlobalVarsStore } from '../../stores/globalVars';
     import DashHeader from "./DashHeader.vue";
     import { nextTick } from 'process';
 
     const emit = defineEmits(['removeWidget']);
-    const opener = useOpenerStore();
+    const GlobalVars = useGlobalVarsStore();
     const props = defineProps({      
             widgetID:{
                 type:String,
@@ -59,7 +59,7 @@
     let highlight = ref(false)
     
     function selectWidget(){
-        if(opener.selectibleWidgets.indexOf(props.widgetID.split("-")[0])>-1){
+        if(GlobalVars.selectibleWidgets.indexOf(props.widgetID.split("-")[0])>-1){
             highlight.value=!highlight.value;
             instance.value.classList.toggle("focus-from-Img-View");
         }

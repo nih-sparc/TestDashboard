@@ -13,6 +13,9 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
   const FLATMAP_LOCATION = ref("");
   const MBF_IMAGE_NAME = ref("");
 
+  const selectibleWidgets=["BiolucidaViewer"];
+  const mbfViewerCount = 0;
+
   return { 
     componentList, 
     navigatorType, 
@@ -20,6 +23,8 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
     DATASET_ID, 
     MBF_SHARE_LINK,
     FLATMAP_LOCATION,
-    MBF_IMAGE_NAME
+    MBF_IMAGE_NAME,
+    selectibleWidgets,
+    mbfViewerCount
  }
 })

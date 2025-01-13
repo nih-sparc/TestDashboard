@@ -1,5 +1,5 @@
 
-import  SparcDashboard  from './components/SparcDashboard.vue'
+import  SparcDashboard  from './devComponents/Dashboard/SparcDashboard.vue'
 import "../dist/output.css"
 import { defineAsyncComponent } from 'vue'
 import mitt from 'mitt'

@@ -12,7 +12,6 @@
 </template>
 <script setup>
   import {ref, onMounted, onUnmounted, inject,watch} from "vue";
-  import { useOpenerStore } from "../stores/opener";
   import {useGlobalVarsStore} from "../stores/globalVars"
 
   const widgetName = ref('MBF Image Viewer');
@@ -28,25 +27,18 @@
   const emitter = inject('emitter');
 
   const GlobalVars = useGlobalVarsStore();
-    const shareLink = ref("");
+  const shareLink = ref("");
   watch(() => GlobalVars.MBF_SHARE_LINK, (newVal, oldVal) => {
         shareLink.value = newVal;
         console.log(shareLink.value)
 })
 
-  const opener = useOpenerStore();
-
   onMounted(() => {
-    opener.mbfViewerCount++;
+    GlobalVars.mbfViewerCount++;
   });
   onUnmounted(()=>{
-    opener.mbfViewerCount--;
+    GlobalVars.mbfViewerCount--;
   })
-    emitter.on('ImageSelector-mbfImageSelected',(img)=>{
-        if(opener.mbfViewerCount>1 && props.listening || opener.mbfViewerCount==1){
-            mbfURLSrc.value=img;
-        }
-    });
 
 </script>
 <style scoped lang="scss">

@@ -1,5 +1,5 @@
 /** @type { import('@storybook/vue3').Preview } */
-import { setup, app } from '@storybook/vue3'
+import { setup } from '@storybook/vue3'
 import { defineAsyncComponent } from 'vue'
 import DesignSystemComponentsPlugin from 'sparc-design-system-components-2'
 import 'element-plus/dist/index.css';
@@ -9,14 +9,12 @@ import { createPinia } from 'pinia';
 import { GridStack } from 'gridstack';
 import mitt from 'mitt';
 import { useGlobalVarsStore } from '../src/stores/globalVars.ts'
-import "../tailwind/output.css"
+import "../dist/output.css"
 import {Dataset} from '../src/assets/Model';
 
 const componentMap = [
   'ImageSelector',
-  'LocationNav',
   'FlatmapViewer',
-  'BiolucidaViewer'
 ]
 
 const pinia = createPinia();

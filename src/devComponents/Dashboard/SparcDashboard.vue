@@ -28,10 +28,10 @@
 
 import { ref, onBeforeMount, onMounted, nextTick, inject, onUpdated, watch} from 'vue';
 import { GridStack } from 'gridstack';
-import FilterWidget from "../devComponents/FilterWidget/FilterWidget.vue"
-import ItemWidget from './ItemWidget.vue';
-import { useGlobalVarsStore }from '../stores/globalVars.ts';
-import {Dataset} from '../assets/Model';
+import FilterWidget from "../FilterWidget/FilterWidget.vue"
+import ItemWidget from './ItemWidget.vue'
+import { useGlobalVarsStore }from '../../stores/globalVars.ts';
+import {Dataset} from '../../assets/Model';
 
 import "gridstack/dist/gridstack.min.css";
 import "gridstack/dist/gridstack-extra.min.css";
@@ -45,7 +45,6 @@ let editGridButton = ref("Edit Grid")
 let Grid = null;
 const root = ref(null);
 
-let NavItem = ref({});
 let DashboardItems = ref([]);
 let staticMode = ref(true);
 getItemsFromLS();
@@ -103,17 +102,12 @@ watch(()=> staticMode.value, (value) => {
 })
 
 function addNewWidget(name) {
-  // if parameter name then newWidget comes from dropdown. else it comes from emmitter
+  // adding new widget from dropdown
     if(name){
       NewComponent.Name = name;
-      NewComponent.Props = new Map();
     }
-    const node = {id:NewComponent.Name+"-"+NextId,w:2,h:6,autoPosition:true, component: NewComponent.Name, componentName:NewComponent.Name, componentProperties:NewComponent.Props};
+    const node = {id:NewComponent.Name+"-"+NextId,w:2,h:6,autoPosition:true, component: NewComponent.Name, componentName:NewComponent.Name};
     
-    // for(let [key,val] of NewComponent.Props){
-    //   node.propName=key
-    //   node.propVal = val;
-    // }
     NextId++;
     //add component to items array first. this will update the dom
     DashboardItems.value.push(node);
@@ -123,16 +117,6 @@ function addNewWidget(name) {
       Grid.makeWidget(node.id);
     });
 }
-_emitter.on('SparcDashboard-addNewWidget', (value) => { 
-      NewComponent.value={}
-      NewComponent.Props = new Map();
-      NewComponent.Name = value[0];
-      value[1].forEach((val)=>{
-        NewComponent.Props.set(val.key,val.value);
-      })
-      
-      addNewWidget()  
-  })
   
 function removeWidget(widget) {
     var index = DashboardItems.value.findIndex(w => w.id == widget);
@@ -156,11 +140,7 @@ function getItemsFromLS(){
       dashItems = JSON.parse(window.localStorage.getItem("DashboardItems"));
     }
     nav = dashItems.find(item => item.id === "SubjectNav");
-    if(!nav){
-      NavItem= {id:"SubjectNav",x:0,y:0,h:20,w:2, component:_globalVars.navigatorType, noMove:true, locked:true};
-    }else{
-      NavItem = nav;
-    }
+
     let navIndex = dashItems.indexOf(nav);
     if(navIndex!==-1){
       dashItems.splice(navIndex,1);

@@ -16,12 +16,3 @@ const CreateBaseApiService = () => {
 export const qdb = {
   ...CreateBaseApiService(),
 };
-
-// const getClasses = async () => {
-//     const { $portalApiClient } = useNuxtApp()
-//     const response = await $portalApiClient.get(`${base}classes/`)
-//     return response.data
-//   }
-// export default{
-//     getClasses
-// }
