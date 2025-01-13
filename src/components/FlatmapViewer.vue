@@ -29,7 +29,7 @@ defineOptions({
     })
   const props = defineProps({
     listening:{
-            tyep:Boolean
+            type:Boolean
     }
   })
   const debug = false;
