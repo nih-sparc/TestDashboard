@@ -29,15 +29,9 @@
 
     const GlobalVars = useGlobalVarsStore();
     const shareLink = ref("");
-    watch(() => GlobalVars.MBF_SHARE_LINK, (newVal, oldVal) => {
-        console.log(newVal)
-        shareLink.value = newVal;
-        console.log(shareLink.value)
+    watch(() => GlobalVars.SELECTED_IMAGE, (newVal, oldVal) => {
+        ///do something
     })
-    //uses widgetID to specify own wrapper
-    // watch(() => props.listening, (newVal, oldVal) => {
-    //        //emitter.emit('select-widget'+props.widgetID, newVal);
-    // });
 
 </script>
 <style scoped lang="scss">
