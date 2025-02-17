@@ -6,7 +6,6 @@ import { TableObject} from "../devComponents/ImageSelector/ImageModel"
 const GlobalVars = useGlobalVarsStore();
 
 export const useLocationStore = defineStore('locationSelected', () => {
-  const emitter = inject('emitter');
 
 function getLocationFromMinMax(min,max){
   if(min && max){

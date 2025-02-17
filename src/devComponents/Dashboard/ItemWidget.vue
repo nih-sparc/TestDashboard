@@ -1,15 +1,36 @@
 <template>
             <div ref="instance" class="grid-stack-item-content" @click="selectWidget()">
-                <component v-slot="slotProps" :class="{'widget-body':hasHeader}" :is="componentTag" :listening="highlight" @remove-header="hasHeader=false">
-                    <DashHeader :widgetName="slotProps.widgetName" :staticMode="staticMode">
-
-                        <sparc-tooltip placement="bottom-left" :content="icon.tooltip" v-for="icon in slotProps.childIcons">
+                <component 
+                v-slot="slotProps" 
+                class="widget-body" 
+                :is="componentTag" 
+                :listening="highlight" 
+                @remove-header="updateHideHeader()" 
+                v-bind="props.componentProperties">
+                    <DashHeader 
+                    v-if="slotProps" 
+                    :widgetName="props.componentName|| slotProps.widgetName" 
+                    :staticMode="staticMode"
+                    :hideHeader="hideHeader">
+                        <sparc-tooltip 
+                        placement="bottom-left" 
+                        :content="icon.tooltip" 
+                        v-for="icon in slotProps.childIcons">
                             <template #item>
-                                <component class="tw-p-1"  :is="icon.comp" @click="icon.event" ></component>
+                                <component class="tw-p-1"  
+                                :is="icon.comp" 
+                                @click="icon.event">
+                            </component>
                             </template>
                         </sparc-tooltip>
                         <!-- <DownloadIcon></DownloadIcon> -->
-                        <close-icon v-if="!staticMode" background="#8300BF" color="white" class="close-button" @click="$emit('removeWidget')"></close-icon>
+                        <close-icon 
+                        v-if="!staticMode" 
+                        background="#8300BF" 
+                        color="white" 
+                        class="close-button"
+                        @click="$emit('removeWidget')">
+                    </close-icon>
                     </DashHeader>
                 </component> 
             </div>
@@ -37,21 +58,28 @@
                 required:true
             },
             componentProperties:{
-                
+                type:Object
+            },
+            componentName:{
+                type:String
             }
         })
 
-    const hasHeader = ref(true);
-
+    const hideHeader = ref(false);
+    function updateHideHeader(){
+        hideHeader.value=true;
+    }
     //this controls properties of a widget being dynamically opened from another widget (via the spacdashboard).
     //use case for this might not be needed anymore as we use edit mode and static mode to add widgets. 
-    let propName = ref("");
-    let propVal = ref("");
-    watch(() => props.componentProperties, (newVal, oldVal) => {
-        for(let [key,val] of newVal){
-        propName=key
-        propVal = val;
-    }})
+    // let propName = ref("");
+    // let propVal = ref("");
+    // watch(() => props.componentProperties, (newVal, oldVal) => {
+    //     console.log(newVal)
+    //     for(let [key,val] of newVal){
+    //     propName=key
+    //     propVal = val;
+     
+    // }})
 
 //-----------------------------------------------------------------------------
 // hightlight functionslity

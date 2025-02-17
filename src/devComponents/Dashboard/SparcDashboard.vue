@@ -1,32 +1,72 @@
 <template>
-    <div class="dash-header tw-h-10">
-     <span class="tw-float-left tw-m-1"><el-button @click="staticMode=!staticMode">{{ editGridButton }}</el-button></span>
-     <FilterWidget></FilterWidget>
+  <div id="app2">
+
+    <div v-if="!hideHeader" class="dash-header tw-h-10">
+      <span class="tw-float-left tw-m-1">
+        <el-button class="edit-button" 
+        @click="staticMode=!staticMode">
+        {{ editGridButton }}
+      </el-button>
+      </span>
+      <FilterWidget></FilterWidget>
+    </div>
+    <div class="tw-h-10" v-else>
+      <span class="tw-float-left tw-m-1">
+        <el-button class="edit-button"
+        @click="staticMode=!staticMode">
+        {{ editGridButton }}
+        </el-button>
+      </span>
     </div>
     <el-col v-if="!staticMode">
       <el-row class="tw-m-12">
-        <el-select :value="NewComponent.Name" placeholder="Add New Widget">
+        <el-select 
+        :value="NewComponent.Name" 
+        placeholder="Add New Widget">
           <el-option
-            v-for="item in ComponentListOptions" :key="item" :label="item" :value="item" @click="addNewWidget(item)">
+            v-for="item in ComponentListOptions" 
+            :key="item" 
+            :label="item" 
+            :value="item" 
+            @click="addNewWidget(item)">
           </el-option>
         </el-select>
-        <el-button v-if="debug" type="default" @click="saveDashboard()" disabled >Save Dashboard</el-button>
+        <el-button v-if="debug" 
+        type="default" 
+        @click="saveDashboard()" 
+        disabled >
+        Save Dashboard
+      </el-button>
       </el-row>
   </el-col> 
     <div  ref="root" class="grid-stack tw-h-screen">
       <div v-for="(w) in DashboardItems" class="grid-stack-item" 
-      :gs-x="w.x" :gs-y="w.y" :gs-w="w.w" :gs-h="w.h" :gs-id="w.id" :id="w.id" :key="w.id">
-            <ItemWidget :widgetID="w.id" @remove-widget="removeWidget(w.id)" :static-mode="staticMode" :componentTag="w.component" :componentProperties="w.Props">
-            </ItemWidget>
+        :gs-x="w.x" 
+        :gs-y="w.y" 
+        :gs-w="w.w" 
+        :gs-h="w.h" 
+        :gs-id="w.id" 
+        :id="w.id" 
+        :key="w.id">
+          <ItemWidget 
+          :widgetID="w.id" 
+          @remove-widget="removeWidget(w.id)" 
+          :static-mode="staticMode" 
+          :componentTag="w.component" 
+          :componentProperties="w.Props"
+          :componentName="w.componentName">
+          </ItemWidget>
       </div>
     </div>
+
+  </div>
 </template>
 
 
 
 <script setup>
 
-import { ref, onBeforeMount, onMounted, nextTick, inject, onUpdated, watch} from 'vue';
+import { ref, onBeforeMount, onMounted, nextTick, inject, onUpdated, watch, provide} from 'vue';
 import { GridStack } from 'gridstack';
 import FilterWidget from "../FilterWidget/FilterWidget.vue"
 import ItemWidget from './ItemWidget.vue'
@@ -36,8 +76,9 @@ import {Dataset} from '../../assets/Model';
 import "gridstack/dist/gridstack.min.css";
 import "gridstack/dist/gridstack-extra.min.css";
 
+
+
 const debug = false;
-const _emitter = inject('emitter');
 const _globalVars = useGlobalVarsStore();
 let _DatasetImgs = ref({});
 let editGridButton = ref("Edit Grid")
@@ -52,18 +93,19 @@ let ComponentListOptions = _globalVars.componentList;
 let NewComponent = {};
 let NextId = DashboardItems.value.length;
 
-
-const dBItems = debug ? [{ id: "TextWidget-1", x: 0, y: 0, h: 1, w:4, componentName:"Text",component:"TextWidget" }] : 
-[{ id: "FlatmapViewer-1", x: 0, y: 0, h: 8, w:2, componentName:"Flatmap Viewer",component:"FlatmapViewer" },
-    { id: "ImageSelector-2", x: 2, y: 0, h: 8, w:3, componentName:"Image Selector", component:"ImageSelector"},
-    { id: "BiolucidaViewer-3", x: 5, y: 0,h: 11, w:7, componentName:"MBF Viewer", component:"BiolucidaViewer"},
-    { id: "ODBGraph-1", x: 0, y: 8, h: 3, w:5, componentName:"Flatmap Viewer",component:"QDBGraph" }]
-
+const props = defineProps({
+    dBItems:{
+            type:Array,
+            required:true
+    },
+    hideHeader:Boolean
+  })
 
 onBeforeMount(() => {
-  DashboardItems.value = dBItems;
+  DashboardItems.value = props.dBItems;
   });
   onMounted(() => {
+    
     initGridStack();
   });
   onUpdated(() => {

@@ -182,7 +182,7 @@ These are passed down to the your component (SampleComponent) from its wrapper v
 ### CUSTOM EMITS/EVENTS:
 
 SPARC Dashboard  uses mitt to implement an event bus. You can use the following methods to emit a custom event that other widgets can pick up or listen to. For example, if your widget has a feature that selects a custom filter and you want it available throughout the dashboard for other widgets to know about, emit your event this way. 
-
+EMITTER IS DEPRECATED
 In your project:
 Import inject from vue. 
 Assign a value to ‘emitter’

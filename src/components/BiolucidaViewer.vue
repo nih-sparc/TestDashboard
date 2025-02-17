@@ -33,8 +33,6 @@
     }
   })
 
-  const emitter = inject('emitter');
-
   const GlobalVars = useGlobalVarsStore();
   const selectedImage = ref("");
 

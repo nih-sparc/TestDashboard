@@ -22,7 +22,6 @@
     import { ref, inject, nextTick, watch } from "vue";
     import {useGlobalVarsStore} from "../stores/globalVars"
     const GlobalVars = useGlobalVarsStore();
-    const emitter = inject('emitter');
 
     defineOptions({
         inheritAttrs: false

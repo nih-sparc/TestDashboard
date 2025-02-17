@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@abi-software/flatmap-viewer@3.2.10":
-  version "3.2.10"
-  resolved "https://registry.yarnpkg.com/@abi-software/flatmap-viewer/-/flatmap-viewer-3.2.10.tgz#5a1bd0035a7669c41db064a35b58a73cbd355158"
-  integrity sha512-jmpZyJBQ7MF4GY4PEAMDpx2ZFel6Id7pacRXVfSVq0JD5zXMVGJ1wn/VJ0AYchSjhp+xYhDy7OjLSEqgxVTYjA==
+"@abi-software/flatmap-viewer@3.2.13":
+  version "3.2.13"
+  resolved "https://registry.yarnpkg.com/@abi-software/flatmap-viewer/-/flatmap-viewer-3.2.13.tgz#1781c914a02a24e7da726bfc1ab35aaa0d52cbdf"
+  integrity sha512-sYkdSTW5D9YMGR/Dp+lfXYkuXI58kytSU0UPQ97mF9WeT7IXEx6zfOPmNlUCrjz3G29Am6tM567BrllKrTmVcQ==
   dependencies:
     "@deck.gl/core" "^9.0.17"
     "@deck.gl/geo-layers" "^9.0.18"
@@ -31,13 +31,13 @@
     minisearch "^2.2.1"
     polylabel "^2.0.1"
 
-"@abi-software/flatmapvuer@1.6.2-beta.12":
-  version "1.6.2-beta.12"
-  resolved "https://registry.yarnpkg.com/@abi-software/flatmapvuer/-/flatmapvuer-1.6.2-beta.12.tgz#39b600447af6d7d9b49d7a48aade9486703bec00"
-  integrity sha512-melmT3+S8d3pXArKhFKUxI7pb5+9/7tefyZjNjGtMB9nkCQqW+b90eHWoboAeCDVFDl8LcPn24PBr8Iru+T0ww==
+"@abi-software/flatmapvuer@1.7.4":
+  version "1.7.4"
+  resolved "https://registry.yarnpkg.com/@abi-software/flatmapvuer/-/flatmapvuer-1.7.4.tgz#fbe376eeadba91d7178d0e53ce61e67abdf34c57"
+  integrity sha512-UIUrfJFD7U5mI6iGmPkj4NI2mLRC3MT3d56vIX3CUoLwMDjzbIZolSO6RXUXczDv+ZbaByHFFsHmO94lLvhrKg==
   dependencies:
-    "@abi-software/flatmap-viewer" "3.2.10"
-    "@abi-software/map-utilities" "^1.2.2-beta.7"
+    "@abi-software/flatmap-viewer" "3.2.13"
+    "@abi-software/map-utilities" "^1.3.2"
     "@abi-software/sparc-annotation" "0.3.2"
     "@abi-software/svg-sprite" "^1.0.1"
     "@element-plus/icons-vue" "^2.3.1"
@@ -48,10 +48,10 @@
     unplugin-vue-components "^0.26.0"
     vue "^3.4.21"
 
-"@abi-software/map-utilities@^1.2.2-beta.7":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@abi-software/map-utilities/-/map-utilities-1.3.0.tgz#01ef8a5ce8c2aa71338da9ed33f9628dca1375b3"
-  integrity sha512-vA1qeXAgQ7yk6BTizCzS3TsRmH31eaWNoj/2yfiwoWhTJiY6+ZP//CmeFZdP4LQCAFR7Y4zyhkVtsx06/96bMw==
+"@abi-software/map-utilities@^1.3.2":
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@abi-software/map-utilities/-/map-utilities-1.3.2.tgz#b2ed61fb66b17416f15671ea274f0fac2868effe"
+  integrity sha512-Whbt7SqOkWHDFrRYslOJlD6+9qUG7cJnCFIEnwhT20nF8a9iGO7tJijXJGjJUzRhsvuZzIUCGU5kwcBH9nVhMw==
   dependencies:
     "@abi-software/svg-sprite" "^1.0.1"
     "@element-plus/icons-vue" "^2.3.1"
@@ -5079,7 +5079,7 @@ date-fns@^2.3.0:
   dependencies:
     "@babel/runtime" "^7.21.0"
 
-dayjs@^1.11.3:
+dayjs@^1.11.13, dayjs@^1.11.3:
   version "1.11.13"
   resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.13.tgz#92430b0139055c3ebb60150aa13e860a4b5a366c"
   integrity sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==
@@ -5377,6 +5377,27 @@ element-plus@2.8.4:
     "@vueuse/core" "^9.1.0"
     async-validator "^4.2.5"
     dayjs "^1.11.3"
+    escape-html "^1.0.3"
+    lodash "^4.17.21"
+    lodash-es "^4.17.21"
+    lodash-unified "^1.0.2"
+    memoize-one "^6.0.0"
+    normalize-wheel-es "^1.2.0"
+
+element-plus@^2.3.9:
+  version "2.9.4"
+  resolved "https://registry.yarnpkg.com/element-plus/-/element-plus-2.9.4.tgz#e4b75055f0f1b1c1f33186321eb3d7a6424051e5"
+  integrity sha512-sGnW0wd9zf6lEGixXV2gfwx3X6VTMkP52qTkX7zbURJ2oariyslrKTBh2txt1sdn1pUvj2l0KY3OfSXoZGmDOw==
+  dependencies:
+    "@ctrl/tinycolor" "^3.4.1"
+    "@element-plus/icons-vue" "^2.3.1"
+    "@floating-ui/dom" "^1.0.1"
+    "@popperjs/core" "npm:@sxzz/popperjs-es@^2.11.7"
+    "@types/lodash" "^4.14.182"
+    "@types/lodash-es" "^4.17.6"
+    "@vueuse/core" "^9.1.0"
+    async-validator "^4.2.5"
+    dayjs "^1.11.13"
     escape-html "^1.0.3"
     lodash "^4.17.21"
     lodash-es "^4.17.21"
