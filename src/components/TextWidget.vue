@@ -1,11 +1,13 @@
 <template>
+      <slot :widgetName="widgetName"></slot>
 <div v-bind="$attrs">
+
     <div v-click-out="saveInput" @keyup.enter="saveInput" class="tw-flex">
       <div v-show="editing">
           <el-input @focus="$event.target.select()" ref="textContentInput" v-model="textContent"></el-input>
       </div> 
       <div v-show="!editing" @click="editInput()" class="tw-w-full tw-h-full">
-          <h3>{{ textContent }}</h3>
+          <h2>{{ textContent }}</h2>
       </div>
       <el-icon v-show="!editing" :size="size" :color="color">
         <Edit @click="editInput()"/>
@@ -20,14 +22,18 @@
   defineOptions({
       inheritAttrs: false
   })    
-  
-  //remove header completely
+  const props = defineProps({
+    displayText:String,
+    hideHeader:Boolean
+  })
   const emit = defineEmits(['remove-header']);
+  const widgetName = props.header?ref('Text Widget'):"";
+
   onMounted(() => {
-    emit('remove-header');
+    if(props.hideHeader){emit("remove-header")}
   });
 
-  const textContent = ref("Click To Enter Text");
+  const textContent = ref(props.displayText);
   const editing = ref(false);
   const textContentInput = ref(null);
 

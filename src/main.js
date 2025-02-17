@@ -3,27 +3,26 @@ import './assets/main.css'
 import { createApp, defineAsyncComponent } from 'vue'
 
 import { createPinia } from 'pinia'
-import DesignSystemComponentsPlugin from 'sparc-design-system-components-2'
 import '../node_modules/sparc-design-system-components-2/dist/style.css';
-import mitt from 'mitt'
+
+import ElementPlus from 'element-plus'
  import App from './App.vue'
 import { useGlobalVarsStore } from './stores/globalVars'
 import "../dist/output.css"
 import { clickOut } from "./directives/directives.js" 
 
- const app = createApp(App);
-app.use(DesignSystemComponentsPlugin);
-app.use(createPinia());
+const app = createApp(App);
 
-const emitter = mitt();
-app.provide('emitter', emitter); 
+app.use(createPinia());
+app.use(ElementPlus)
 
 const componentMap = [
-    'ImageSelector',
     'FlatmapViewer',
+    'ImageSelector',
     'BiolucidaViewer',
     'QDBGraph',
-    'TextWidget'
+    'TextWidget',
+    'CountWidget'
 ]
 componentMap.forEach(comp=>{
     const asyncComponent = defineAsyncComponent(() => import(`./components/${comp}.vue`)); 
@@ -37,6 +36,6 @@ app.directive('click-out', clickOut)
 const globalVars = useGlobalVarsStore();
 globalVars.componentList = componentMap;
 
-app.use(DesignSystemComponentsPlugin);
+//app.use(DesignSystemComponents);
 
 app.mount('#app');

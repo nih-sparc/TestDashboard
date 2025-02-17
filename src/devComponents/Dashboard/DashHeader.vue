@@ -1,5 +1,7 @@
 <template>
-    <div class="content-header stick-to-top tw-flex tw-flex-row tw-items-center tw-justify-between tw-h-10 tw-p-1">                    
+    <div
+    v-if="!hideHeader" 
+    class="content-header stick-to-top tw-flex tw-flex-row tw-items-center tw-justify-between tw-h-10 tw-p-1">                    
       <div>
         <h3>{{ widgetName }}</h3>
       </div>
@@ -19,12 +21,12 @@
 //       </div>
 //     </div> 
 import { ref, inject, computed, watch, provide} from 'vue';
-const emitter = inject('emitter');
 const props = defineProps({      
     widgetName:{
         type:String,
         required:true
-    }
+    },
+    hideHeader:Boolean
 })
 
 </script>
