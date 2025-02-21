@@ -3,12 +3,11 @@
     <button v-if="debug" @click="debugCall">test selection</button>
     <div v-bind="$attrs" class="flatmap-viewer tw-p-0">
         <div class="tw-text-left tw-pl-1 flatmap-text" >
-            <sparc-tooltip placement="top-left" content="select location on flatmap to filter the image selector">
-                            <template #item>
-                                <el-icon color="#8300BF"><InfoFilled /></el-icon>
-                            </template>
-                        </sparc-tooltip>
-                        <p><b>Current Location: </b>{{ locationLabel }}</p>
+            <el-tooltip placement="top-start">
+                            <template #content>   select location on flatmap to filter the image selector  </template>
+                                <el-icon color="#8300BF"><InfoFilled /></el-icon>                     
+            </el-tooltip>
+            <p><b>Current Location: </b>{{ locationLabel }}</p>
         </div>
 
         <FlatmapVuer class="tw-px-2 tw-py-2" :disableUI="disableFlatmapUI" uuid="0ea568ec-538d-52f3-a8e7-0437d844e1cf" entry="UBERON:0001759" v-on:resource-selected="FlatmapSelected"  v-on:ready="FlatmapReady"/>
@@ -21,6 +20,8 @@
   import {FlatmapVuer, MultiFlatmapVuer} from '@abi-software/flatmapvuer';
   import { useGlobalVarsStore } from '../stores/globalVars'
   import { useLocationStore} from "../stores/locationSelect";
+  import { ElTooltip } from "element-plus";
+  import { InfoFilled } from "@element-plus/icons-vue";
   import "@abi-software/flatmapvuer/dist/style.css";
   FlatmapVuer.props.flatmapAPI.default="https://mapcore-demo.org/devel/flatmap/v4/";
 

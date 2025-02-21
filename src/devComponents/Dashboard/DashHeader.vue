@@ -9,6 +9,10 @@
         <slot></slot>
       </div>
     </div>
+    <div v-else
+      class="tw-fixed">
+      <slot></slot>
+    </div>
 </template>
 <script setup>
 //this component really only has one job, and it's to format the header correctly and make it easier for users to add icons to the header without much markup on their end.

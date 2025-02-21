@@ -10,10 +10,11 @@ import ElementPlus from 'element-plus'
 import { useGlobalVarsStore } from './stores/globalVars'
 import "../dist/output.css"
 import { clickOut } from "./directives/directives.js" 
+import { installDashboard} from './DashboardPlugin.ts'
 
 const app = createApp(App);
+const pinia = createPinia();
 
-app.use(createPinia());
 app.use(ElementPlus)
 
 const componentMap = [
@@ -24,10 +25,9 @@ const componentMap = [
     'TextWidget',
     'CountWidget'
 ]
-componentMap.forEach(comp=>{
-    const asyncComponent = defineAsyncComponent(() => import(`./components/${comp}.vue`)); 
-    app.component(comp, asyncComponent);
-})
+
+installDashboard(app,componentMap);
+
 
 app.directive("focus", focus);
 app.directive('click-out', clickOut)

@@ -14,7 +14,7 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: "./src/DashboardPlugin.js",
+      entry: "./src/DashboardPlugin.ts",
       name: 'SparcDashboard',
       formats:["es","cjs"],
       fileName: (format) => (format === "es" ? "index.js" : "index.cjs"),

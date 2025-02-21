@@ -66,12 +66,13 @@
 
 <script setup>
 
-import { ref, onBeforeMount, onMounted, nextTick, inject, onUpdated, watch, provide} from 'vue';
+import { ref, onBeforeMount, onMounted, nextTick, computed, onUpdated, watch, provide} from 'vue';
 import { GridStack } from 'gridstack';
 import FilterWidget from "../FilterWidget/FilterWidget.vue"
 import ItemWidget from './ItemWidget.vue'
 import { useGlobalVarsStore }from '../../stores/globalVars.ts';
 import {Dataset} from '../../assets/Model';
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 import "gridstack/dist/gridstack.min.css";
 import "gridstack/dist/gridstack-extra.min.css";
@@ -86,7 +87,8 @@ let editGridButton = ref("Edit Grid")
 let Grid = null;
 const root = ref(null);
 
-let DashboardItems = ref([]);
+const DashboardItems = computed(() => _globalVars.DASHBOARD_ITEMS);
+    
 let staticMode = ref(true);
 getItemsFromLS();
 let ComponentListOptions = _globalVars.componentList;
@@ -98,14 +100,18 @@ const props = defineProps({
             type:Array,
             required:true
     },
-    hideHeader:Boolean
+    hideHeader:Boolean,
+    options:{
+        type:Object,
+        required:false
+    }
   })
 
 onBeforeMount(() => {
-  DashboardItems.value = props.dBItems;
+    _globalVars.DASHBOARD_ITEMS= props.dBItems;
   });
   onMounted(() => {
-    
+    addOptionsToGlobalVars();
     initGridStack();
   });
   onUpdated(() => {
@@ -137,6 +143,17 @@ function initGridStack(){
     Grid = GridStack.init(options);
     Grid.setStatic(staticMode.value)
 }
+
+//Add Data to Global Vars for reactivity and Global Scoping -----------------------------
+function addOptionsToGlobalVars(){
+  if(props.options?.globalData){
+      for(const x in props.options.globalData){
+        _globalVars.addOptionsDataItems(x,props.options.globalData[x])
+      }
+  }
+}
+
+
 //All additional Functions - - - - - - - - -- - - - - --  -- - -- - - - - - - -  --
 watch(()=> staticMode.value, (value) => {
   Grid.setStatic(value);

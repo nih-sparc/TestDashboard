@@ -19,7 +19,6 @@
       @update-chart="(x)=>updateChart(x)"
       :settingsData="graphSettingsObject"
       >
-        
       </GraphSettings>
 </template>
 <script setup>
@@ -38,7 +37,11 @@
 
   const widgetName = ref("QDB Graph");
   const settingsVisible=ref(false);
-  function openSettings(){settingsVisible.value=true}
+
+  function openSettings(){
+    settingsVisible.value=true
+  }
+
   //add icon to header
   const childIcons=shallowRef([{"comp":GraphIcon,"event":openSettings,"tooltip":"open graph settings"}])
 
