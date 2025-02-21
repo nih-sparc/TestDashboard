@@ -27,10 +27,7 @@ const componentMap = [
 ]
 
 installDashboard(app,componentMap);
-componentMap.forEach(comp=>{
-    const asyncComponent = defineAsyncComponent(() => import(`./components/${comp}.vue`)); 
-    app.component(comp, asyncComponent);
-})
+
 
 app.directive("focus", focus);
 app.directive('click-out', clickOut)

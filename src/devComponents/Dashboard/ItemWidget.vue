@@ -3,34 +3,38 @@
                 <component 
                 v-slot="slotProps" 
                 class="widget-body" 
+                :widgetID="widgetID"
                 :is="componentTag" 
                 :listening="highlight" 
-                @remove-header="updateHideHeader()" 
+                @remove-header="(h)=>updateHideHeader(h)" 
                 v-bind="props.componentProperties">
                     <DashHeader 
                     v-if="slotProps" 
                     :widgetName="props.componentName|| slotProps.widgetName" 
                     :staticMode="staticMode"
                     :hideHeader="hideHeader">
-                        <sparc-tooltip 
-                        placement="bottom-left" 
-                        :content="icon.tooltip" 
-                        v-for="icon in slotProps.childIcons">
-                            <template #item>
-                                <component class="tw-p-1"  
-                                :is="icon.comp" 
-                                @click="icon.event">
-                            </component>
-                            </template>
-                        </sparc-tooltip>
-                        <!-- <DownloadIcon></DownloadIcon> -->
-                        <close-icon 
-                        v-if="!staticMode" 
-                        background="#8300BF" 
-                        color="white" 
-                        class="close-button"
-                        @click="$emit('removeWidget')">
-                    </close-icon>
+                        <div
+                        class="tw-flex">
+                            <el-tooltip 
+                            placement="bottom-start"
+                            v-for="icon in slotProps.childIcons">
+                                <template #content>{{ icon.tooltip }}</template>
+                                    <component class="tw-p-1 tw-w-5"  
+                                    :is="icon.comp" 
+                                    @click="icon.event">
+                                </component>
+                            </el-tooltip>
+                            <div
+                            class="tw-flex"
+                            v-if="!staticMode" >
+                                <close-icon 
+                                background="#8300BF" 
+                                color="white" 
+                                class="item-widget-button"
+                                @click="$emit('removeWidget')">
+                                </close-icon>
+                            </div>
+                        </div>
                     </DashHeader>
                 </component> 
             </div>
@@ -42,7 +46,8 @@
     import { useGlobalVarsStore } from '../../stores/globalVars';
     import DashHeader from "./DashHeader.vue";
     import { nextTick } from 'process';
-
+    import { ElTooltip } from 'element-plus';
+    
     const emit = defineEmits(['removeWidget']);
     const GlobalVars = useGlobalVarsStore();
     const props = defineProps({      
@@ -66,21 +71,11 @@
         })
 
     const hideHeader = ref(false);
-    function updateHideHeader(){
-        hideHeader.value=true;
+    function updateHideHeader(hideIt){
+        hideHeader.value=hideIt;
     }
-    //this controls properties of a widget being dynamically opened from another widget (via the spacdashboard).
-    //use case for this might not be needed anymore as we use edit mode and static mode to add widgets. 
-    // let propName = ref("");
-    // let propVal = ref("");
-    // watch(() => props.componentProperties, (newVal, oldVal) => {
-    //     console.log(newVal)
-    //     for(let [key,val] of newVal){
-    //     propName=key
-    //     propVal = val;
-     
-    // }})
 
+    
 //-----------------------------------------------------------------------------
 // hightlight functionslity
     let instance = ref(null);
@@ -104,7 +99,7 @@
     h3{
         margin:10px;
     }
-    .close-button{
+    .item-widget-button{
         cursor: pointer;
         margin-right:3px;
         width:20px;
@@ -137,4 +132,7 @@
 .focus-from-Img-View{
         border:solid $lightPurple 2px !important;
     }
+.icon-wrapper{
+    width:25px
+}
 </style>

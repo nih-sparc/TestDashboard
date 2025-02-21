@@ -7,6 +7,8 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
   const componentList = ref([""]);
   const navigatorType = ref("LocationNav");//default 
   const DATASET_ID = ref("");
+  const optionsData = ref([])
+  const DASHBOARD_ITEMS = ref([]);
  
   //component objects
   const DASH_IMAGE_ARRAY = ref([]);
@@ -19,10 +21,14 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
   const SELECTED_IMAGE = ref(null);
 
   const selectibleWidgets=["BiolucidaViewer"];
-  const mbfViewerCount = 0;
+  const mbfViewerCount = ref(0);
 
 
   //SETTERS
+  const addOptionsDataItems = (name:string,value:any)=>{
+      optionsData.value.push({name,value})
+  }
+
   const setImageArray = (newArray: SparcImageObject[]) => {
     if (!Array.isArray(newArray)) {
       console.error("setImageArray expects an array.");
@@ -30,17 +36,26 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
     }
     DASH_IMAGE_ARRAY.value = [...newArray]; 
   };
-  const setSelectedImage = (selectedImage:SparcImageObject)=>{
+  const setSelectedImage = (selectedImage: SparcImageObject | null) => {
+    if (!selectedImage) {
+      console.warn("No valid image selected.");
+      return;
+    }
     SELECTED_IMAGE.value = selectedImage;
-    MBF_IMAGE_NAME.value = selectedImage.packageId;
-  }
-  const setBiolucidaPath = (path:String) => {
+    MBF_IMAGE_NAME.value = selectedImage.packageId || "";
+  };
+  
+  const setBiolucidaPath = (path: string) => {
     if (SELECTED_IMAGE.value) {
-      SELECTED_IMAGE.value.biolucidaPath = path;
+      SELECTED_IMAGE.value = { ...SELECTED_IMAGE.value, biolucidaPath: path };
+    } else {
+      console.warn("No image selected. Cannot set Biolucida path.");
     }
   };
+  
 
   return { 
+    DASHBOARD_ITEMS,
     componentList, 
     navigatorType, 
     DASH_IMAGE_ARRAY, 
@@ -52,8 +67,10 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
     SUBJECT_AGE,
     SUBJECT_SEX,
     SELECTED_IMAGE,
+    optionsData,
     setBiolucidaPath,
     setImageArray,
-    setSelectedImage
+    setSelectedImage,
+    addOptionsDataItems
  }
 })
