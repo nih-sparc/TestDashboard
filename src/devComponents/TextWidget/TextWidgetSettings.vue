@@ -62,7 +62,8 @@
     </template>
     <script setup>
     
-    import { ref, watch, computed } from 'vue'
+    import { ref, watch, computed} from 'vue'
+    import { storeToRefs } from 'pinia';
     import {useGlobalVarsStore} from "../../stores/globalVars.ts"
     const globalVars = useGlobalVarsStore();
 
@@ -97,7 +98,7 @@
     }
 
     //Gather select options for user based on available global vars. 
-    const widgetSelectOptions = computed(() => globalVars.optionsData);
+    const { optionsData: widgetSelectOptions } = storeToRefs(globalVars);
     
     </script>
     <style scoped>

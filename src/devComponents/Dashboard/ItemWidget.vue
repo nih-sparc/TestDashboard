@@ -42,7 +42,7 @@
 <script setup>
     import CloseIcon from '../../components/icons/CloseIcon.vue';
     import DownloadIcon from '../../components/icons/DownloadIcon.vue'
-    import { ref, inject, computed, watch, reactive} from 'vue';
+    import { ref} from 'vue';
     import { useGlobalVarsStore } from '../../stores/globalVars';
     import DashHeader from "./DashHeader.vue";
     import { nextTick } from 'process';

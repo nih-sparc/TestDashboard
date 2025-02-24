@@ -72,7 +72,7 @@ import FilterWidget from "../FilterWidget/FilterWidget.vue"
 import ItemWidget from './ItemWidget.vue'
 import { useGlobalVarsStore }from '../../stores/globalVars.ts';
 import {Dataset} from '../../assets/Model';
-import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+import { storeToRefs } from 'pinia';
 
 import "gridstack/dist/gridstack.min.css";
 import "gridstack/dist/gridstack-extra.min.css";
@@ -87,7 +87,7 @@ let editGridButton = ref("Edit Grid")
 let Grid = null;
 const root = ref(null);
 
-const DashboardItems = computed(() => _globalVars.DASHBOARD_ITEMS);
+const { DASHBOARD_ITEMS: DashboardItems } = storeToRefs(_globalVars);
     
 let staticMode = ref(true);
 getItemsFromLS();

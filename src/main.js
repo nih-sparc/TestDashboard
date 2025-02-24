@@ -9,11 +9,10 @@ import ElementPlus from 'element-plus'
  import App from './App.vue'
 import { useGlobalVarsStore } from './stores/globalVars'
 import "../dist/output.css"
-import { clickOut } from "./directives/directives.js" 
 import { installDashboard} from './DashboardPlugin.ts'
 
 const app = createApp(App);
-const pinia = createPinia();
+
 
 app.use(ElementPlus)
 
@@ -27,14 +26,6 @@ const componentMap = [
 ]
 
 installDashboard(app,componentMap);
-
-
-app.directive("focus", focus);
-app.directive('click-out', clickOut)
-
-//add list of components to add componet drop down
-const globalVars = useGlobalVarsStore();
-globalVars.componentList = componentMap;
 
 //app.use(DesignSystemComponents);
 

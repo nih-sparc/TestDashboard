@@ -6,6 +6,7 @@ import { useGlobalVarsStore } from './stores/globalVars'
 import '../node_modules/sparc-design-system-components-2/dist/style.css';
 import { createPinia, type Pinia} from 'pinia'
 import {App, isRef} from 'vue'
+import { clickOut } from "./directives/directives.js" 
 
 
 //for auto install -----------------------------------------------------------------------------------------------------------------
@@ -25,6 +26,8 @@ export function installDashboard(app: App<Element>, componentMap:Array<string>,p
     globalVars.componentList = componentMap;
 
     app.component("SparcDashboard", SparcDashboard);
+    app.directive("focus", focus);
+    app.directive('click-out', clickOut)
   }
 export default SparcDashboard;
 
