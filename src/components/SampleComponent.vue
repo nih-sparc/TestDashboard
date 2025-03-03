@@ -32,7 +32,7 @@
 </script>
 <style scoped lang="scss">
 //import SPARC styles if you want to have access to them. 
-@import './node_modules/sparc-design-system-components-2/src/assets/_variables.scss';
+
 
 //example of class styles
 .sample-component{

@@ -287,14 +287,14 @@ Here is an example of the SampleComponent.vue file as of 7/17/2024. See github f
 </script>
 <style scoped lang="scss">
 //import SPARC styles if you want to have access to them. 
-@import './node_modules/sparc-design-system-components-2/src/assets/_variables.scss';
+
 
 //example of class styles
 .sample-component{
     height:500px;
     width:400px;
     border: solid purple 1px;
-    background-color: lightgray;
+    background-color: grey;
 }
 </style>
 ```

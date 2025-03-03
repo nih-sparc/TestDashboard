@@ -1,16 +1,16 @@
 <template>
     <div
     v-if="!hideHeader" 
-    class="content-header stick-to-top tw-flex tw-flex-row tw-items-center tw-justify-between tw-h-10 tw-p-1">                    
+    class="content-header stick-to-top tw-flex tw-flex-row tw-items-center tw-justify-between tw-h-10">                    
       <div>
-        <h3>{{ widgetName }}</h3>
+        <div class="tw-m-4 tw-leading-none">{{ widgetName }}</div>
       </div>
       <div>
         <slot></slot>
       </div>
     </div>
     <div v-else
-      class="tw-fixed">
+      class="tw-absolute content-header tw-flex-row-reverse tw-flex tw-w-100 tw-items-center tw-justify-between tw-h-10">
       <slot></slot>
     </div>
 </template>
@@ -35,23 +35,7 @@ const props = defineProps({
 
 </script>
 <style scoped lang="scss">
-@import './node_modules/sparc-design-system-components-2/src/assets/_variables.scss';
 
-.content-header{
-    border-bottom: 1px solid $mediumGrey;
-    background-color: #ebedf0;
-    z-index: 3;
-    h3{
-        margin:10px;
-    }
-    .close-button{
-        cursor: pointer;
-        margin-right:3px;
-        width:20px;
-        height: 20px;
-        padding:8px;
-    }
-}
 
 .stick-to-top{
 position: sticky;

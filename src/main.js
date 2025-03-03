@@ -1,20 +1,15 @@
-import './assets/main.css'
+//import './assets/main.css'
 
-import { createApp, defineAsyncComponent } from 'vue'
+import { createApp } from 'vue'
 
-import { createPinia } from 'pinia'
-import '../node_modules/sparc-design-system-components-2/dist/style.css';
-
-import ElementPlus from 'element-plus'
  import App from './App.vue'
-import { useGlobalVarsStore } from './stores/globalVars'
-import "../dist/output.css"
-import { installDashboard} from './DashboardPlugin.ts'
+
+import { installDashboard} from '../dist/index.js'
 
 const app = createApp(App);
 
 
-app.use(ElementPlus)
+//app.use(ElementPlus)
 
 const componentMap = [
     'FlatmapViewer',
@@ -26,7 +21,5 @@ const componentMap = [
 ]
 
 installDashboard(app,componentMap);
-
-//app.use(DesignSystemComponents);
 
 app.mount('#app');

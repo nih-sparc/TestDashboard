@@ -1,65 +1,51 @@
 <template>
-
-    <el-dialog
-        v-model="dialogVisible"
-        title="Text Widget Settings"
-        width="20%"
-        :append-to-body="true"
-      >
-      <div class="tw-m-2">
-
-        <div>
-          <div class="tw-p-1">
-              <h4>Select This Widget's Value</h4>
-          </div>
-          <div class="tw-w-40">
-            <select
-            v-model="widgetSource">
-              <option
-              :value="null"
-              :key="null">
-                none - manual edit
-              </option>
-              <option
-              v-for="ops in widgetSelectOptions"
-              :value="ops.name"
-              :key="ops.name">
-              {{ ops.name}}
-              </option>
-            </select>
-          </div>
+  <el-dialog
+    class="full-dialog-dashboard"
+    v-model="dialogVisible"
+    title="Text Widget Settings"
+    :append-to-body="true"
+  >
+    <div class="widget-settings-container">
+      
+      <!-- Row for Widget Value & Widget Title -->
+      <div class="widget-settings-row">
+        <!-- Select Widget Value -->
+        <div class="widget-setting">
+          <h4>Select This Widget's Value</h4>
+          <select v-model="widgetSource">
+            <option :value="null" :key="null">none - manual edit</option>
+            <option v-for="ops in widgetSelectOptions" :value="ops.name" :key="ops.name">
+              {{ ops.name }}
+            </option>
+          </select>
         </div>
 
-        <div>
-          <div class="tw-p-1">
-              <h4>Assign This Widget's Title</h4>
-          </div>
-          <div class="tw-w-40">
-              <el-input
-              v-model="widgetTitle"
-              placeholder="default is value name"/>
-          </div>
-        </div>
-
-        <div class="tw-flex tw-justify-between tw-w-40 tw-p-1 tw-pt-6">
-          <label>Hide Header</label>
-          <el-checkbox
-            v-model="hideHeader"
-            :value="hideHeader"
-          />
+        <!-- Assign Widget Title -->
+        <div class="widget-setting">
+          <h4>Assign This Widget's Title</h4>
+          <el-input v-model="widgetTitle" placeholder="default is value name"/>
         </div>
       </div>
-    
-        <template #footer>
-          <div class="dialog-footer">
-            <el-button class="secondary" @click="dialogVisible = false">Cancel</el-button>
-            <el-button @click="updateTextVariable()">
-              Save
-            </el-button>
-          </div>
-        </template>
-      </el-dialog>
+
+      <!-- Hide Header Checkbox (Placed Below) -->
+      <div class="widget-hide-header">
+        <label>Hide Header</label>
+        <el-checkbox v-model="hideHeader" :value="hideHeader" />
+      </div>
+      
+    </div>
+
+    <!-- Footer -->
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button class="secondary" @click="dialogVisible = false">Cancel</el-button>
+        <el-button @click="updateTextVariable()">Save</el-button>
+      </div>
     </template>
+
+  </el-dialog>
+</template>
+
     <script setup>
     
     import { ref, watch, computed} from 'vue'
@@ -101,19 +87,76 @@
     const { optionsData: widgetSelectOptions } = storeToRefs(globalVars);
     
     </script>
-    <style scoped>
-    .demo-color-block {
-      display: flex;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-    .border-division{
-      /* border-bottom: solid gray 1px;
-      padding:.5rem; */
-    }
-    .border-division div {
-      /* flex: 1 1 0;
-      min-height: 20px; */
-    
-    }
+    <style scoped lang="scss">
+@import '../../assets/vars.scss';
+
+.full-dialog-dashboard {
+  width: 95%;
+  height: 95%;
+  margin: auto;
+  margin-top: 2.5%;
+}
+
+.widget-settings-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px; 
+  font-family: Roboto, sans-serif;
+  font-size: 14px;
+  color: var(--textDark);
+}
+
+/* Row for Select & Title Fields */
+.widget-settings-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+/* Styling for Each Setting */
+.widget-setting {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.widget-setting select,
+.widget-setting input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--el-color-primary-dark-2);
+  border-radius: 4px;
+}
+
+/* Hide Header Section */
+.widget-hide-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  width:25%;
+}
+
+/* Button Styles */
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.el-button {
+  background-color: var(--el-color-primary);
+  border-color: var(--el-color-primary-dark-2);
+  color: white;
+}
+
+.el-button:hover {
+  background-color: var(--el-color-primary-light-3);
+  border-color: var(--el-color-primary-dark-2);
+}
+.el-input{
+  height: 35px;
+}
+
     </style>

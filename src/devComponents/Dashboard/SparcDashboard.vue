@@ -1,8 +1,7 @@
 <template>
-  <div id="app2">
-
-    <div v-if="!hideHeader" class="dash-header tw-h-10">
-      <span class="tw-float-left tw-m-1">
+  <div class="dashboard-app">
+    <div v-if="!hideHeader" class="dash-header tw-max-h-screen tw-flex tw-flex-col">
+      <span class="tw-float-left tw-m-1 button">
         <el-button class="edit-button" 
         @click="staticMode=!staticMode">
         {{ editGridButton }}
@@ -10,7 +9,7 @@
       </span>
       <FilterWidget></FilterWidget>
     </div>
-    <div class="tw-h-10" v-else>
+    <div v-else class="tw-h-10 dash-header">
       <span class="tw-float-left tw-m-1">
         <el-button class="edit-button"
         @click="staticMode=!staticMode">
@@ -19,7 +18,7 @@
       </span>
     </div>
     <el-col v-if="!staticMode">
-      <el-row class="tw-m-12">
+      <div class="tw-m-4 tw-w-40">
         <el-select 
         :value="NewComponent.Name" 
         placeholder="Add New Widget">
@@ -37,7 +36,7 @@
         disabled >
         Save Dashboard
       </el-button>
-      </el-row>
+    </div>
   </el-col> 
     <div  ref="root" class="grid-stack tw-h-screen">
       <div v-for="(w) in DashboardItems" class="grid-stack-item" 
@@ -58,7 +57,7 @@
           </ItemWidget>
       </div>
     </div>
-
+        
   </div>
 </template>
 
@@ -220,25 +219,52 @@ function isValidJSON(str) {
 </script>
 
 <style  lang="scss">
-@import './node_modules/sparc-design-system-components-2/src/assets/_variables.scss';
+@import '../../assets/vars.scss';
 
-.dash-header {
-  background-color: $darkBlue;
-  color: white;
-}
 .grid-stack {
-  background: $background;
+ //background
 }
-
 .grid-stack-item {
 
   text-align: center;
   line-height: 35px;
   .grid-stack-item-content{
     overflow: hidden;
+    // box-shadow: $dropShadow;
+    border:solid $textLight 1px;
+    border-radius: 0.2rem;
   }
 }
+.dashboard-app{
+  font-family: Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 17px;
+  background: $background;
+  color: $textDark;
+  
 
+  /* Force Inheritance */
+  .el-button {
+    background-color: var(--el-color-primary);
+    border-color: var(--el-color-primary-dark-2);
+    color: white;
+  }
 
+  .el-button:hover {
+    background-color: var(--el-color-primary-light-3);
+    border-color: var(--el-color-primary-dark-2);
+  }
+}
+</style>
+<style lang="scss">
+.el-dialog.full-dialog-dashboard {
+  width: 95%;
+  height: 95%;
+  margin: auto;
+  margin-top: 2.5%;
+  font-family: Roboto, sans-serif;
+  font-size: 14px;
+  color: var(--textDark);
+}
 
 </style>

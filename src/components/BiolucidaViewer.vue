@@ -75,7 +75,6 @@ const getBiolucidaLink = async ()=>{
 
 </script>
 <style scoped lang="scss">
-@import './node_modules/sparc-design-system-components-2/src/assets/_variables.scss';
 .bv-metadata{
   border: solid #ebedf0 2px;
     padding-left:10px;
@@ -84,7 +83,7 @@ const getBiolucidaLink = async ()=>{
     }
 }
 .hightlight{
-        border:solid $lightPurple 2px !important;
+        border:solid purple 2px !important; //light purple
     }
     iframe{padding:0; border:none;}
 

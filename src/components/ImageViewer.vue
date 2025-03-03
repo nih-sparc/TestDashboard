@@ -35,7 +35,7 @@
 
 </script>
 <style scoped lang="scss">
-@import './node_modules/sparc-design-system-components-2/src/assets/_variables.scss';
+
     .viewer-img{
         display: flex;
         height: 100%;
@@ -45,7 +45,7 @@
         }
     }
     .highlight{
-        border: solid $lightPurple 2px;
+        border: solid purple 2px; //light purple
     }
 .metadata-imgV{
     text-align: left;
@@ -56,8 +56,4 @@
         margin:0 !important;
     }
 }
-</style>
-<style lang="scss">
-@import './node_modules/sparc-design-system-components-2/src/assets/_variables.scss';
-
 </style>

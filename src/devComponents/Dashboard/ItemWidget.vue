@@ -3,6 +3,7 @@
                 <component 
                 v-slot="slotProps" 
                 class="widget-body" 
+                :class="{'widget-body-no-head':hideHeader}"
                 :widgetID="widgetID"
                 :is="componentTag" 
                 :listening="highlight" 
@@ -19,21 +20,17 @@
                             placement="bottom-start"
                             v-for="icon in slotProps.childIcons">
                                 <template #content>{{ icon.tooltip }}</template>
-                                    <component class="tw-p-1 tw-w-5"  
+                                    <component 
+                                    class="tw-w-4 header-icon"  
                                     :is="icon.comp" 
                                     @click="icon.event">
                                 </component>
                             </el-tooltip>
-                            <div
-                            class="tw-flex"
-                            v-if="!staticMode" >
-                                <close-icon 
-                                background="#8300BF" 
-                                color="white" 
-                                class="item-widget-button"
-                                @click="$emit('removeWidget')">
-                                </close-icon>
-                            </div>
+                            <el-icon v-if="!staticMode"
+                             class="item-widget-button"
+                             @click="$emit('removeWidget')"
+                             ><Close/></el-icon>
+                            
                         </div>
                     </DashHeader>
                 </component> 
@@ -47,6 +44,7 @@
     import DashHeader from "./DashHeader.vue";
     import { nextTick } from 'process';
     import { ElTooltip } from 'element-plus';
+    import { Close } from "@element-plus/icons-vue";
     
     const emit = defineEmits(['removeWidget']);
     const GlobalVars = useGlobalVarsStore();
@@ -90,10 +88,10 @@
 
 </script>
 <style scoped lang="scss">
-@import './node_modules/sparc-design-system-components-2/src/assets/_variables.scss';
-
+@import '../../assets/vars.scss';
 :deep(.content-header){
-    border-bottom: 1px solid $mediumGrey;
+    z-index: 3;
+    width:95%;
     overflow: hidden;
     min-height: 40px;
     h3{
@@ -104,20 +102,42 @@
         margin-right:3px;
         width:20px;
         height: 20px;
-        padding:8px;
+    }
+    .close-button{
+        cursor: pointer;
+        margin-right:3px;
+        width:20px;
+        height: 20px;
     }
 }
 :deep(.widget-body){
   height: calc( 100% - 40px );
 }
+:deep(.widget-body-no-head){
+    height: inherit;
+}
 .grid-stack-item-content {
+    background-color: #ffffff;
     overflow:hidden;
-    border: 1px solid $lightGrey;
-    border-radius: 0.2rem;
     text-align: center;
-    background-color: #ebedf0;
     display: flex;
     flex-flow: column;
+    transition: background 0.3s ease-in-out;
+    &:hover {
+    background: $backgroundBlocked; 
+  }
+
+  .header-icon {
+
+    opacity: 0;
+    transform: translateY(5px);
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  }
+
+  &:hover .header-icon {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 :deep(.fill) {
     display: flex;
@@ -130,9 +150,22 @@
     }
 }
 .focus-from-Img-View{
-        border:solid $lightPurple 2px !important;
+        border:solid purple 2px !important; //light  purple
     }
 .icon-wrapper{
     width:25px
 }
+
+// hover functionality
+.parent-div {
+  position: relative;
+  display: inline-block; // Keeps it sized to content (optional)
+  padding: 20px;
+  background: #f0f0f0;
+  border-radius: 8px;
+  transition: background 0.3s ease-in-out;
+
+
+}
+
 </style>
