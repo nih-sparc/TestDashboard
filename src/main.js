@@ -1,10 +1,8 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import {installDashboard} from './DashboardPlugin.ts'
-import { createPinia} from 'pinia'
+import {installDashboard} from '../dist/index'
 
 const app = createApp(App);
-const pinia = createPinia();
 
 const componentMap = [
     'FlatmapViewer',
@@ -16,9 +14,6 @@ const componentMap = [
     'ScaffoldViewer'
 ]
 
-async function initializeApp() {
-    await installDashboard(app, componentMap); 
-    app.mount('#app'); 
-}
+installDashboard(app, componentMap); 
+app.mount('#app'); 
 
-initializeApp();
