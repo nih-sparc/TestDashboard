@@ -29,18 +29,19 @@
   },
   "dependencies": {
     "@abi-software/flatmapvuer": "1.7.4",
+    "@abi-software/scaffoldvuer": "^1.8.0",
     "@element-plus/icons-vue": "^2.3.1",
     "@tsconfig/node21": "^21.0.1",
     "axios": "^1.6.7",
     "chart.js": "^4.4.2",
-    "element-plus": "^2.3.9",
+    "element-plus": "^2.0.0",
     "gridstack": "^9.5.0",
     "mitt": "^3.0.1",
-    "pinia": "^2.1.7",
+    "pinia": "^2.0.0",
     "sass": "^1.69.5",
     "storybook": "^7.5.3",
     "vite-plugin-css-injected-by-js": "^3.5.2",
-    "vue": "^3.5.11",
+    "vue": "^3.2.0",
     "vue-chartjs": "^5.3.1"
   },
   "devDependencies": {

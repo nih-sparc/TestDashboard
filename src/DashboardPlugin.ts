@@ -11,12 +11,11 @@ import 'element-plus/dist/index.css';
 
 //for auto install -----------------------------------------------------------------------------------------------------------------
   
-export async function installDashboard(app: App<Element>, componentMap:Array<string>,pinia){
+export function installDashboard(app: App<Element>, componentMap:Array<string>,pinia){
   if (!pinia || !isPiniaInstance(pinia)) {
     pinia = createPinia();
     app.use(pinia)
   }
-  console.log(pinia)
   app.use(pinia)
     componentMap.forEach(comp=>{
         const asyncComponent = defineAsyncComponent(() => import(`./components/${comp}.vue`)); 
@@ -25,7 +24,7 @@ export async function installDashboard(app: App<Element>, componentMap:Array<str
 
     //add list of components to add componet drop down
     const globalVars = useGlobalVarsStore(pinia);
-    globalVars.componentList.value = componentMap;
+    globalVars.componentList = componentMap;
 
     app.component("SparcDashboard", SparcDashboard);
     app.directive("focus", focus);
