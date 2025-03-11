@@ -16,6 +16,7 @@ export function installDashboard(app: App<Element>, componentMap:Array<string>,p
     pinia = createPinia();
     app.use(pinia)
   }
+  app.use(pinia)
     componentMap.forEach(comp=>{
         const asyncComponent = defineAsyncComponent(() => import(`./components/${comp}.vue`)); 
         app.component(comp, asyncComponent);

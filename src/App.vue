@@ -1,12 +1,12 @@
 <template>
-    <SparcDashboard :dBItems="dBItems" :hideHeader="true" :options="dashboardOptions"></SparcDashboard>
+    <SparcDashboard :dBItems="dBItems"  :options="dashboardOptions"></SparcDashboard>
 
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch} from 'vue';
 import SparcDashboard from "./devComponents/Dashboard/SparcDashboard.vue"
 
-const debug = true;
+const debug = false;
 const dBItems = debug ? [{ id: "TextWidget-1", x: 0, y: 0, h: 1, w:4, componentName:"Text",component:"TextWidget",Props:{displayText:"Dastaset Overview",hideHeader:true} },
 { id: "CountWidget-2", x: 0, y: 1, h: 2, w:2, componentName:"File Count",component:"CountWidget",Props:{count:20} },
 { id: "TextWidget-3", x: 2, y: 1, h: 2, w:2, componentName:"Status",component:"TextWidget",Props:{displayText:"Published"}}] : 

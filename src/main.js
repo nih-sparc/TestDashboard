@@ -4,7 +4,7 @@ import { createApp } from 'vue'
 
  import App from './App.vue'
 
-import { installDashboard} from '../dist/index.js'
+import { installDashboard} from './DashboardPlugin'
 
 const app = createApp(App);
 

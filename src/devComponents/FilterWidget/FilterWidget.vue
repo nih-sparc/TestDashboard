@@ -49,4 +49,7 @@ const filterOrder = ["Dataset", "Vagal Location", "Selected Image"]
     .color-primary{
         color:white;
     }
+    .filter-wrapper{
+        background-color: #243d8e;
+    }
 </style>
