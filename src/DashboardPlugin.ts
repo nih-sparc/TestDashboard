@@ -25,7 +25,7 @@ export async function installDashboard(app: App<Element>, componentMap:Array<str
 
     //add list of components to add componet drop down
     const globalVars = useGlobalVarsStore(pinia);
-    globalVars.componentList.value = componentMap;
+    globalVars.componentList = componentMap;
 
     app.component("SparcDashboard", SparcDashboard);
     app.directive("focus", focus);
