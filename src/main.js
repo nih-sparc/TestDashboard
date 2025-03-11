@@ -1,15 +1,10 @@
-//import './assets/main.css'
-
 import { createApp } from 'vue'
-
- import App from './App.vue'
-
-import { installDashboard} from './DashboardPlugin'
+import App from './App.vue'
+import { installDashboard } from '../dist/index'
+import { createPinia} from 'pinia'
 
 const app = createApp(App);
-
-
-//app.use(ElementPlus)
+const pinia = createPinia();
 
 const componentMap = [
     'FlatmapViewer',
@@ -20,6 +15,9 @@ const componentMap = [
     'CountWidget'
 ]
 
-installDashboard(app,componentMap);
+async function initializeApp() {
+    await installDashboard(app, componentMap); 
+    app.mount('#app'); 
+}
 
-app.mount('#app');
+initializeApp();
