@@ -1,6 +1,6 @@
 <script setup>
 import { ScaffoldVuer } from '@abi-software/scaffoldvuer';
-import '@abi-software/scaffoldvuer/dist/style.css';
+
 import {ref} from 'vue'
 
 const ScaffoldSelected = function(annotation) {
@@ -31,5 +31,6 @@ const minimapSettings= ref({
     :displayMinimap="displayMinimap"
     :minimapSettings="minimapSettings" />
 </template>
-<style lang="scss">
+<style lang="scss" scoped>
+@import '@abi-software/scaffoldvuer/dist/style.css';
 </style>

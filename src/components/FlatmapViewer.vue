@@ -22,7 +22,7 @@
   import { useLocationStore} from "../stores/locationSelect";
   import { ElTooltip } from "element-plus";
   import { InfoFilled } from "@element-plus/icons-vue";
-  import "@abi-software/flatmapvuer/dist/style.css";
+
   FlatmapVuer.props.flatmapAPI.default="https://mapcore-demo.org/devel/flatmap/v4/";
 
 defineOptions({
@@ -84,7 +84,7 @@ function addBufferToMinMax(id){
 
 </script>
 <style scoped lang="scss">
-
+@import "@abi-software/flatmapvuer/dist/style.css";
     .flatmap-viewer{
         display: flex;
         flex-direction: column;

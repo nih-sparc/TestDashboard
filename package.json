@@ -1,6 +1,6 @@
 {
   "name": "sparc-dashboard-beta",
-  "version": "0.4.7",
+  "version": "0.4.13",
   "author": "Sam Kraft (https://Sparc.Science)",
   "private": false,
   "type": "module",
@@ -34,14 +34,14 @@
     "@tsconfig/node21": "^21.0.1",
     "axios": "^1.6.7",
     "chart.js": "^4.4.2",
-    "element-plus": "^2.0.0",
+    "element-plus": "^2.3.9",
     "gridstack": "^9.5.0",
     "mitt": "^3.0.1",
     "pinia": "^2.0.0",
     "sass": "^1.69.5",
     "storybook": "^7.5.3",
     "vite-plugin-css-injected-by-js": "^3.5.2",
-    "vue": "^3.2.0",
+    "vue": "^3.5.13",
     "vue-chartjs": "^5.3.1"
   },
   "devDependencies": {
@@ -72,8 +72,8 @@
     "vue-tsc": "^1.8.19"
   },
   "peerDependencies": {
-    "element-plus": "^2.0.0",
+    "element-plus": "^2.3.9",
     "pinia": "^2.0.0",
-    "vue": "^3.2.0"
+    "vue": "^3.5.13"
   }
 }

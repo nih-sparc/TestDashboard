@@ -1,13 +1,12 @@
 
 import  SparcDashboard  from './devComponents/Dashboard/SparcDashboard.vue'
-import "../dist/output.css"
 import { defineAsyncComponent } from 'vue'
 import { useGlobalVarsStore } from './stores/globalVars'
 import { createPinia, type Pinia} from 'pinia'
 import {App, isRef} from 'vue'
 import { clickOut } from "./directives/directives.js" 
 import ElementPlus from 'element-plus'
-import 'element-plus/dist/index.css'; 
+
 
 //for auto install -----------------------------------------------------------------------------------------------------------------
   
