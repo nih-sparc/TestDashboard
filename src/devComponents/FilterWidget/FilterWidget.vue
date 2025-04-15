@@ -42,6 +42,7 @@ const filterOrder = ["Dataset", "Vagal Location", "Selected Image"]
 
 </script>
 <style scoped lang="scss">
+@import '../../assets/vars.scss';
 
     .color-secondary{
         color:grey;//light grey
@@ -50,7 +51,8 @@ const filterOrder = ["Dataset", "Vagal Location", "Selected Image"]
         color:white;
     }
     .filter-wrapper{
-        background-color: #243d8e;
+        background-color: $secondary;
         height: 33px;
+        padding:8px;
     }
 </style>

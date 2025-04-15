@@ -91,7 +91,7 @@
 @import '../../assets/vars.scss';
 :deep(.content-header){
     z-index: 3;
-    width:95%;
+    width:100%;
     overflow: hidden;
     min-height: 40px;
     h3{

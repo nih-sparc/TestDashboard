@@ -72,6 +72,9 @@ import ItemWidget from './ItemWidget.vue'
 import { useGlobalVarsStore }from '../../stores/globalVars.ts';
 import {Dataset} from '../../assets/Model';
 import { storeToRefs } from 'pinia';
+import "../../assets/theme.scss"
+import "gridstack/dist/gridstack.min.css";
+import "gridstack/dist/gridstack-extra.min.css";
 
 const debug = false;
 const _globalVars = useGlobalVarsStore();
@@ -215,10 +218,7 @@ function isValidJSON(str) {
 
 <style scoped lang="scss">
 @import '../../assets/vars.scss';
-@import "gridstack/dist/gridstack.min.css";
-@import "gridstack/dist/gridstack-extra.min.css";
-@import 'element-plus/dist/index.css'; 
-@import "../../../dist/output.css";
+
 
 .grid-stack {
  //background

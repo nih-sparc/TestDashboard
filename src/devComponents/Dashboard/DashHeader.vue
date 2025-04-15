@@ -3,7 +3,7 @@
     v-if="!hideHeader" 
     class="content-header stick-to-top tw-flex tw-flex-row tw-items-center tw-justify-between tw-h-10">                    
       <div>
-        <div class="tw-m-4 tw-leading-none">{{ widgetName }}</div>
+        <div class="tw-m-4 tw-leading-none tw-pl-1 widget-name">{{ widgetName }}</div>
       </div>
       <div>
         <slot></slot>

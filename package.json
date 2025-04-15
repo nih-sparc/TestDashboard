@@ -1,6 +1,6 @@
 {
   "name": "sparc-dashboard-beta",
-  "version": "0.4.13",
+  "version": "0.4.17",
   "author": "Sam Kraft (https://Sparc.Science)",
   "private": false,
   "type": "module",
@@ -10,6 +10,7 @@
     "dist",
     "src/stores",
     "src/devComponents",
+    "src/assets",
     "tailwind"
   ],
   "scripts": {
@@ -27,6 +28,9 @@
     "build-storybook": "storybook build",
     "test": "vitest"
   },
+  "resolutions": {
+    "element-plus": "^2.3.9"
+  },  
   "dependencies": {
     "@abi-software/flatmapvuer": "1.7.4",
     "@abi-software/scaffoldvuer": "^1.8.0",

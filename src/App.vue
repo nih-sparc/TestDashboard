@@ -1,6 +1,19 @@
 <template>
     <SparcDashboard :dBItems="dBItems"  :options="dashboardOptions"></SparcDashboard>
+    <el-button type="primary" @click="openDialog">Open Dialog</el-button>
+    <el-dialog
+      v-model="dialogVisible"
+      title="Basic Dialog"
 
+      @close="closeDialog"
+    >
+      <p>This is a dialog content area.</p>
+
+      <template #footer>
+        <el-button @click="closeDialog">Cancel</el-button>
+        <el-button type="primary" @click="closeDialog">Confirm</el-button>
+      </template>
+    </el-dialog>
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch} from 'vue';
@@ -24,13 +37,18 @@ const dashboardOptions =ref({
     CollaboaratorCount:0
   }
 })
-
+const dialogVisible = ref(false);
+function closeDialog(){
+  dialogVisible.value = false
+}
+function openDialog(){
+  dialogVisible.value = true;
+}
   onMounted(() => {
 
   });
 
 </script>
-<style scoped lang="scss">
-
+<style lang="scss">
 
 </style>
