@@ -107,6 +107,14 @@ const dBItems = [
     ]
 </script>
 ```
+## List of Components
+- any of these may be imported in the componentMap
+BiolucidaViewer - Surfaces Biolucida Images when SELECTED_IMAGE (in global vars) is updated
+FlatmapViewer - Shows the vagas flatmap. Updats the FLATMAP_LOCATION global var
+ImageSelector - Displays list of images in the global var DASH_IMAGE_ARRAY. Updates SELECTED_IMAGE
+QDBGraph - displays QDB data
+ScaffoldViewer - Displays 3D Scaffold
+TextWidget - Displays text assigned by user or from data
 
 # DOCUMENTATION 
 - adding custom component to dashboard

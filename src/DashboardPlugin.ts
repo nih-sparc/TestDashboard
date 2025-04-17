@@ -2,9 +2,7 @@ import SparcDashboard from './devComponents/Dashboard/SparcDashboard.vue';
 import { defineAsyncComponent, defineCustomElement, App, isRef } from 'vue';
 import { useGlobalVarsStore } from './stores/globalVars';
 import { createPinia, type Pinia } from 'pinia';
-import { clickOut } from "./directives/directives.js"; 
-import ElementPlus from 'element-plus';
-import 'element-plus/dist/index.css';
+import { clickOut, focusOn } from "./directives/directives.js"; 
 import "../tailwind/output.css";
 
 export function installDashboard(
@@ -42,11 +40,9 @@ export function installDashboard(
   }
 
   // Register directives
-  app.directive("focus", focus);
+  app.directive("focus", focusOn);
   app.directive("click-out", clickOut);
 
-  // Add Element Plus UI library
-  app.use(ElementPlus);
 }
 
 export default SparcDashboard;
