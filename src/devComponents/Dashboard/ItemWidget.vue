@@ -5,6 +5,7 @@
                 class="widget-body" 
                 :class="{'widget-body-no-head':hideHeader}"
                 :widgetID="widgetID"
+                :componentName="props.componentName|| slotProps.widgetName" 
                 :is="componentTag" 
                 :listening="highlight" 
                 @remove-header="(h)=>updateHideHeader(h)" 
@@ -39,6 +40,7 @@
 <script setup>
     import CloseIcon from '../../components/icons/CloseIcon.vue';
     import DownloadIcon from '../../components/icons/DownloadIcon.vue'
+    import { Edit } from '@element-plus/icons-vue';
     import { ref} from 'vue';
     import { useGlobalVarsStore } from '../../stores/globalVars';
     import DashHeader from "./DashHeader.vue";
@@ -93,7 +95,6 @@
     z-index: 3;
     width:100%;
     overflow: hidden;
-    min-height: 40px;
     h3{
         margin:10px;
     }
@@ -115,6 +116,9 @@
 }
 :deep(.widget-body-no-head){
     height: inherit;
+    h2{
+        margin: 0;
+    }
 }
 .grid-stack-item-content {
     background-color: #ffffff;
@@ -128,7 +132,7 @@
   }
 
   .header-icon {
-
+    height: 18px;
     opacity: 0;
     transform: translateY(5px);
     transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;

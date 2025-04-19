@@ -247,6 +247,10 @@ function isValidJSON(str) {
     background-color: var(--el-color-primary);
     border-color: var(--el-color-primary-dark-2);
     color: white;
+
+    :hover{
+      color:var(--el-color-primary-dark-2)
+    }
   }
 
   .el-button:hover {

@@ -55,10 +55,22 @@
 
     const emit = defineEmits(['close-dialog','update-text-var']);
     const props = defineProps({
-      showDialog:{
+    showDialog: {
       type: Boolean,
-      default: false
+      default: false,
     },
+    widgetSourceValue: {
+      type: String,
+      default: "",
+    },
+    widgetTitleValue: {
+      type: String,
+      default: "",
+    },
+    hideHeaderValue: {
+      type: Boolean,
+      default: false,
+    }
     })
 
     //handle close dialog emit
@@ -73,8 +85,18 @@
     const widgetSource = ref("");
     const widgetTitle = ref("");
     const hideHeader = ref(false);
+
+    watch(() => props.showDialog, (val) => {
+      if (val) {
+
+        widgetSource.value = props.widgetSourceValue;
+        widgetTitle.value = props.widgetTitleValue;
+        hideHeader.value = props.hideHeaderValue;
+        console.log(props.widgetSourceValue)
+      }
+    });
+
     watch( hideHeader, (newVal) => {
-      console.log(newVal)
         emit("hide-header",newVal);
     })
 
