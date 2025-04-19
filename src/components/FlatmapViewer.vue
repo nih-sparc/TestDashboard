@@ -4,13 +4,13 @@
     <div v-bind="$attrs" class="flatmap-viewer tw-p-0">
         <div class="tw-text-left tw-pl-1 flatmap-text" >
             <el-tooltip placement="top-start">
-                            <template #content>   select location on flatmap to filter the image selector  </template>
-                                <el-icon color="#8300BF"><InfoFilled /></el-icon>                     
+                <template #content>   select location on flatmap to filter the image selector  </template>
+                <el-icon color="#8300BF"><InfoFilled /></el-icon>                     
             </el-tooltip>
             <p><b>Current Location: </b>{{ locationLabel }}</p>
         </div>
-
-        <FlatmapVuer class="tw-px-2 tw-py-2" :disableUI="disableFlatmapUI" uuid="0ea568ec-538d-52f3-a8e7-0437d844e1cf" entry="UBERON:0001759" v-on:resource-selected="FlatmapSelected"  v-on:ready="FlatmapReady"/>
+        
+        <FlatmapVuer class="tw-px-2 tw-py-2 fmv-class" :disableUI="disableFlatmapUI" uuid="0ea568ec-538d-52f3-a8e7-0437d844e1cf" entry="UBERON:0001759" v-on:resource-selected="FlatmapSelected"  v-on:ready="FlatmapReady"/>
 
     </div>
 
@@ -83,18 +83,23 @@ function addBufferToMinMax(id){
 }
 
 </script>
+<style>
+/* this cannot be scoped while still working as designed. Style leak exists reardless of this line */
+        @import "@abi-software/flatmapvuer/dist/style.css";
+</style>
 <style scoped lang="scss">
-@import "@abi-software/flatmapvuer/dist/style.css";
+@import "../assets/vars.scss";
+
     .flatmap-viewer{
         display: flex;
         flex-direction: column;
 
         .flatmap-text{
             display:flex;
-            height: 50px;
+            min-height: 60px;
             font-size:20px;
-            line-height: 20px;
-            margin: 4px;
+            line-height: 17px;
+            margin-left: 4px;
             .el-tooltip__trigger{
                 padding: 16px 5px 0 0;
                 font-size: 12px;
