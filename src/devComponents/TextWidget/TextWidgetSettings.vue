@@ -6,32 +6,40 @@
     :append-to-body="true"
   >
     <div class="widget-settings-container">
-      
       <!-- Row for Widget Value & Widget Title -->
       <div class="widget-settings-row">
         <!-- Select Widget Value -->
         <div class="widget-setting">
-          <h4>Select This Widget's Value</h4>
-          <select v-model="widgetSource">
-            <option :value="null" :key="null">none - manual edit</option>
-            <option v-for="ops in widgetSelectOptions" :value="ops.name" :key="ops.name">
-              {{ ops.name }}
-            </option>
-          </select>
+          <h4>Select This Widget's Value </h4>
+          <h5>Select From Variables</h5>
+          <el-select v-model="reactiveSource">
+            <el-option
+              :value="'manual edit'"
+              :key="'none'"
+              label="None"
+            />
+            <el-option 
+            v-for="ops in widgetSelectOptions" 
+            :value="ops.name" 
+            :key="ops.name" 
+            :label="ops.name">
+            </el-option>
+          </el-select>
+          <h5>Manual Entry</h5>
+          <el-input v-model="manualTextEntry"></el-input>
         </div>
 
-        <!-- Assign Widget Title -->
-        <div class="widget-setting">
-          <h4>Assign This Widget's Title</h4>
-          <el-input v-model="widgetTitle" placeholder="default is value name"/>
-        </div>
       </div>
 
-      <!-- Hide Header Checkbox (Placed Below) -->
+              <!-- <div class="widget-setting">
+          <h4>Assign This Widget's Header</h4>
+          <el-input v-model="widgetHeader" :disabled="hideHeader" placeholder="default is value name"/>
+        </div>
+
       <div class="widget-hide-header">
         <label>Hide Header</label>
         <el-checkbox v-model="hideHeader" :value="hideHeader" />
-      </div>
+      </div> -->
       
     </div>
 
@@ -59,18 +67,15 @@
       type: Boolean,
       default: false,
     },
-    widgetSourceValue: {
+    reactiveSourceValue: {
       type: String,
       default: "",
     },
-    widgetTitleValue: {
-      type: String,
-      default: "",
+    manualEntryValue:{
+      type:String,
+      default:""
     },
-    hideHeaderValue: {
-      type: Boolean,
-      default: false,
-    }
+
     })
 
     //handle close dialog emit
@@ -81,33 +86,25 @@
       },
     });
 
-    //on Save button click
-    const widgetSource = ref("");
-    const widgetTitle = ref("");
-    const hideHeader = ref(false);
+    const reactiveSource = ref(props.reactiveSourceValue);
+    const manualTextEntry = ref(props.manualEntryValue);
+    watch(() => props.manualEntryValue, (newVal) => {
+      manualTextEntry.value = newVal;
+    }, { immediate: true });
 
-    watch(() => props.showDialog, (val) => {
-      if (val) {
-
-        widgetSource.value = props.widgetSourceValue;
-        widgetTitle.value = props.widgetTitleValue;
-        hideHeader.value = props.hideHeaderValue;
-        console.log(props.widgetSourceValue)
-      }
-    });
-
-    watch( hideHeader, (newVal) => {
-        emit("hide-header",newVal);
-    })
-
-    function updateTextVariable(){
-      emit("update-text-var",{"widgetSource":widgetSource.value,"title":widgetTitle.value});
-      dialogVisible.value = false;
-    }
 
     //Gather select options for user based on available global vars. 
     const { optionsData: widgetSelectOptions } = storeToRefs(globalVars);
-    
+
+    function updateTextVariable(){
+      let manualEditValue = manualTextEntry.value;
+      if(!manualEditValue || manualEditValue=="manual edit"){
+        manualEditValue = null;
+      }
+      emit("update-text-var",{"reactiveSource":reactiveSource.value, "manualEdit":manualEditValue});
+      dialogVisible.value = false;
+    }
+
     </script>
     <style scoped lang="scss">
 @import '../../assets/vars.scss';
