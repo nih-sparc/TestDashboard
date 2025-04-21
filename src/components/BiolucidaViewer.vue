@@ -9,7 +9,7 @@
           <div class="meta-item">
           <a :href="selectedImage.urlPath" target="_blank" rel="noopener noreferrer">
             Pennsieve Link       
-            <el-icon color="#8300BF"><Link/></el-icon>
+            <el-icon color="#8300BF"></el-icon>
           </a>
         </div>
         </div>

@@ -107,6 +107,14 @@ const dBItems = [
     ]
 </script>
 ```
+## List of Components
+- any of these may be imported in the componentMap
+BiolucidaViewer - Surfaces Biolucida Images when SELECTED_IMAGE (in global vars) is updated
+FlatmapViewer - Shows the vagas flatmap. Updats the FLATMAP_LOCATION global var
+ImageSelector - Displays list of images in the global var DASH_IMAGE_ARRAY. Updates SELECTED_IMAGE
+QDBGraph - displays QDB data
+ScaffoldViewer - Displays 3D Scaffold
+TextWidget - Displays text assigned by user or from data
 
 # DOCUMENTATION 
 - adding custom component to dashboard
@@ -247,6 +255,22 @@ Example for use:
         ///do something
     })
 ```
+### Changeing Dashboard Styles
+
+The dashboard supports basic theming through CSS custom properties, allowing you to override colors, backgrounds, and other style values from your own application.
+
+To customize styles, define your overrides in a global stylesheet and scope them to the .dashboard-app class:
+
+```
+.dashboard-app{
+    --dash-text-dark: yellow;
+    --dash-background: purple;
+  }
+```
+
+all available variable can be found in src/assets/vars.scss
+
+-Tip: Make sure your styles are loaded before the dashboard is mounted for overrides to take effect. Import at the top of main.js to insure proper loading.
 
 ## Sample Component
 

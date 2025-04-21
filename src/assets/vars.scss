@@ -1,20 +1,11 @@
-$background: #f6fcff;
-$background2: #fbfdff;
-$backgroundBlocked:#cedded;
-$dropShadow: 0px -2px 4px rgba(7, 79, 124, 0.05), /* Light shadow on top */
-0px 6px 10px rgba(7, 79, 124, 0.1);
+//add vars to theme.scss
+$background: var(--dash-background);
+$background2: var(--dash-background2);
+$backgroundBlocked: var(--dash-backgroundBlocked);
+$dropShadow: var(--dash-drop-shadow);
 
-$textDark: #243d8e;
-$textMedium: #546085;
-$textLight: #d9e3ff;
+$textDark: var(--dash-text-dark);
+$textMedium: var(--dash-text-medium);
+$textLight: var(--dash-text-light);
 
-.dashboard-app{
-  /* Scoped CSS Variables */
-  --el-color-primary: #243d8e;
-  --el-color-primary-light-3: #fbfdff;
-  --el-color-primary-dark-2: #546085;
-  --color:#243d8e;
-  --el-dialog-width: 90%;
-}
-
-  
+$secondary:var(--dash-secondary);

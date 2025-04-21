@@ -1,6 +1,6 @@
 <template>
   <slot :widgetName="widgetName" :childIcons="childIcons"></slot>
-<div v-bind="$attrs">
+<div class="text-widget-wrap" v-bind="$attrs">
       <!-- if user binds widget to global variable -->
     <div v-if="useGlobalVar">
       <h2>{{ textContentGV }}</h2>
@@ -21,6 +21,9 @@
   </div>
   <TextWidgetSettings  
       :show-dialog="settingsVisible"
+      :widget-source-value = "componentName.replaceAll(' ','')"
+      :widgetTitleValue = "hideHeader?'':componentName"
+      :hideHeaderValue = "hideHeader"
       @close-dialog="settingsVisible = false"
       @update-text-var="(x)=>updateTextVariable(x)"
       @hide-header="(x)=>handleHideHeader(x)"
@@ -40,7 +43,8 @@
   const props = defineProps({
     displayText:String,
     hideHeader:Boolean,
-    widgetID:String
+    widgetID:String,
+    componentName:String
   })
   const emit = defineEmits(['remove-header']);
   const widgetName = props.header ? ref(props.header) : ref('Text Widget')
@@ -77,7 +81,7 @@
   }
   // called when settings is updated
   function updateTextVariable(newVal){
-    useGlobalVar.value = newVal.widgetSource ? true: false;
+    useGlobalVar.value = !!newVal.widgetSource;
     selectedGlobalVar.value = newVal.widgetSource;
     const dashItem = globalVars.DASHBOARD_ITEMS.find(item => item.id===props.widgetID)
     dashItem.componentName = newVal.title ? newVal.title: camelCaseToTitle(newVal.widgetSource);
@@ -97,7 +101,7 @@
 
 </script>
 <style scoped>
-  .selector-body{
-      
+  .text-widget-wrap{
+      margin:auto;
   }
 </style>
