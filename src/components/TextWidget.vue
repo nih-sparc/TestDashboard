@@ -1,14 +1,15 @@
 <template>
   <slot :widgetName="widgetName" :childIcons="childIcons"></slot>
 <div class="text-widget-wrap" v-bind="$attrs">
+
       <!-- if user binds widget to global variable -->
-    <div v-if="useGlobalVar">
+    <div v-if="reactiveState">
       <h2>{{ textContentGV }}</h2>
     </div>
     <!-- if user is manually inputting value -->
     <div v-else v-click-out="saveInput" @keyup.enter="saveInput" class="tw-flex">
       <div v-show="editing">
-          <el-input @focus="$event.target.select()" ref="textContentInput" v-model="textContent"></el-input>
+          <el-input @focus="$event.target.select()" ref="textUserInput" v-model="textContent"></el-input>
       </div> 
       <div v-show="!editing" @click="editInput()" class="tw-w-full tw-h-full">
           <h2>{{ textContent }}</h2>
@@ -21,20 +22,19 @@
   </div>
   <TextWidgetSettings  
       :show-dialog="settingsVisible"
-      :widget-source-value = "componentName.replaceAll(' ','')"
-      :widgetTitleValue = "hideHeader?'':componentName"
-      :hideHeaderValue = "hideHeader"
+      :reactive-source-value = "props.bindedKey"
+      :manual-entry-value="textContent"
       @close-dialog="settingsVisible = false"
       @update-text-var="(x)=>updateTextVariable(x)"
-      @hide-header="(x)=>handleHideHeader(x)"
       >
   </TextWidgetSettings>
 </template>
 <script setup>
-  import { ref, shallowRef, onMounted, computed } from "vue";
+  import { ref, shallowRef, watch, computed } from "vue";
   import { Edit } from "@element-plus/icons-vue";
   import TextWidgetSettings from "../devComponents/TextWidget/TextWidgetSettings.vue";
   import {useGlobalVarsStore} from "../stores/globalVars.ts"
+import { off } from "process";
   const globalVars = useGlobalVarsStore();
 
   defineOptions({
@@ -42,56 +42,77 @@
   })    
   const props = defineProps({
     displayText:String,
-    hideHeader:Boolean,
+    bindedKey:String,
     widgetID:String,
     componentName:String
   })
   const emit = defineEmits(['remove-header']);
-  const widgetName = props.header ? ref(props.header) : ref('Text Widget')
 
+
+  //String that user sees
+  const textContent = ref(props.displayText);
+  watch(() => props.displayText, (newVal) => {
+      textContent.value = newVal;
+    }, { immediate: true });
+  const textContentGV = computed(() => {
+    const optionMatch = globalVars.optionsData.find(item => item.name === props.bindedKey);
+    return optionMatch?.value ?? "—"; 
+  })
+  //reactive state is the user assigning the value to a global variable
+  const reactiveState = ref(props.bindedKey?true:false);
+
+/*
+Item Wiget Assignments - slot dependant
+*/
+  const widgetName = ref('Text Widget')
   //add icon to header
   const childIcons=shallowRef([{"comp":Edit,"event":openSettings,"tooltip":"open Text settings"}])
 
-  onMounted(() => {
-    if(props.hideHeader){emit("remove-header",true)}
-  });
-
-  const textContent = ref(props.displayText);
+/*
+Feature: Click To Manually Edit Text - outside of settings
+*/
   const editing = ref(false);
-  const textContentInput = ref(null);
-  const useGlobalVar = ref(false);
-  const selectedGlobalVar = ref("");
+  const textUserInput = ref(null);
 
   function editInput(){
         editing.value=true;
-        textContentInput.value ? textContentInput.value.focus(): "";
+        textUserInput.value ? textUserInput.value.focus(): "";
   }
   function saveInput(){
         editing.value=false;
   }
 
-  //open settings to set global variable
+/*
+SETTINGS
+*/
   const settingsVisible = ref(false)
   function openSettings(){
     settingsVisible.value=true
   }
-  //called when hide header is checked in settings
-  function handleHideHeader(hideIt){
-    emit("remove-header",hideIt)
-  }
+
   // called when settings is updated
-  function updateTextVariable(newVal){
-    useGlobalVar.value = !!newVal.widgetSource;
-    selectedGlobalVar.value = newVal.widgetSource;
+  function updateTextVariable({manualEdit,reactiveSource}){
     const dashItem = globalVars.DASHBOARD_ITEMS.find(item => item.id===props.widgetID)
-    dashItem.componentName = newVal.title ? newVal.title: camelCaseToTitle(newVal.widgetSource);
+    console.log(manualEdit)
+    if(manualEdit){
+      reactiveState.value = false;
+      dashItem.Props.displayText = manualEdit;
+      dashItem.Props.bindedKey = null;
+    }else if(reactiveSource){
+      reactiveState.value = true;
+      dashItem.Props.bindedKey = reactiveSource
+    }
+
   }
    //version of textContent that is used when binded to global variable
-   const textContentGV = computed(() => {
-      const selectedValue = globalVars.optionsData.find(item => item.name === selectedGlobalVar.value);
-      return selectedValue ? selectedValue.value : null; 
-  });
+  //  const textContentGV = computed(() => {
+  //     const selectedValue = globalVars.optionsData.find(item => item.name === selectedGlobalVar.value);
+  //     return selectedValue ? selectedValue.value : null; 
+  // });
 
+  /*
+  HELPER FUNCTIONS
+  */
   function camelCaseToTitle(str) {
     if(!str){return;}
     return str

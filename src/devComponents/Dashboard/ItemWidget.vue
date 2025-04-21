@@ -5,7 +5,7 @@
                 class="widget-body" 
                 :class="{'widget-body-no-head':hideHeader}"
                 :widgetID="widgetID"
-                :componentName="props.componentName|| slotProps.widgetName" 
+                :widgetName="props.componentName" 
                 :is="componentTag" 
                 :listening="highlight" 
                 @remove-header="(h)=>updateHideHeader(h)" 
@@ -67,13 +67,16 @@
             },
             componentName:{
                 type:String
+            },
+            hideHeaderValue:{
+                type:Boolean
             }
         })
 
-    const hideHeader = ref(false);
-    function updateHideHeader(hideIt){
-        hideHeader.value=hideIt;
-    }
+     const hideHeader = ref(props.hideHeaderValue);
+    // function updateHideHeader(hideIt){
+    //     hideHeader.value=hideIt;
+    // }
 
     
 //-----------------------------------------------------------------------------

@@ -53,7 +53,8 @@
           :static-mode="staticMode" 
           :componentTag="w.component" 
           :componentProperties="w.Props"
-          :componentName="w.componentName">
+          :componentName="w.componentName"
+          :hideHeaderValue="w.hideHeader">
           </ItemWidget>
       </div>
     </div>
