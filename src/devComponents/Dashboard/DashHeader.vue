@@ -3,7 +3,18 @@
     v-if="!hideHeader" 
     class="content-header dash-header-visible stick-to-top tw-flex tw-flex-row tw-items-center tw-justify-between tw-h-10">                    
       <div>
-        <div class="tw-m-4 tw-leading-none tw-pl-1 widget-name">{{ widgetName }}</div>
+         <!-- click to edit Widget Header -->
+        <div v-click-out="saveInput" @keyup.enter="saveInput" class="tw-flex">
+          <div v-show="editing" class="editing-div">
+              <el-input @focus="$event.target.select()" ref="textUserInput" v-model="headerText"></el-input>
+          </div> 
+          <div v-show="!editing" @click="editInput()" class="visible-div" >
+              <div class="tw-m-4 tw-leading-none tw-pl-1 widget-name">{{ headerText }}</div>
+          </div>
+          <!-- <el-icon v-show="!editing">
+            <Edit @click="editInput()"/>
+          </el-icon> -->
+        </div>
       </div>
       <div>
         <slot></slot>
@@ -15,28 +26,54 @@
     </div>
 </template>
 <script setup>
-//     // tw-absolute content-header tw-flex-row-reverse tw-flex tw-w-100 tw-items-center tw-justify-between tw-h-10">
-//this component really only has one job, and it's to format the header correctly and make it easier for users to add icons to the header without much markup on their end.
-//alternative markup that would be needed on all children >
-//  <div v-bind="$attrs">                    
-//       <slot name="title" :widgetName="widgetName"></slot>
-//       <div>
-//         <GraphIcon class="tw-p-1" @click="settingsVisible=true"></GraphIcon>
-//         <slot></slot>
-//       </div>
-//     </div> 
+import {ref, watch} from 'vue'
+import {useGlobalVarsStore} from "../../stores/globalVars.ts"
+const globalVars = useGlobalVarsStore();
 
 const props = defineProps({      
     widgetName:{
         type:String,
         required:true
     },
+    widgetID:{
+      type:String,
+      required:true
+    },
+    //refactor to make hideHeader populated by getDashItem
     hideHeader:Boolean
 })
+  const headerText = ref(null);
+  watch(() => props.widgetName, (newVal) => {
+    console.log(newVal)
+      headerText.value = newVal;
+    }, { immediate: true });
 
+/*
+Feature: Click To Manually Edit Text
+*/
+  const editing = ref(false);
+  const textUserInput = ref(null);
+
+  function editInput(){
+        editing.value=true;
+        textUserInput.value ? textUserInput.value.focus(): "";
+  }
+  function saveInput(){
+        editing.value=false;
+        const dashItem = globalVars.getDashItem(props.widgetID);
+        dashItem.componentName = headerText;
+  }
 </script>
 <style scoped lang="scss">
-
+.content-header{
+  .visible-div{
+    min-width: 100px;
+    height: 40px;
+  }
+  .editing-div{
+    width:150px;
+  }
+}
 .dash-header-hide{
   height: 18px;
   display: flex;

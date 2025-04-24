@@ -6,8 +6,7 @@
     :append-to-body="true"
   >
     <div class="widget-settings-container">
-      <!-- Row for Widget Value & Widget Title -->
-      <div class="widget-settings-row">
+
         <!-- Select Widget Value -->
         <div class="widget-setting">
           <h4>Select This Widget's Value </h4>
@@ -27,9 +26,10 @@
           </el-select>
           <h5>Manual Entry</h5>
           <el-input v-model="manualTextEntry"></el-input>
+         <el-checkbox v-model="hideHeader" label="Hide Header"></el-checkbox>
         </div>
 
-      </div>
+
 
               <!-- <div class="widget-setting">
           <h4>Assign This Widget's Header</h4>
@@ -75,6 +75,10 @@
       type:String,
       default:""
     },
+    hideHeaderValue:{
+      type:Boolean,
+      default:false
+    }
 
     })
 
@@ -87,6 +91,7 @@
     });
 
     const reactiveSource = ref(props.reactiveSourceValue);
+    const hideHeader = ref(props.hideHeaderValue);
     const manualTextEntry = ref(props.manualEntryValue);
     watch(() => props.manualEntryValue, (newVal) => {
       manualTextEntry.value = newVal;
@@ -101,7 +106,7 @@
       if(!manualEditValue || manualEditValue=="manual edit"){
         manualEditValue = null;
       }
-      emit("update-text-var",{"reactiveSource":reactiveSource.value, "manualEdit":manualEditValue});
+      emit("update-text-var",{"reactiveSource":reactiveSource.value, "manualEdit":manualEditValue, "hideHeader":hideHeader.value});
       dialogVisible.value = false;
     }
 

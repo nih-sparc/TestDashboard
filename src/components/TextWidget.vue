@@ -24,6 +24,7 @@
       :show-dialog="settingsVisible"
       :reactive-source-value = "props.bindedKey"
       :manual-entry-value="textContent"
+      :hide-header-value="props.hideHeader"
       @close-dialog="settingsVisible = false"
       @update-text-var="(x)=>updateTextVariable(x)"
       >
@@ -44,13 +45,11 @@ import { off } from "process";
     displayText:String,
     bindedKey:String,
     widgetID:String,
-    componentName:String
+    hideHeader:Boolean
   })
-  const emit = defineEmits(['remove-header']);
-
 
   //String that user sees
-  const textContent = ref(props.displayText);
+  const textContent = ref(null);
   watch(() => props.displayText, (newVal) => {
       textContent.value = newVal;
     }, { immediate: true });
@@ -64,6 +63,7 @@ import { off } from "process";
 /*
 Item Wiget Assignments - slot dependant
 */
+//might need to be depricated - interfering with other ways to set the widget title/name
   const widgetName = ref('Text Widget')
   //add icon to header
   const childIcons=shallowRef([{"comp":Edit,"event":openSettings,"tooltip":"open Text settings"}])
@@ -91,25 +91,22 @@ SETTINGS
   }
 
   // called when settings is updated
-  function updateTextVariable({manualEdit,reactiveSource}){
-    const dashItem = globalVars.DASHBOARD_ITEMS.find(item => item.id===props.widgetID)
-    console.log(manualEdit)
+  function updateTextVariable({manualEdit,reactiveSource, hideHeader}){
+    const dashItem = globalVars.getDashItem(props.widgetID);
+    dashItem.hideHeader = hideHeader;
     if(manualEdit){
       reactiveState.value = false;
       dashItem.Props.displayText = manualEdit;
+      dashItem.componentName = manualEdit;
       dashItem.Props.bindedKey = null;
     }else if(reactiveSource){
       reactiveState.value = true;
-      dashItem.Props.bindedKey = reactiveSource
+      dashItem.Props.displayText =null;
+      dashItem.componentName = camelCaseToTitle(reactiveSource);
+      dashItem.Props.bindedKey = reactiveSource;
     }
 
   }
-   //version of textContent that is used when binded to global variable
-  //  const textContentGV = computed(() => {
-  //     const selectedValue = globalVars.optionsData.find(item => item.name === selectedGlobalVar.value);
-  //     return selectedValue ? selectedValue.value : null; 
-  // });
-
   /*
   HELPER FUNCTIONS
   */

@@ -23,7 +23,10 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
   const selectibleWidgets=["BiolucidaViewer"];
   const mbfViewerCount = ref(0);
 
-
+  //GETTERS
+  const getDashItem =(widgetId:string)=>{
+    return DASHBOARD_ITEMS.value.find(item => item.id===widgetId);
+  }
   //SETTERS
   const addOptionsDataItems = (name:string,value:any)=>{
       optionsData.value.push({name,value})
@@ -68,6 +71,7 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
     SUBJECT_SEX,
     SELECTED_IMAGE,
     optionsData,
+    getDashItem,
     setBiolucidaPath,
     setImageArray,
     setSelectedImage,

@@ -54,7 +54,7 @@
           :componentTag="w.component" 
           :componentProperties="w.Props"
           :componentName="w.componentName"
-          :hideHeaderValue="w.hideHeader">
+          :hideWidgetsHeader="w.hideHeader">
           </ItemWidget>
       </div>
     </div>

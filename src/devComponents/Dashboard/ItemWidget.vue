@@ -5,14 +5,14 @@
                 class="widget-body" 
                 :class="{'widget-body-no-head':hideHeader}"
                 :widgetID="widgetID"
-                :widgetName="props.componentName" 
                 :is="componentTag" 
                 :listening="highlight" 
-                @remove-header="(h)=>updateHideHeader(h)" 
+                :hideHeader="hideHeader"
                 v-bind="props.componentProperties">
                     <DashHeader 
                     v-if="slotProps" 
-                    :widgetName="props.componentName|| slotProps.widgetName" 
+                    :widgetName="props.componentName" 
+                    :widgetID="widgetID"
                     :staticMode="staticMode"
                     :hideHeader="hideHeader">
                         <div
@@ -41,7 +41,7 @@
     import CloseIcon from '../../components/icons/CloseIcon.vue';
     import DownloadIcon from '../../components/icons/DownloadIcon.vue'
     import { Edit } from '@element-plus/icons-vue';
-    import { ref} from 'vue';
+    import { ref, watch} from 'vue';
     import { useGlobalVarsStore } from '../../stores/globalVars';
     import DashHeader from "./DashHeader.vue";
     import { nextTick } from 'process';
@@ -68,16 +68,16 @@
             componentName:{
                 type:String
             },
-            hideHeaderValue:{
+            //refactor to make hideHeader populated by getDashItem
+            hideWidgetsHeader:{
                 type:Boolean
             }
         })
 
-     const hideHeader = ref(props.hideHeaderValue);
-    // function updateHideHeader(hideIt){
-    //     hideHeader.value=hideIt;
-    // }
-
+     const hideHeader = ref(null);
+     watch(()=> props.hideWidgetsHeader,(newVal)=>{
+        hideHeader.value=newVal;
+     },{immediate:true})
     
 //-----------------------------------------------------------------------------
 // hightlight functionslity
