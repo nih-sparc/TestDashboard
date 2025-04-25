@@ -126,7 +126,7 @@
 .grid-stack-item-content {
     background-color: #ffffff;
     overflow:hidden;
-    text-align: center;
+    text-align: start;
     display: flex;
     flex-flow: column;
     transition: background 0.3s ease-in-out;

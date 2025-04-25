@@ -56,5 +56,7 @@ function openDialog(){
 
 </script>
 <style lang="scss">
-
+.el-dialog__title {
+  color: white;
+}
 </style>

@@ -16,7 +16,7 @@
           </el-icon> -->
         </div>
       </div>
-      <div>
+      <div class="header-slot-icon">
         <slot></slot>
       </div>
     </div>
@@ -44,7 +44,6 @@ const props = defineProps({
 })
   const headerText = ref(null);
   watch(() => props.widgetName, (newVal) => {
-    console.log(newVal)
       headerText.value = newVal;
     }, { immediate: true });
 
@@ -72,6 +71,11 @@ Feature: Click To Manually Edit Text
   }
   .editing-div{
     width:150px;
+  }
+  .header-slot-icon{
+    position: absolute;
+    top: 5px;
+    right: 5px;
   }
 }
 .dash-header-hide{

@@ -1,8 +1,9 @@
 <template>
+  <!-- Dashboard Header - with and without Filter -->
   <div class="dashboard-app">
     <div v-if="!hideHeader" class="dash-header tw-max-h-screen tw-flex tw-flex-col">
       <span class="tw-float-left tw-m-1 button">
-        <el-button class="edit-button" 
+        <el-button class="edit-button"
         @click="staticMode=!staticMode">
         {{ editGridButton }}
       </el-button>
@@ -17,48 +18,50 @@
         </el-button>
       </span>
     </div>
+<!-- Add New Widget Drop Down -->
     <el-col v-if="!staticMode">
       <div class="tw-m-4 tw-w-40">
-        <el-select 
-        :value="NewComponent.Name" 
+        <el-select
+        :value="NewComponent.Name"
         placeholder="Add New Widget">
           <el-option
-            v-for="item in ComponentListOptions" 
-            :key="item" 
-            :label="item" 
-            :value="item" 
+            v-for="item in ComponentListOptions"
+            :key="item"
+            :label="item"
+            :value="item"
             @click="addNewWidget(item)">
           </el-option>
         </el-select>
-        <el-button v-if="debug" 
-        type="default" 
-        @click="saveDashboard()" 
+        <el-button v-if="debug"
+        type="default"
+        @click="saveDashboard()"
         disabled >
         Save Dashboard
       </el-button>
     </div>
-  </el-col> 
+  </el-col>
+  <!-- Grid Stack JS -->
     <div  ref="root" class="grid-stack tw-h-screen">
-      <div v-for="(w) in DashboardItems" class="grid-stack-item" 
-        :gs-x="w.x" 
-        :gs-y="w.y" 
-        :gs-w="w.w" 
-        :gs-h="w.h" 
-        :gs-id="w.id" 
-        :id="w.id" 
+      <div v-for="(w) in DashboardItems" class="grid-stack-item"
+        :gs-x="w.x"
+        :gs-y="w.y"
+        :gs-w="w.w"
+        :gs-h="w.h"
+        :gs-id="w.id"
+        :id="w.id"
         :key="w.id">
-          <ItemWidget 
-          :widgetID="w.id" 
-          @remove-widget="removeWidget(w.id)" 
-          :static-mode="staticMode" 
-          :componentTag="w.component" 
+          <ItemWidget
+          :widgetID="w.id"
+          @remove-widget="removeWidget(w.id)"
+          :static-mode="staticMode"
+          :componentTag="w.component"
           :componentProperties="w.Props"
           :componentName="w.componentName"
           :hideWidgetsHeader="w.hideHeader">
           </ItemWidget>
       </div>
     </div>
-        
+
   </div>
 </template>
 
@@ -86,7 +89,7 @@ let Grid = null;
 const root = ref(null);
 
 const { DASHBOARD_ITEMS: DashboardItems } = storeToRefs(_globalVars);
-    
+
 let staticMode = ref(true);
 getItemsFromLS();
 let ComponentListOptions = _globalVars.componentList;
@@ -124,7 +127,7 @@ function retrieveDataset(){
      );
 }
 
-//add gridstack specific events here - - - - - - --  -- -- - - -- - --  -- - - -----  -  - - - - 
+//add gridstack specific events here - - - - - - --  -- -- - - -- - --  -- - - -----  -  - - - -
 function initGridStack(){
     const options={
       float:true,
@@ -163,8 +166,8 @@ function addNewWidget(name) {
     if(name){
       NewComponent.Name = name;
     }
-    const node = {id:NewComponent.Name+"-"+NextId,w:2,h:6,autoPosition:true, component: NewComponent.Name, componentName:NewComponent.Name};
-    
+    const node = {id:NewComponent.Name+"-"+NextId,w:2,h:6,autoPosition:true, component: NewComponent.Name, componentName:NewComponent.Name, Props:{}};
+
     NextId++;
     //add component to items array first. this will update the dom
     DashboardItems.value.push(node);
@@ -174,12 +177,12 @@ function addNewWidget(name) {
       Grid.makeWidget(node.id);
     });
 }
-  
+
 function removeWidget(widget) {
     var index = DashboardItems.value.findIndex(w => w.id == widget);
     DashboardItems.value.splice(index, 1);
     const selector = `#${widget}`;
-    Grid.removeWidget(selector, false);    
+    Grid.removeWidget(selector, false);
   }
 function saveDashboard(){
   const gridItems = Grid.save();
@@ -192,7 +195,7 @@ function saveDashboard(){
 function getItemsFromLS(){
     let dashItems = [];
     let nav = {};
-  
+
     if(isValidJSON(window.localStorage.getItem("DashboardItems"))){
       dashItems = JSON.parse(window.localStorage.getItem("DashboardItems"));
     }
@@ -204,7 +207,7 @@ function getItemsFromLS(){
     }
     DashboardItems.value = dashItems;
 }
-    
+
 function isValidJSON(str) {
   if(!str){return false;}
     try {
@@ -212,14 +215,16 @@ function isValidJSON(str) {
     } catch (e) {
         return false;
     }
-    
+
     return true;
 }
 </script>
 
 <style scoped lang="scss">
 @import '../../assets/vars.scss';
-
+.el-dialog__title {
+  color: white;
+}
 
 .grid-stack {
  //background
@@ -241,23 +246,25 @@ function isValidJSON(str) {
   line-height: 17px;
   background: $background;
   color: $textDark;
-  
+
 
   /* Force Inheritance */
-  .el-button {
+  .edit-button {
     background-color: var(--el-color-primary);
     border-color: var(--el-color-primary-dark-2);
     color: white;
 
-    :hover{
-      color:var(--el-color-primary-dark-2)
+    &:hover{
+      color:var(--el-color-primary-dark-2);
+      background-color: var(--el-color-primary-light-3);
+     border-color: var(--el-color-primary-dark-2);
     }
   }
 
-  .el-button:hover {
-    background-color: var(--el-color-primary-light-3);
-    border-color: var(--el-color-primary-dark-2);
-  }
+  // .el-button:hover {
+  //   background-color: var(--el-color-primary-light-3);
+  //   border-color: var(--el-color-primary-dark-2);
+  // }
 }
 </style>
 <style lang="scss">

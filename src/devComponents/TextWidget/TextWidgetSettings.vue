@@ -11,11 +11,12 @@
         <div class="widget-setting">
           <h4>Select This Widget's Value </h4>
           <h5>Select From Variables</h5>
-          <el-select v-model="reactiveSource">
+          <el-select v-model="reactiveSource" class="text-settings-height">
             <el-option
               :value="'manual edit'"
               :key="'none'"
               label="None"
+
             />
             <el-option 
             v-for="ops in widgetSelectOptions" 
@@ -25,7 +26,7 @@
             </el-option>
           </el-select>
           <h5>Manual Entry</h5>
-          <el-input v-model="manualTextEntry"></el-input>
+          <el-input v-model="manualTextEntry" class="text-settings-height"></el-input>
          <el-checkbox v-model="hideHeader" label="Hide Header"></el-checkbox>
         </div>
 
@@ -113,7 +114,9 @@
     </script>
     <style scoped lang="scss">
 @import '../../assets/vars.scss';
-
+.el-dialog__header{
+  color:white;
+}
 .full-dialog-dashboard {
   width: 95%;
   height: 95%;
@@ -143,6 +146,10 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+
+  .el-select{
+    height: 42px;
+  }
 }
 
 .widget-setting select,
@@ -179,8 +186,12 @@
   background-color: var(--el-color-primary-light-3);
   border-color: var(--el-color-primary-dark-2);
 }
-.el-input{
-  height: 35px;
+.text-settings-height .el-input {
+  height: 42px; 
+}
+.text-settings-height .el-input__inner {
+  height: 42px;
+  line-height: 42px;
 }
 
     </style>

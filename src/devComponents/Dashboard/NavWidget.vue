@@ -32,7 +32,7 @@ const props = defineProps({
 .grid-stack-item-content {
     border: 1px solid grey; //line color 1
     border-radius: 0.2rem;
-    text-align: center;
+    text-align: start;
     background:grey;//line color 2
 }
 :deep(.fill) {
