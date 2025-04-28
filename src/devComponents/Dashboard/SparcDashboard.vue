@@ -107,7 +107,6 @@ getItemsFromLS();
 let ComponentListOptions = _globalVars.componentList;
 let NewComponent = {};
 let NextId = props.dBItems.length+1;
-console.log(NextId)
 
 onBeforeMount(() => {
     _globalVars.DASHBOARD_ITEMS= props.dBItems;
@@ -173,7 +172,6 @@ function addNewWidget(name) {
     NextId++;
     //add component to items array first. this will update the dom
     DashboardItems.value.push(node);
-    console.log("added widget: "+node)
     nextTick(()=>{
       //after dom updates, add your widget to the grid with makewidget. don't use addwidget
       Grid.makeWidget(node.id);
