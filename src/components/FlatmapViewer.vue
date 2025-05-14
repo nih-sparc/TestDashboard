@@ -45,6 +45,7 @@ defineOptions({
     const locationStore = useLocationStore();
 
 function FlatmapSelected(data){
+    console.log("here")
     if (data.eventType === 'click') { 
    // showMarker(data);
 
