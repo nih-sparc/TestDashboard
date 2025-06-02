@@ -30,13 +30,15 @@ const dashboardOptions =ref({
   }
 })
 //component name works more like a header and might need to be renamed throughout the ap
-const debug = false;
-const dBItems = debug ? [
-  { id: "TextWidget-1", x: 0, y: 0, h: 1, w:4, componentName:"Ted",component:"TextWidget",hideHeader:true, Props:{displayText:"Dastaset Overview"} },
-  { id: "TextWidget-2", x: 0, y: 1, h: 2, w:2, componentName:"Bob",component:"TextWidget",Props:{bindedKey:"FileCount"} },
-  { id: "TextWidget-3", x: 2, y: 1, h: 2, w:2, componentName:"Karen",component:"TextWidget",Props:{bindedKey:"Status"}},
-  { id: "TextWidget-4", x: 3, y: 1, h: 2, w:2, componentName:"Collaborator Counts",component:"TextWidget",Props:{bindedKey:"CollaboaratorCount"}}
-] : 
+const debug = true;
+const dBItems = debug ? [{id:"vitessceViewer-1",x:0,y:0,h:9,w:8, componentName: "vitessce", component:"VitessceViewer"}]
+// [
+//   { id: "TextWidget-1", x: 0, y: 0, h: 1, w:4, componentName:"Ted",component:"TextWidget",hideHeader:true, Props:{displayText:"Dastaset Overview"} },
+//   { id: "TextWidget-2", x: 0, y: 1, h: 2, w:2, componentName:"Bob",component:"TextWidget",Props:{bindedKey:"FileCount"} },
+//   { id: "TextWidget-3", x: 2, y: 1, h: 2, w:2, componentName:"Karen",component:"TextWidget",Props:{bindedKey:"Status"}},
+//   { id: "TextWidget-4", x: 3, y: 1, h: 2, w:2, componentName:"Collaborator Counts",component:"TextWidget",Props:{bindedKey:"CollaboaratorCount"}}
+// ] 
+: 
 [{ id: "FlatmapViewer-1", x: 0, y: 0, h: 8, w:2, componentName:"Flatmap Viewer",component:"FlatmapViewer" },
     { id: "ImageSelector-2", x: 2, y: 0, h: 8, w:3, componentName:"Image Selector", component:"ImageSelector"},
     { id: "BiolucidaViewer-3", x: 5, y: 0,h: 11, w:7, componentName:"MBF Viewer", component:"BiolucidaViewer"},

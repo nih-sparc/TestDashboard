@@ -2,6 +2,7 @@ import { fileURLToPath, URL } from 'url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
+//might need to import and add react to plugins and optimizedDeps:{include:['react', 'react-dom', 'vitessce']}
 
 export default defineConfig({
   plugins: [
@@ -10,8 +11,12 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
-    }
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+    dedupe: ['deck.gl']
+  },
+  optimizeDeps: {
+    exclude: ['deck.gl'], // Prevent multiple prebundles
   },
   build: {
     lib: {
