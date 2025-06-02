@@ -10,7 +10,7 @@
       </span>
       <FilterWidget></FilterWidget>
     </div>
-    <div v-else class="tw-h-10 dash-header">
+    <div v-else class="tw-h-10 dash-header">x
       <span class="tw-float-left tw-m-1">
         <el-button class="edit-button"
         @click="staticMode=!staticMode">
@@ -32,10 +32,10 @@
             @click="addNewWidget(item)">
           </el-option>
         </el-select>
-        <el-button v-if="debug"
+        <el-button 
         type="default"
         @click="saveDashboard()"
-        disabled >
+        >
         Save Dashboard
       </el-button>
     </div>
@@ -49,7 +49,8 @@
         :gs-h="w.h"
         :gs-id="w.id"
         :id="w.id"
-        :key="w.id">
+        :key="w.id"
+        :props ="w.Props">
           <ItemWidget
           :widgetID="w.id"
           @remove-widget="removeWidget(w.id)"
@@ -103,13 +104,14 @@ const root = ref(null);
 const { DASHBOARD_ITEMS: DashboardItems } = storeToRefs(_globalVars);
 
 let staticMode = ref(true);
-getItemsFromLS();
 let ComponentListOptions = _globalVars.componentList;
 let NewComponent = {};
 let NextId = props.dBItems.length+1;
 
 onBeforeMount(() => {
-    _globalVars.DASHBOARD_ITEMS= props.dBItems;
+    const savedDash = getItemsFromLS()
+    _globalVars.DASHBOARD_ITEMS= savedDash.length>0? savedDash: props.dBItems;
+
   });
   onMounted(() => {
     addOptionsToGlobalVars();
@@ -186,26 +188,25 @@ function removeWidget(widget) {
   }
 function saveDashboard(){
   const gridItems = Grid.save();
-  gridItems.forEach(item => {
-    item.component = item.id.split("-")[0];
-    item.componentName = item.component;
+  const merged = gridItems.map(fromGrid => {
+    const dashItems = DashboardItems.value.find(DI => DI.id === fromGrid.id) || {};
+    return {...dashItems, ...fromGrid };  
   });
-  window.localStorage.setItem("DashboardItems",JSON.stringify(gridItems));
+  // gridItems.forEach(item => {
+  //   item.component = item.id.split("-")[0];
+  //   item.componentName = item.component;
+  // });
+  console.log(merged)
+  window.localStorage.setItem("DashboardItems",JSON.stringify(merged));
 }
 function getItemsFromLS(){
     let dashItems = [];
-    let nav = {};
 
     if(isValidJSON(window.localStorage.getItem("DashboardItems"))){
       dashItems = JSON.parse(window.localStorage.getItem("DashboardItems"));
     }
-    nav = dashItems.find(item => item.id === "SubjectNav");
-
-    let navIndex = dashItems.indexOf(nav);
-    if(navIndex!==-1){
-      dashItems.splice(navIndex,1);
-    }
-    DashboardItems.value = dashItems;
+    console.log(dashItems)
+    return dashItems;
 }
 
 function isValidJSON(str) {
