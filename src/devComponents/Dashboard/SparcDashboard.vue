@@ -4,7 +4,7 @@
     <div v-if="!hideHeader" class="dash-header tw-max-h-screen tw-flex tw-flex-col">
       <span class="tw-float-left tw-m-1 button">
         <el-button class="edit-button"
-        @click="staticMode=!staticMode">
+        @click="handleEditGrid()">
         {{ editGridButton }}
       </el-button>
       </span>
@@ -13,7 +13,7 @@
     <div v-else class="tw-h-10 dash-header">x
       <span class="tw-float-left tw-m-1">
         <el-button class="edit-button"
-        @click="staticMode=!staticMode">
+        @click="handleEditGrid()">
         {{ editGridButton }}
         </el-button>
       </span>
@@ -32,12 +32,6 @@
             @click="addNewWidget(item)">
           </el-option>
         </el-select>
-        <el-button 
-        type="default"
-        @click="saveDashboard()"
-        >
-        Save Dashboard
-      </el-button>
     </div>
   </el-col>
   <!-- Grid Stack JS -->
@@ -65,8 +59,6 @@
 
   </div>
 </template>
-
-
 
 <script setup>
 
@@ -111,6 +103,7 @@ let NextId = props.dBItems.length+1;
 onBeforeMount(() => {
     const savedDash = getItemsFromLS()
     _globalVars.DASHBOARD_ITEMS= savedDash.length>0? savedDash: props.dBItems;
+    _globalVars.loadFromLocalStorage();
 
   });
   onMounted(() => {
@@ -121,13 +114,6 @@ onBeforeMount(() => {
 
 })
 
-//retrieve dataset as json ------------------------------- - - - - - - - --------- - -- - -- - - -
-function retrieveDataset(){
-  fetch('./dataByLocation.json')
-    .then((response) => response.json())
-    .then((json) => _DatasetImgs.value = Object.assign(new Dataset(json)),
-     );
-}
 
 //add gridstack specific events here - - - - - - --  -- -- - - -- - --  -- - - -----  -  - - - -
 function initGridStack(){
@@ -186,19 +172,24 @@ function removeWidget(widget) {
     const selector = `#${widget}`;
     Grid.removeWidget(selector, false);
   }
-function saveDashboard(){
+
+function handleEditGrid(){
+  staticMode.value=!staticMode.value;
+  if(staticMode.value){
+    saveDashboard()
+    _globalVars.saveToLocalStorage()
+  }
+}
+function saveDashboard() {
   const gridItems = Grid.save();
   const merged = gridItems.map(fromGrid => {
     const dashItems = DashboardItems.value.find(DI => DI.id === fromGrid.id) || {};
-    return {...dashItems, ...fromGrid };  
+    const overrides = (({ x, y, h, l }) => ({ x, y, h, l }))(fromGrid);
+    return { ...dashItems, ...overrides };
   });
-  // gridItems.forEach(item => {
-  //   item.component = item.id.split("-")[0];
-  //   item.componentName = item.component;
-  // });
-  console.log(merged)
-  window.localStorage.setItem("DashboardItems",JSON.stringify(merged));
+  window.localStorage.setItem("DashboardItems", JSON.stringify(merged));
 }
+
 function getItemsFromLS(){
     let dashItems = [];
 

@@ -57,6 +57,48 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
       console.warn("No image selected. Cannot set Biolucida path.");
     }
   };
+  const saveToLocalStorage = ()=>{
+    const data = {
+      DASHBOARD_ITEMS: DASHBOARD_ITEMS.value,
+      componentList: componentList.value,
+      navigatorType: navigatorType.value,
+      DASH_IMAGE_ARRAY: DASH_IMAGE_ARRAY.value,
+      DATASET_ID: DATASET_ID.value,
+      FLATMAP_LOCATION: FLATMAP_LOCATION.value,
+      MBF_IMAGE_NAME: MBF_IMAGE_NAME.value,
+      SUBJECT_AGE: SUBJECT_AGE.value,
+      SUBJECT_SEX: SUBJECT_SEX.value,
+      SELECTED_IMAGE: SELECTED_IMAGE.value,
+      optionsData: optionsData.value,
+      mbfViewerCount: mbfViewerCount.value
+    };
+  
+    localStorage.setItem("dashboard-globalVarsStore", JSON.stringify(data));
+  }
+  const loadFromLocalStorage = () => {
+    const stored = localStorage.getItem("globalVarsStore");
+    if (!stored) return;
+  
+    try {
+      const data = JSON.parse(stored);
+  
+      if ('DASHBOARD_ITEMS' in data) DASHBOARD_ITEMS.value = data.DASHBOARD_ITEMS;
+      if ('componentList' in data) componentList.value = data.componentList;
+      if ('navigatorType' in data) navigatorType.value = data.navigatorType;
+      if ('DASH_IMAGE_ARRAY' in data) DASH_IMAGE_ARRAY.value = data.DASH_IMAGE_ARRAY;
+      if ('DATASET_ID' in data) DATASET_ID.value = data.DATASET_ID;
+      if ('FLATMAP_LOCATION' in data) FLATMAP_LOCATION.value = data.FLATMAP_LOCATION;
+      if ('MBF_IMAGE_NAME' in data) MBF_IMAGE_NAME.value = data.MBF_IMAGE_NAME;
+      if ('SUBJECT_AGE' in data) SUBJECT_AGE.value = data.SUBJECT_AGE;
+      if ('SUBJECT_SEX' in data) SUBJECT_SEX.value = data.SUBJECT_SEX;
+      if ('SELECTED_IMAGE' in data) SELECTED_IMAGE.value = data.SELECTED_IMAGE;
+      if ('optionsData' in data) optionsData.value = data.optionsData;
+      if ('mbfViewerCount' in data) mbfViewerCount.value = data.mbfViewerCount;
+  
+    } catch (error) {
+      console.error("Failed to parse globalVarsStore from localStorage:", error);
+    }
+  };
   
 
   return { 
@@ -78,6 +120,8 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
     setImageArray,
     setSelectedImage,
     addOptionsDataItems,
-    clearOptionsDataItems
+    clearOptionsDataItems,
+    saveToLocalStorage,
+    loadFromLocalStorage
  }
 })
