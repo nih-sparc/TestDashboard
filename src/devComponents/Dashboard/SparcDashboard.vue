@@ -62,7 +62,7 @@
 
 <script setup>
 
-import { ref, onBeforeMount, onMounted, nextTick, computed, onUpdated, watch, provide} from 'vue';
+import { ref, onBeforeMount, onMounted, nextTick,  watch} from 'vue';
 import { GridStack } from 'gridstack';
 import FilterWidget from "../FilterWidget/FilterWidget.vue"
 import ItemWidget from './ItemWidget.vue'
@@ -104,15 +104,12 @@ onBeforeMount(() => {
     const savedDash = getItemsFromLS()
     _globalVars.DASHBOARD_ITEMS= savedDash.length>0? savedDash: props.dBItems;
     _globalVars.loadFromLocalStorage();
-
   });
   onMounted(() => {
-    addOptionsToGlobalVars();
     initGridStack();
-  });
-  onUpdated(() => {
+    addOptionsToGlobalVars();
 
-})
+  });
 
 
 //add gridstack specific events here - - - - - - --  -- -- - - -- - --  -- - - -----  -  - - - -
@@ -187,6 +184,7 @@ function saveDashboard() {
     const overrides = (({ x, y, h, l }) => ({ x, y, h, l }))(fromGrid);
     return { ...dashItems, ...overrides };
   });
+  console.log(merged)
   window.localStorage.setItem("DashboardItems", JSON.stringify(merged));
 }
 
