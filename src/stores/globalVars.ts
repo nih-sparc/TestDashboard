@@ -101,7 +101,6 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
       if ('SELECTED_IMAGE' in data) SELECTED_IMAGE.value = data.SELECTED_IMAGE;
       if ('optionsData' in data) optionsData.value = data.optionsData;
       if ('mbfViewerCount' in data) mbfViewerCount.value = data.mbfViewerCount;
-      console.log("loaded global vars",stored)
     } catch (error) {
       console.error("Failed to parse globalVarsStore from localStorage:", error);
     }

@@ -184,7 +184,6 @@ function saveDashboard() {
     const overrides = (({ x, y, h, l }) => ({ x, y, h, l }))(fromGrid);
     return { ...dashItems, ...overrides };
   });
-  console.log(merged)
   window.localStorage.setItem("DashboardItems", JSON.stringify(merged));
 }
 
@@ -194,7 +193,6 @@ function getItemsFromLS(){
     if(isValidJSON(window.localStorage.getItem("DashboardItems"))){
       dashItems = JSON.parse(window.localStorage.getItem("DashboardItems"));
     }
-    console.log(dashItems)
     return dashItems;
 }
 

@@ -49,6 +49,7 @@ const handleCurrentChange = (row, index) => {
     if(!row){return}
     const selectedImage =  filteredImages.value.find(x => x.packageId === row.id)
     GlobalVars.setSelectedImage(selectedImage,row) 
+    GlobalVars.saveToLocalStorage();
 }
 
 watch(filteredImages, 
