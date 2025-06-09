@@ -23,10 +23,12 @@ import { Dataset } from "../../assets/Model";
   const DatasetID = computed(() => GlobalVars.DATASET_ID)
   const FlatmapLocation = computed(() => GlobalVars.FLATMAP_LOCATION) 
   const MBFImageName = computed(() => GlobalVars.MBF_IMAGE_NAME)
+  const SelectedSubjects = computed(()=>GlobalVars.SELECTED_SUBJECTS)
 const filterEntries = [
   { label: "Dataset",        value: DatasetID},
   { label: "Vagal Location", value: FlatmapLocation},
   { label: "Selected Image", value: MBFImageName},
+  {label: "Subjects",value:SelectedSubjects}
 ];
 const filterOrder = filterEntries.map(e => e.label);
 const ActiveFilters = ref(new Map());

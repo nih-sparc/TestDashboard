@@ -21,6 +21,7 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
   //filtered metadata
   const SUBJECT_SEX = ref("");
   const SUBJECT_AGE = ref(null);
+  const SELECTED_SUBJECTS = ref([])
   const CURRENT_ROW = ref({})
     //BiolucidaViewer.vue
   const SELECTED_IMAGE = ref(null);
@@ -67,7 +68,7 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
   const saveToLocalStorage = ()=>{
     const data = {
      // DASHBOARD_ITEMS: DASHBOARD_ITEMS.value,
-     // componentList: componentList.value,
+      SELECTED_SUBJECTS: SELECTED_SUBJECTS.value,
       CURRENT_ROW: CURRENT_ROW.value,
       DASH_IMAGE_ARRAY: DASH_IMAGE_ARRAY.value,
       DATASET_ID: DATASET_ID.value,
@@ -90,7 +91,7 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
       const data = JSON.parse(stored);
   
       //if ('DASHBOARD_ITEMS' in data) DASHBOARD_ITEMS.value = data.DASHBOARD_ITEMS;
-      //if ('componentList' in data) componentList.value = data.componentList;
+      if('SELECTED_SUBJECTS' in data) SELECTED_SUBJECTS.value = data.SELECTED_SUBJECTS;
       if ('CURRENT_ROW' in data) CURRENT_ROW.value = data.CURRENT_ROW;
       if ('DASH_IMAGE_ARRAY' in data) DASH_IMAGE_ARRAY.value = data.DASH_IMAGE_ARRAY;
       if ('DATASET_ID' in data) DATASET_ID.value = data.DATASET_ID;
@@ -117,6 +118,7 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
     MBF_IMAGE_NAME,
     selectibleWidgets,
     mbfViewerCount,
+    SELECTED_SUBJECTS,
     SUBJECT_AGE,
     SUBJECT_SEX,
     SELECTED_IMAGE,

@@ -15,7 +15,8 @@ const componentMap = [
     'QDBGraph',
     'TextWidget',
     'CountWidget',
-    'ScaffoldViewer'
+    'ScaffoldViewer',
+    'SubjectSelector'
 ]
 
 installDashboard(app, componentMap); 
