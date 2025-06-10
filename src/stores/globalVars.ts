@@ -19,8 +19,7 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
   const MBF_IMAGE_NAME = ref("");
 
   //filtered metadata
-  const SUBJECT_SEX = ref("");
-  const SUBJECT_AGE = ref(null);
+
   const SELECTED_SUBJECTS = ref([])
   const CURRENT_ROW = ref({})
     //BiolucidaViewer.vue
@@ -74,8 +73,6 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
       DATASET_ID: DATASET_ID.value,
       FLATMAP_LOCATION: FLATMAP_LOCATION.value,
       MBF_IMAGE_NAME: MBF_IMAGE_NAME.value,
-      SUBJECT_AGE: SUBJECT_AGE.value,
-      SUBJECT_SEX: SUBJECT_SEX.value,
       SELECTED_IMAGE: SELECTED_IMAGE.value,
       optionsData: optionsData.value,
       mbfViewerCount: mbfViewerCount.value
@@ -97,8 +94,6 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
       if ('DATASET_ID' in data) DATASET_ID.value = data.DATASET_ID;
       if ('FLATMAP_LOCATION' in data) FLATMAP_LOCATION.value = data.FLATMAP_LOCATION;
       if ('MBF_IMAGE_NAME' in data) MBF_IMAGE_NAME.value = data.MBF_IMAGE_NAME;
-      if ('SUBJECT_AGE' in data) SUBJECT_AGE.value = data.SUBJECT_AGE;
-      if ('SUBJECT_SEX' in data) SUBJECT_SEX.value = data.SUBJECT_SEX;
       if ('SELECTED_IMAGE' in data) SELECTED_IMAGE.value = data.SELECTED_IMAGE;
       if ('optionsData' in data) optionsData.value = data.optionsData;
       if ('mbfViewerCount' in data) mbfViewerCount.value = data.mbfViewerCount;
@@ -119,8 +114,6 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
     selectibleWidgets,
     mbfViewerCount,
     SELECTED_SUBJECTS,
-    SUBJECT_AGE,
-    SUBJECT_SEX,
     SELECTED_IMAGE,
     optionsData,
     getDashItem,

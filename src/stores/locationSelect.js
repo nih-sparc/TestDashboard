@@ -2,8 +2,10 @@ import { ref, inject } from 'vue'
 import { defineStore } from 'pinia'
 import { Api } from "../services";
 import {useGlobalVarsStore} from "../stores/globalVars"
+import { useSubjectStore } from './subjectStore';
 import { TableObject} from "../devComponents/ImageSelector/ImageModel"
 const GlobalVars = useGlobalVarsStore();
+const SubjectStore = useSubjectStore();
 
 export const useLocationStore = defineStore('locationSelected', () => {
 
@@ -14,12 +16,15 @@ function getLocationFromMinMax(min,max){
 }
 //user has selected a location on the flatmap
 //use coord system from 0-1 to call qdb for a list of instances of images within that range 
-const getRegionMinMax = async(min, max, subject)=>{
-    subject = "sub-f001";
+const getRegionMinMax = async(min, max)=>{
+    const subjects = GlobalVars.SELECTED_SUBJECTS
     let _instance_list = {};
     let _response = {};
+    let subjectParams = new URLSearchParams();
     try{
-        await Api.qdb.getLocationMinMax(min,max,subject).then(response =>{
+        subjects?.length ? subjects.forEach(subject => subjectParams.append('subject', subject.name)): null;
+        console.log(subjectParams)
+        await Api.qdb.getLocationMinMax(min,max,"&"+subjectParams.toString()).then(response =>{
             _response = response;
         })
         if (_response.status === 200) {

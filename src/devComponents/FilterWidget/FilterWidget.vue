@@ -1,6 +1,6 @@
 <template>                  
     <el-row class="filter-wrapper">
-        <div v-for="filterName in filterOrder" class="tw-flex-row tw-m-2">
+        <div v-for="filterName in filterOrder" class="tw-flex-row tw-ml-2 filter-name">
             <span v-if="ActiveFilters.get(filterName)"><b class="color-primary">{{ filterName +": " }}</b><span class="color-secondary">{{ ActiveFilters.get(filterName) }}</span></span>
         </div>
     </el-row>
@@ -23,7 +23,7 @@ import { Dataset } from "../../assets/Model";
   const DatasetID = computed(() => GlobalVars.DATASET_ID)
   const FlatmapLocation = computed(() => GlobalVars.FLATMAP_LOCATION) 
   const MBFImageName = computed(() => GlobalVars.MBF_IMAGE_NAME)
-  const SelectedSubjects = computed(()=>GlobalVars.SELECTED_SUBJECTS)
+  const SelectedSubjects = computed(()=>GlobalVars.SELECTED_SUBJECTS.map((x)=>x.name).join(", "))
 const filterEntries = [
   { label: "Dataset",        value: DatasetID},
   { label: "Vagal Location", value: FlatmapLocation},
@@ -64,5 +64,8 @@ filterEntries.forEach(({ label, value }) => {
         background-color: $secondary;
         height: 33px;
         padding:8px;
+    }
+    .filter-name{
+        margin-left:0.5rem;
     }
 </style>
