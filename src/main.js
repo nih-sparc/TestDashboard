@@ -16,7 +16,8 @@ const componentMap = [
     'TextWidget',
     'CountWidget',
     'ScaffoldViewer',
-    'SubjectSelector'
+    'SubjectSelector',
+    'HealFlatmap'
 ]
 
 installDashboard(app, componentMap); 

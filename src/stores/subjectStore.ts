@@ -9,7 +9,6 @@ export const useSubjectStore = defineStore('subjectStore', () => {
     const DistinctSubjects = ref([]);
 
     const GetDistinctSubjects = async()=>{
-        console.log("here")
         if(DistinctSubjects?.value.length){return}
         try{
             await Api.qdb.getSubjects(GlobalVars.DATASET_ID).then(response =>{

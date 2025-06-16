@@ -23,8 +23,8 @@ const getRegionMinMax = async(min, max)=>{
     let subjectParams = new URLSearchParams();
     try{
         subjects?.length ? subjects.forEach(subject => subjectParams.append('subject', subject.name)): null;
-        console.log(subjectParams)
-        await Api.qdb.getLocationMinMax(min,max,"&"+subjectParams.toString()).then(response =>{
+        const paramString = "&"+subjectParams.toString();
+        await Api.qdb.getLocationMinMax(min,max,paramString).then(response =>{
             _response = response;
         })
         if (_response.status === 200) {
@@ -32,7 +32,7 @@ const getRegionMinMax = async(min, max)=>{
           handleMinMaxRequest(_instance_list);
         }
     }catch(e){
-        console.error("couldn't get min max region "+subject+" from QDB /n min: "+min +" max: "+ max);
+        console.error("couldn't get min max region from QDB /n min: "+min +" max: "+ max);
         console.log(e)
     }
 }

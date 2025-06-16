@@ -59,6 +59,7 @@ import { onBeforeMount } from 'vue';
 
 </script>
 <style scoped lang="scss">
+@import "../assets/vars.scss";
     .subject-selector{
         display: flex;
         flex-direction: row;
@@ -70,7 +71,7 @@ import { onBeforeMount } from 'vue';
             margin:0 5px 0 5px;
         }
         .selected{
-            background-color: gray;
+            background-color: var(--dash-backgroundBlocked);
         }
     }
     .el-card{

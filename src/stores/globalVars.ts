@@ -29,6 +29,22 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
   const selectibleWidgets=["BiolucidaViewer"];
   const mbfViewerCount = ref(0);
 
+  //scaffold
+  //const SCAFFOLD_URL = ref("https://sparc.science/datasets/426?type=dataset&datasetDetailsTab=images")
+  const SCAFFOLD_URL = ref("https://mapcore-bucket1.s3-us-west-2.amazonaws.com/others/29_Jan_2020/heartICN_metadata.json")
+
+  const clearAllFilters = ()=>{
+    DATASET_ID.value = "";
+    DASH_IMAGE_ARRAY.value = [];
+    FLATMAP_LOCATION.value = "";
+    MBF_IMAGE_NAME.value = "";
+    SELECTED_SUBJECTS.value = [];
+    CURRENT_ROW.value = {};
+    SELECTED_IMAGE.value = null;
+    SCAFFOLD_URL.value = "";
+    saveToLocalStorage()
+  }
+
   //GETTERS
   const getDashItem =(widgetId:string)=>{
     return DASHBOARD_ITEMS.value.find(item => item.id===widgetId);
@@ -86,7 +102,6 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
   
     try {
       const data = JSON.parse(stored);
-  
       //if ('DASHBOARD_ITEMS' in data) DASHBOARD_ITEMS.value = data.DASHBOARD_ITEMS;
       if('SELECTED_SUBJECTS' in data) SELECTED_SUBJECTS.value = data.SELECTED_SUBJECTS;
       if ('CURRENT_ROW' in data) CURRENT_ROW.value = data.CURRENT_ROW;
@@ -116,6 +131,7 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
     SELECTED_SUBJECTS,
     SELECTED_IMAGE,
     optionsData,
+    SCAFFOLD_URL,
     getDashItem,
     setBiolucidaPath,
     setImageArray,
@@ -123,6 +139,7 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
     addOptionsDataItems,
     clearOptionsDataItems,
     saveToLocalStorage,
-    loadFromLocalStorage
+    loadFromLocalStorage,
+    clearAllFilters
  }
 })
