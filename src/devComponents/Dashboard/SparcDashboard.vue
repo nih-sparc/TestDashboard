@@ -181,7 +181,7 @@ function saveDashboard() {
   const gridItems = Grid.save();
   const merged = gridItems.map(fromGrid => {
     const dashItems = DashboardItems.value.find(DI => DI.id === fromGrid.id) || {};
-    const overrides = (({ x, y, h, l }) => ({ x, y, h, l }))(fromGrid);
+    const overrides = (({ x, y, h, w }) => ({ x, y, h, w }))(fromGrid);
     return { ...dashItems, ...overrides };
   });
   window.localStorage.setItem("DashboardItems", JSON.stringify(merged));

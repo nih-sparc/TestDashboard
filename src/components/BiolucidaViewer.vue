@@ -14,7 +14,7 @@
         </div>
         </div>
         <div class="tw-h-screen tw-flex tw-justify-center">
-            <iframe class="tw-p-1 tw-w-screen" :src="selectedImage.biolucidaPath" ></iframe>
+            <iframe class="tw-p-1 tw-w-screen" :src="selectedImage?.biolucidaPath" ></iframe>
         </div>
     </div>
 </template>
