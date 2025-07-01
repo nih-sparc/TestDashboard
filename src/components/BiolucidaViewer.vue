@@ -19,7 +19,7 @@
     </div>
 </template>
 <script setup>
-  import {ref, onMounted, onUnmounted, computed,watch} from "vue";
+  import {ref, toRef, computed, watch} from "vue";
   import {useGlobalVarsStore} from "../stores/globalVars"
   import { Api } from "../services";
 
@@ -28,13 +28,19 @@
 
   const props = defineProps({
     imageID:0,
-    listening:{
-            type:Boolean
+    isLocked:{
+        default:false,
+        type:Boolean
     }
   })
 
   const GlobalVars = useGlobalVarsStore();
-  const selectedImage = computed(()=>GlobalVars.SELECTED_IMAGE);
+  const selectedImage = computed(() => {
+    console.log("here")
+    if (props.isLocked && selectedImage.value) return selectedImage.value;
+    return GlobalVars.SELECTED_IMAGE;
+});
+
 
 
 //get Biolucida url on update
@@ -58,9 +64,9 @@ const getBiolucidaLink = async ()=>{
       console.error("couldn't fetch biolucida link: "+e);
   }
 }
-  watch(
+watch(
   selectedImage,
-  (newVal) => {
+  (newVal,oldVal) => {
     if (newVal && !newVal.biolucidaPath) {
       getBiolucidaLink();
     }

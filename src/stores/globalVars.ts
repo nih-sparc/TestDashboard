@@ -4,8 +4,9 @@ import { SparcImageObject } from '../devComponents/ImageSelector/ImageModel';
 
 export const useGlobalVarsStore = defineStore('globalVars', () => {
   //global objects
+  //gridstack.js instance
+  const gridInstance = ref(null);
   const componentList = ref([""]);
-  // const navigatorType = ref("LocationNav");//default 
   const DATASET_ID = ref("");
   const optionsData = ref([])
   const DASHBOARD_ITEMS = ref([]);
@@ -25,9 +26,6 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
     //BiolucidaViewer.vue
   const SELECTED_IMAGE = ref(null);
 
-  //remove after adding lock functionality
-  const selectibleWidgets=["BiolucidaViewer"];
-  const mbfViewerCount = ref(0);
 
   //scaffold
   //const SCAFFOLD_URL = ref("https://sparc.science/datasets/426?type=dataset&datasetDetailsTab=images")
@@ -80,6 +78,15 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
       console.warn("No image selected. Cannot set Biolucida path.");
     }
   };
+
+  const toggleWidgetLock = (widgetId: string) => {
+    const widget = DASHBOARD_ITEMS.value.find(w => w.id === widgetId);
+    if (widget) {
+      widget.Props = widget.Props || {};
+      widget.Props.locked = !widget.Props.locked;
+    }
+  }
+
   const saveToLocalStorage = ()=>{
     const data = {
      // DASHBOARD_ITEMS: DASHBOARD_ITEMS.value,
@@ -90,8 +97,7 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
       FLATMAP_LOCATION: FLATMAP_LOCATION.value,
       MBF_IMAGE_NAME: MBF_IMAGE_NAME.value,
       SELECTED_IMAGE: SELECTED_IMAGE.value,
-      optionsData: optionsData.value,
-      mbfViewerCount: mbfViewerCount.value
+      optionsData: optionsData.value
     };
   
     localStorage.setItem("dashboard-globalVarsStore", JSON.stringify(data));
@@ -111,7 +117,6 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
       if ('MBF_IMAGE_NAME' in data) MBF_IMAGE_NAME.value = data.MBF_IMAGE_NAME;
       if ('SELECTED_IMAGE' in data) SELECTED_IMAGE.value = data.SELECTED_IMAGE;
       if ('optionsData' in data) optionsData.value = data.optionsData;
-      if ('mbfViewerCount' in data) mbfViewerCount.value = data.mbfViewerCount;
     } catch (error) {
       console.error("Failed to parse globalVarsStore from localStorage:", error);
     }
@@ -126,13 +131,13 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
     DATASET_ID, 
     FLATMAP_LOCATION,
     MBF_IMAGE_NAME,
-    selectibleWidgets,
-    mbfViewerCount,
     SELECTED_SUBJECTS,
     SELECTED_IMAGE,
     optionsData,
     SCAFFOLD_URL,
+    gridInstance,
     getDashItem,
+    toggleWidgetLock,
     setBiolucidaPath,
     setImageArray,
     setSelectedImage,

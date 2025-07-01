@@ -5,7 +5,7 @@
 </template>
 <script setup>
   import { ref, onMounted} from "vue";
-  import {MapViewer} from '@abi-software/flatmap-viewer'
+  
 
 defineOptions({
         inheritAttrs: false
@@ -15,30 +15,28 @@ const widgetName = "Heal Flatmap"
 
 const MAP_SERVER = ref('https://mapcore-demo.org/current/flatmap/v3/')
 
-onMounted(async()=>{
-    // Create a viewer for the map server
+onMounted(async () => {
+  const { MapViewer } = await import('https://cdn.jsdelivr.net/npm/@abi-software/flatmap-viewer/+esm')
 
-    const viewer = new MapViewer(MAP_SERVER.value)
+  const viewer = new MapViewer(MAP_SERVER.value)
 
-    // Optionally get a list of all maps on the server
+  const mapList = await viewer.allMaps()
 
-    const mapList = await viewer.allMaps()
-    console.log(mapList)
-
-    // Load the most recent human female map into the `map-container`
-    // with all paths hidden. The provided callbacke will log all events
-    // from the viewer to the console.
-
-    const map = await viewer.loadMap({
-        taxon: 'NCBITaxon:9606',
-        biologicalSex: 'PATO:0000383'
-    }, (type, data) => {
-        console.log(type, data)
-    }, {
-    container: 'map-container',
-    pathsDisabled: true
-    })
+  await viewer.loadMap(
+    {
+      taxon: 'NCBITaxon:9606',
+      biologicalSex: 'PATO:0000383'
+    },
+    (type, data) => {
+      // console.log(type, data)
+    },
+    {
+      container: 'map-container',
+      pathsDisabled: true
+    }
+  )
 })
+
 
 </script>
 <style>
