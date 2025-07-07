@@ -36,7 +36,6 @@
 
   const GlobalVars = useGlobalVarsStore();
   const selectedImage = computed(() => {
-    console.log("here")
     if (props.isLocked && selectedImage.value) return selectedImage.value;
     return GlobalVars.SELECTED_IMAGE;
 });

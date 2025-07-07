@@ -7,7 +7,7 @@ import "../tailwind/output.css";
 
 export function installDashboard(
   app: App<Element>,
-  componentMap: Array<string>,
+  // componentMap: Array<string>,
   pinia: Pinia | null = null,
   options: { useShadowDOM?: boolean } = {}
 ) {
@@ -19,14 +19,14 @@ export function installDashboard(
   }
 
   // Register all async components
-  componentMap.forEach(comp => {
-    const asyncComponent = defineAsyncComponent(() => import(`./components/${comp}.vue`));
-    app.component(comp, asyncComponent);
-  });
+  // componentMap.forEach(comp => {
+  //   const asyncComponent = defineAsyncComponent(() => import(`./components/${comp}.vue`));
+  //   app.component(comp, asyncComponent);
+  // });
 
   // Save component list to global state
   const globalVars = useGlobalVarsStore(pinia);
-  globalVars.componentList = componentMap;
+  // globalVars.componentList = componentMap;
 
   // Register SPARC Dashboard component
   if (options.useShadowDOM) {

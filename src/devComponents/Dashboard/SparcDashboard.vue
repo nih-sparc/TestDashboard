@@ -22,7 +22,6 @@
     <el-col v-if="!staticMode">
       <div class="tw-m-4 tw-w-40">
         <el-select
-        :value="NewComponent.Name"
         placeholder="Add New Widget">
           <el-option
             v-for="item in ComponentListOptions"
@@ -68,7 +67,7 @@
 
 <script setup>
 
-import { ref, onBeforeMount, onMounted, nextTick, watch, reactive} from 'vue';
+import { ref, onBeforeMount, onMounted, nextTick, watch, watchEffect, reactive} from 'vue';
 import { GridStack } from 'gridstack';
 import FilterWidget from "../FilterWidget/FilterWidget.vue"
 import ItemWidget from './ItemWidget.vue'
@@ -78,42 +77,46 @@ import { storeToRefs } from 'pinia';
 import "../../assets/theme.scss"
 import "gridstack/dist/gridstack.min.css";
 import "gridstack/dist/gridstack-extra.min.css";
+import { computed } from 'vue';
 
 const props = defineProps({
-    dBItems:{
-            type:Array,
-            required:true
-    },
+
     hideHeader:Boolean,
     options:{
         type:Object,
-        required:false
+        required:true,
+        default: () => ({
+          availableWidgets:[],
+          defaultLayout:[],
+          globalData:{}
+        })
     }
   })
 
 const debug = false;
 const _globalVars = useGlobalVarsStore();
-let _DatasetImgs = ref({});
-let editGridButton = ref("Edit Grid")
+const AvailableWidgets = computed(()=>props.options.availableWidgets)
+const DefaultLayout = computed(()=>props.options.defaultLayout)
 
+let editGridButton = ref("Edit Grid")
 let Grid = null;
 const root = ref(null);
 
 const { DASHBOARD_ITEMS: DashboardItems } = storeToRefs(_globalVars);
 
 let staticMode = ref(true);
-let ComponentListOptions = _globalVars.componentList;
-let NewComponent = {};
-let NextId = props.dBItems.length+1;
+let NextId = 0;
 
 onBeforeMount(() => {
     const savedDash = getItemsFromLS()
-    _globalVars.DASHBOARD_ITEMS= savedDash.length>0? savedDash: props.dBItems;
+    _globalVars.DASHBOARD_ITEMS= savedDash.length>0? savedDash: DefaultLayout.value;
+    console.log(DefaultLayout.value[0])
+    NextId = _globalVars.DASHBOARD_ITEMS.length+1
     _globalVars.loadFromLocalStorage();
   });
   onMounted(() => {
     initGridStack();
-    addOptionsToGlobalVars();
+    parseOptions();
 
   });
 
@@ -137,14 +140,27 @@ function initGridStack(){
     _globalVars.gridInstance = Grid;
 }
 
+const ComponentListOptions = ref([]);
+const localRegistry = ref({});
+
+watchEffect(() => {
+  const widgets = AvailableWidgets.value ?? [];
+  widgets.forEach((comp) => {
+    if (comp?.__name && !(comp.__name in localRegistry.value)) {
+      localRegistry.value[comp.__name] = comp;
+      ComponentListOptions.value.push(comp.__name);
+    }
+  });
+});
 //Add Data to Global Vars for reactivity and Global Scoping -----------------------------
-function addOptionsToGlobalVars(){
+function parseOptions(){
   if(props.options?.globalData){
     _globalVars.clearOptionsDataItems();
       for(const x in props.options.globalData){
         _globalVars.addOptionsDataItems(x,props.options.globalData[x])
       }
   }
+
 }
 
 
@@ -154,12 +170,12 @@ watch(()=> staticMode.value, (value) => {
   editGridButton.value = !value?"Save Grid":"Edit Grid";
 })
 
+
 function addNewWidget(name) {
+  if(!name){return}
   // adding new widget from dropdown
-    if(name){
-      NewComponent.Name = name;
-    }
-    const node = {id:NewComponent.Name+"-"+NextId,w:2,h:6,autoPosition:true, component: NewComponent.Name, componentName:NewComponent.Name, Props:{}};
+
+    const node = {id:name+"-"+NextId,w:2,h:6,autoPosition:true, component: localRegistry.value[name], componentName:name, Props:{}};
 
     NextId++;
     //add component to items array first. this will update the dom

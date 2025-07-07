@@ -37,6 +37,7 @@ defineOptions({
   const GlobalVars = useGlobalVarsStore();
   const disableFlatmapUI = true;
   let FlatmapReady = false;
+  //getter
   const flatmapLocation = computed(()=>GlobalVars.FLATMAP_LOCATION)
 
   const widgetName = ref('Flatmap Selector');

@@ -61,6 +61,7 @@ Feature: Click To Manually Edit Text
         textUserInput.value ? textUserInput.value.focus(): "";
   }
   function saveInput(){
+    if(!editing.value){return}
         editing.value=false;
         const dashItem = globalVars.getDashItem(props.widgetID);
         dashItem.componentName = headerText;

@@ -48,7 +48,7 @@
 </template>
 <script setup>
     import DownloadIcon from '../../components/icons/DownloadIcon.vue'
-    import { ref, watch, computed} from 'vue';
+    import { ref, watch} from 'vue';
     import { useGlobalVarsStore } from '../../stores/globalVars';
     import DashHeader from "./DashHeader.vue";
     import { ElTooltip } from 'element-plus';

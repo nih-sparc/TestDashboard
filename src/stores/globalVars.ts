@@ -6,7 +6,6 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
   //global objects
   //gridstack.js instance
   const gridInstance = ref(null);
-  const componentList = ref([""]);
   const DATASET_ID = ref("");
   const optionsData = ref([])
   const DASHBOARD_ITEMS = ref([]);
@@ -45,7 +44,7 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
 
   //GETTERS
   const getDashItem =(widgetId:string)=>{
-    return DASHBOARD_ITEMS.value.find(item => item.id===widgetId);
+    return DASHBOARD_ITEMS.value?.find(item => item.id===widgetId);
   }
   //SETTERS
   const addOptionsDataItems = (name:string,value:any)=>{
@@ -89,7 +88,8 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
 
   const saveToLocalStorage = ()=>{
     const data = {
-     // DASHBOARD_ITEMS: DASHBOARD_ITEMS.value,
+      
+      DASHBOARD_ITEMS: DASHBOARD_ITEMS.value,
       SELECTED_SUBJECTS: SELECTED_SUBJECTS.value,
       CURRENT_ROW: CURRENT_ROW.value,
       DASH_IMAGE_ARRAY: DASH_IMAGE_ARRAY.value,
@@ -108,7 +108,7 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
   
     try {
       const data = JSON.parse(stored);
-      //if ('DASHBOARD_ITEMS' in data) DASHBOARD_ITEMS.value = data.DASHBOARD_ITEMS;
+      if ('DASHBOARD_ITEMS' in data) DASHBOARD_ITEMS.value = data.DASHBOARD_ITEMS;
       if('SELECTED_SUBJECTS' in data) SELECTED_SUBJECTS.value = data.SELECTED_SUBJECTS;
       if ('CURRENT_ROW' in data) CURRENT_ROW.value = data.CURRENT_ROW;
       if ('DASH_IMAGE_ARRAY' in data) DASH_IMAGE_ARRAY.value = data.DASH_IMAGE_ARRAY;
@@ -125,7 +125,6 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
 
   return { 
     DASHBOARD_ITEMS,
-    componentList, 
     DASH_IMAGE_ARRAY, 
     CURRENT_ROW,
     DATASET_ID, 

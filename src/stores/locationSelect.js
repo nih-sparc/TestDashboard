@@ -4,10 +4,12 @@ import { Api } from "../services";
 import {useGlobalVarsStore} from "../stores/globalVars"
 import { useSubjectStore } from './subjectStore';
 import { TableObject} from "../devComponents/ImageSelector/ImageModel"
-const GlobalVars = useGlobalVarsStore();
-const SubjectStore = useSubjectStore();
+
 
 export const useLocationStore = defineStore('locationSelected', () => {
+
+  const GlobalVars = useGlobalVarsStore();
+  const SubjectStore = useSubjectStore();
 
 function getLocationFromMinMax(min,max){
   if(min && max){
@@ -85,7 +87,6 @@ const getMetadataForImages= async(images)=>{
   }
 
 
-  const componentList = ref([""]);
   const navigatorType = ref("LocationNav");//default 
   return { navigatorType, getLocationFromMinMax }
 })
