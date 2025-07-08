@@ -65,48 +65,47 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
-import { ref, onBeforeMount, onMounted, nextTick, watch, watchEffect, reactive} from 'vue';
+import { ref, onBeforeMount, onMounted, nextTick, watch, watchEffect, reactive, computed} from 'vue';
 import { GridStack } from 'gridstack';
-import FilterWidget from "../FilterWidget/FilterWidget.vue"
-import ItemWidget from './ItemWidget.vue'
+import FilterWidget from "../FilterWidget/FilterWidget.vue";
+import ItemWidget from './ItemWidget.vue';
 import { useGlobalVarsStore }from '../../stores/globalVars.ts';
-import {Dataset} from '../../assets/Model';
 import { storeToRefs } from 'pinia';
-import "../../assets/theme.scss"
+import "../../assets/theme.scss";
 import "gridstack/dist/gridstack.min.css";
 import "gridstack/dist/gridstack-extra.min.css";
-import { computed } from 'vue';
 
-const props = defineProps({
+interface DashboardOptions {
+  availableWidgets:any[];
+  defaultLayout:any[];
+  globalData:Record<string,any>;
+}
 
-    hideHeader:Boolean,
-    options:{
-        type:Object,
-        required:true,
-        default: () => ({
-          availableWidgets:[],
-          defaultLayout:[],
-          globalData:{}
-        })
-    }
-  })
+const props = defineProps<{
+    hideHeader?:Boolean,
+    options:DashboardOptions
+}>();
 
-const debug = false;
 const _globalVars = useGlobalVarsStore();
+const { DASHBOARD_ITEMS: DashboardItems } = storeToRefs(_globalVars);
+
 const AvailableWidgets = computed(()=>props.options.availableWidgets)
 const DefaultLayout = computed(()=>props.options.defaultLayout)
 
-let editGridButton = ref("Edit Grid")
+let editGridButton = ref<string>("Edit Grid")
 let Grid = null;
-const root = ref(null);
-
-const { DASHBOARD_ITEMS: DashboardItems } = storeToRefs(_globalVars);
-
-let staticMode = ref(true);
+const root = ref<HTMLElement | null>(null);
+let staticMode = ref<boolean>(true);
 let NextId = 0;
 
+// Track component registry
+const ComponentListOptions = ref<string[]>([]);
+const localRegistry = ref<Record<string,any>>({});
+const widgetRefs = reactive<Record<string,HTMLElement | null>>({});
+
+//Load from Local Storage
 onBeforeMount(() => {
     const savedDash = getItemsFromLS()
     _globalVars.DASHBOARD_ITEMS= savedDash.length>0? savedDash: DefaultLayout.value;
@@ -121,7 +120,7 @@ onBeforeMount(() => {
   });
 
 
-//add gridstack specific events here - - - - - - --  -- -- - - -- - --  -- - - -----  -  - - - -
+//Initialize Gridstack
 function initGridStack(){
     const options={
       float:true,
@@ -139,10 +138,7 @@ function initGridStack(){
     Grid.setStatic(staticMode.value)
     _globalVars.gridInstance = Grid;
 }
-
-const ComponentListOptions = ref([]);
-const localRegistry = ref({});
-
+//Update Dropdown Options
 watchEffect(() => {
   const widgets = AvailableWidgets.value ?? [];
   widgets.forEach((comp) => {
@@ -152,49 +148,55 @@ watchEffect(() => {
     }
   });
 });
-//Add Data to Global Vars for reactivity and Global Scoping -----------------------------
-function parseOptions(){
-  if(props.options?.globalData){
+//Parse Options to Global Vars
+function parseOptions():void{
+  const data = props.options.globalData
+  if(data){
     _globalVars.clearOptionsDataItems();
-      for(const x in props.options.globalData){
-        _globalVars.addOptionsDataItems(x,props.options.globalData[x])
+      for(const key in data){
+        _globalVars.addOptionsDataItems(key,data[key])
       }
   }
-
 }
 
-
-//All additional Functions - - - - - - - - -- - - - - --  -- - -- - - - - - - -  --
-watch(()=> staticMode.value, (value) => {
+//Watch for mode change
+watch(()=> staticMode.value, (value:boolean) => {
   Grid.setStatic(value);
   editGridButton.value = !value?"Save Grid":"Edit Grid";
 })
-
-
-function addNewWidget(name) {
+//Add new Widget
+function addNewWidget(name:string):void {
   if(!name){return}
   // adding new widget from dropdown
-
-    const node = {id:name+"-"+NextId,w:2,h:6,autoPosition:true, component: localRegistry.value[name], componentName:name, Props:{}};
+    const id = `${name}-${NextId}`;
+    const node = {
+      id:id,
+      w:2,
+      h:6,
+      autoPosition:true,
+      component: localRegistry.value[name],
+      componentName:name, 
+      Props:{}
+    };
 
     NextId++;
     //add component to items array first. this will update the dom
     DashboardItems.value.push(node);
     nextTick(()=>{
-      //after dom updates, add your widget to the grid with makewidget. don't use addwidget
-      Grid.makeWidget(node.id);
+      //after dom updates, add your widget to the grid
+      Grid?.makeWidget(`#${id}`);
     });
 }
-
-function removeWidget(widget) {
+// Remove widget
+function removeWidget(widget:string):void {
     var index = DashboardItems.value.findIndex(w => w.id == widget);
     DashboardItems.value.splice(index, 1);
     const selector = `#${widget}`;
     Grid.removeWidget(selector, false);
   }
 
-const widgetRefs = reactive({});
-function toggleWidgetLock({id,isLocked}){
+//Lock or Unlock Widget
+function toggleWidgetLock({id,isLocked}:{id:string;isLocked:boolean}):void{
   const el = widgetRefs[id];
   if (el && Grid) {
     Grid.update(el, {
@@ -205,40 +207,40 @@ function toggleWidgetLock({id,isLocked}){
   }
   _globalVars.toggleWidgetLock(id);
 }
-function handleEditGrid(){
+//Toggle Edit Mode
+function handleEditGrid():void{
   staticMode.value=!staticMode.value;
   if(staticMode.value){
     saveDashboard()
     _globalVars.saveToLocalStorage()
   }
 }
-function saveDashboard() {
-  const gridItems = Grid.save();
-  const merged = gridItems.map(fromGrid => {
+//Save Dashboard to Local Storage
+function saveDashboard():void {
+  const gridItems = Grid.save()??[];
+  const merged = gridItems.map((fromGrid:any) => {
     const dashItems = DashboardItems.value.find(DI => DI.id === fromGrid.id) || {};
     const overrides = (({ x, y, h, w }) => ({ x, y, h, w }))(fromGrid);
     return { ...dashItems, ...overrides };
   });
   window.localStorage.setItem("DashboardItems", JSON.stringify(merged));
 }
-
-function getItemsFromLS(){
-    let dashItems = [];
-
-    if(isValidJSON(window.localStorage.getItem("DashboardItems"))){
-      dashItems = JSON.parse(window.localStorage.getItem("DashboardItems"));
+//Load from Local Storage
+function getItemsFromLS():any[]{
+  const raw = window.localStorage.getItem("DashboardItems")
+    if(isValidJSON(raw)){
+      return JSON.parse(raw as string);
     }
-    return dashItems;
+    return [];
 }
 
-function isValidJSON(str) {
+function isValidJSON(str:string | null) {
   if(!str){return false;}
     try {
         JSON.parse(str);
     } catch (e) {
         return false;
     }
-
     return true;
 }
 </script>
