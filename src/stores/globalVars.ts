@@ -4,6 +4,8 @@ import { SparcImageObject } from '../devComponents/ImageSelector/ImageModel';
 
 export const useGlobalVarsStore = defineStore('globalVars', () => {
   //global objects
+  const DefaultLayout = ref([]); //retrieved from Dashboard's properties
+  const ComponentRegistry = ref<Record<string,any>>({})
   //gridstack.js instance
   const gridInstance = ref(null);
   const DATASET_ID = ref("");
@@ -85,8 +87,19 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
       widget.Props.locked = !widget.Props.locked;
     }
   }
-
+//Save Dashboard to Local Storage
+function saveDashboardGrid():void {
+  const gridItems = gridInstance.value.save()??[];
+  console.log(gridItems)
+  const merged = gridItems.map((fromGrid:any) => {
+    const dashItems = DASHBOARD_ITEMS.value.find(DI => DI.id === fromGrid.id) || {};
+    const overrides = (({ x, y, h, w }) => ({ x, y, h, w }))(fromGrid);
+    return { ...dashItems, ...overrides };
+  });
+  window.localStorage.setItem("DashboardItems", JSON.stringify(merged));
+}
   const saveToLocalStorage = ()=>{
+    saveDashboardGrid()
     const data = {
       
       DASHBOARD_ITEMS: DASHBOARD_ITEMS.value,
@@ -102,13 +115,25 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
   
     localStorage.setItem("dashboard-globalVarsStore", JSON.stringify(data));
   }
+  //Load from Local Storage
+function getDashItemsFromLS():any[]{
+  const raw = window.localStorage.getItem("DashboardItems")
+    if(isValidJSON(raw)){
+      const dashItems = JSON.parse(raw as string);
+      //const maybe =dashItems.map((item:any) => ({...item,tag: item.component.__name}));
+      return parseSavedDashItems(dashItems);
+    }
+    return [];
+}
   const loadFromLocalStorage = () => {
     const stored = localStorage.getItem("dashboard-globalVarsStore");
-    if (!stored) return;
-  
+    if (!stored){
+      DASHBOARD_ITEMS.value = DefaultLayout.value;
+      return;
+    } 
     try {
       const data = JSON.parse(stored);
-      if ('DASHBOARD_ITEMS' in data) DASHBOARD_ITEMS.value = data.DASHBOARD_ITEMS;
+      DASHBOARD_ITEMS.value = getDashItemsFromLS();
       if('SELECTED_SUBJECTS' in data) SELECTED_SUBJECTS.value = data.SELECTED_SUBJECTS;
       if ('CURRENT_ROW' in data) CURRENT_ROW.value = data.CURRENT_ROW;
       if ('DASH_IMAGE_ARRAY' in data) DASH_IMAGE_ARRAY.value = data.DASH_IMAGE_ARRAY;
@@ -117,14 +142,37 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
       if ('MBF_IMAGE_NAME' in data) MBF_IMAGE_NAME.value = data.MBF_IMAGE_NAME;
       if ('SELECTED_IMAGE' in data) SELECTED_IMAGE.value = data.SELECTED_IMAGE;
       if ('optionsData' in data) optionsData.value = data.optionsData;
+
     } catch (error) {
       console.error("Failed to parse globalVarsStore from localStorage:", error);
     }
   };
-  
+//internal 
+//Match string with corresponding dashboard component
+  const parseSavedDashItems = (savedItems:Array<any>)=>{
+    return savedItems.map((item:any)=>{
+      const component = ComponentRegistry.value[item.component?.__name]
+      if(!component){return null}
+      item.component = component;
+      return item
+      
+    }).filter(comp=>!!comp)
+  }
+
+function isValidJSON(str:string | null) {
+  if(!str){return false;}
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
 
   return { 
     DASHBOARD_ITEMS,
+    DefaultLayout,
+    ComponentRegistry,
     DASH_IMAGE_ARRAY, 
     CURRENT_ROW,
     DATASET_ID, 

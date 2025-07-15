@@ -76,6 +76,7 @@ import { storeToRefs } from 'pinia';
 import "../../assets/theme.scss";
 import "gridstack/dist/gridstack.min.css";
 import "gridstack/dist/gridstack-extra.min.css";
+import { componentSizeMap } from 'element-plus';
 
 interface DashboardOptions {
   availableWidgets:any[];
@@ -91,27 +92,25 @@ const props = defineProps<{
 const _globalVars = useGlobalVarsStore();
 const { DASHBOARD_ITEMS: DashboardItems } = storeToRefs(_globalVars);
 
-const AvailableWidgets = computed(()=>props.options.availableWidgets)
-const DefaultLayout = computed(()=>props.options.defaultLayout)
+
 
 let editGridButton = ref<string>("Edit Grid")
-let Grid = null;
+const {gridInstance:Grid} = storeToRefs(_globalVars);
 const root = ref<HTMLElement | null>(null);
 let staticMode = ref<boolean>(true);
 let NextId = 0;
 
 // Track component registry
 const ComponentListOptions = ref<string[]>([]);
-const localRegistry = ref<Record<string,any>>({});
+const {ComponentRegistry:localRegistry} = storeToRefs(_globalVars);
 const widgetRefs = reactive<Record<string,HTMLElement | null>>({});
 
 //Load from Local Storage
 onBeforeMount(() => {
-    const savedDash = getItemsFromLS()
-    _globalVars.DASHBOARD_ITEMS= savedDash.length>0? savedDash: DefaultLayout.value;
-    console.log(DefaultLayout.value[0])
-    NextId = _globalVars.DASHBOARD_ITEMS.length+1
+    _globalVars.DefaultLayout = props.options.defaultLayout;
     _globalVars.loadFromLocalStorage();
+    NextId = _globalVars.DASHBOARD_ITEMS.length+1
+
   });
   onMounted(() => {
     initGridStack();
@@ -134,13 +133,12 @@ function initGridStack(){
         handles: 'e,se,s,sw,w,n'
       }
     }
-    Grid = GridStack.init(options);
-    Grid.setStatic(staticMode.value)
-    _globalVars.gridInstance = Grid;
+    Grid.value = GridStack.init(options);
+    Grid.value.setStatic(staticMode.value)
 }
 //Update Dropdown Options
 watchEffect(() => {
-  const widgets = AvailableWidgets.value ?? [];
+  const widgets = props.options.availableWidgets ?? [];
   widgets.forEach((comp) => {
     if (comp?.__name && !(comp.__name in localRegistry.value)) {
       localRegistry.value[comp.__name] = comp;
@@ -161,7 +159,7 @@ function parseOptions():void{
 
 //Watch for mode change
 watch(()=> staticMode.value, (value:boolean) => {
-  Grid.setStatic(value);
+  Grid.value.setStatic(value);
   editGridButton.value = !value?"Save Grid":"Edit Grid";
 })
 //Add new Widget
@@ -184,7 +182,7 @@ function addNewWidget(name:string):void {
     DashboardItems.value.push(node);
     nextTick(()=>{
       //after dom updates, add your widget to the grid
-      Grid?.makeWidget(`#${id}`);
+      Grid.value?.makeWidget(`#${id}`);
     });
 }
 // Remove widget
@@ -192,14 +190,14 @@ function removeWidget(widget:string):void {
     var index = DashboardItems.value.findIndex(w => w.id == widget);
     DashboardItems.value.splice(index, 1);
     const selector = `#${widget}`;
-    Grid.removeWidget(selector, false);
+    Grid.value.removeWidget(selector, false);
   }
 
 //Lock or Unlock Widget
 function toggleWidgetLock({id,isLocked}:{id:string;isLocked:boolean}):void{
   const el = widgetRefs[id];
-  if (el && Grid) {
-    Grid.update(el, {
+  if (el && Grid.value) {
+    Grid.value.update(el, {
       locked:!isLocked,
       noMove: !isLocked,
       noResize: !isLocked
@@ -211,38 +209,11 @@ function toggleWidgetLock({id,isLocked}:{id:string;isLocked:boolean}):void{
 function handleEditGrid():void{
   staticMode.value=!staticMode.value;
   if(staticMode.value){
-    saveDashboard()
     _globalVars.saveToLocalStorage()
   }
 }
-//Save Dashboard to Local Storage
-function saveDashboard():void {
-  const gridItems = Grid.save()??[];
-  const merged = gridItems.map((fromGrid:any) => {
-    const dashItems = DashboardItems.value.find(DI => DI.id === fromGrid.id) || {};
-    const overrides = (({ x, y, h, w }) => ({ x, y, h, w }))(fromGrid);
-    return { ...dashItems, ...overrides };
-  });
-  window.localStorage.setItem("DashboardItems", JSON.stringify(merged));
-}
-//Load from Local Storage
-function getItemsFromLS():any[]{
-  const raw = window.localStorage.getItem("DashboardItems")
-    if(isValidJSON(raw)){
-      return JSON.parse(raw as string);
-    }
-    return [];
-}
 
-function isValidJSON(str:string | null) {
-  if(!str){return false;}
-    try {
-        JSON.parse(str);
-    } catch (e) {
-        return false;
-    }
-    return true;
-}
+
 </script>
 
 <style scoped lang="scss">
