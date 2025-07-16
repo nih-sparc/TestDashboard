@@ -90,19 +90,17 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
 //Save Dashboard to Local Storage
 function saveDashboardGrid():void {
   const gridItems = gridInstance.value.save()??[];
-  console.log(gridItems)
   const merged = gridItems.map((fromGrid:any) => {
     const dashItems = DASHBOARD_ITEMS.value.find(DI => DI.id === fromGrid.id) || {};
     const overrides = (({ x, y, h, w }) => ({ x, y, h, w }))(fromGrid);
     return { ...dashItems, ...overrides };
   });
-  window.localStorage.setItem("DashboardItems", JSON.stringify(merged));
-}
+    return merged;
+  }
   const saveToLocalStorage = ()=>{
-    saveDashboardGrid()
+    
     const data = {
-      
-      DASHBOARD_ITEMS: DASHBOARD_ITEMS.value,
+      DASHBOARD_ITEMS: saveDashboardGrid(),
       SELECTED_SUBJECTS: SELECTED_SUBJECTS.value,
       CURRENT_ROW: CURRENT_ROW.value,
       DASH_IMAGE_ARRAY: DASH_IMAGE_ARRAY.value,
@@ -112,19 +110,9 @@ function saveDashboardGrid():void {
       SELECTED_IMAGE: SELECTED_IMAGE.value,
       optionsData: optionsData.value
     };
-  
     localStorage.setItem("dashboard-globalVarsStore", JSON.stringify(data));
   }
-  //Load from Local Storage
-function getDashItemsFromLS():any[]{
-  const raw = window.localStorage.getItem("DashboardItems")
-    if(isValidJSON(raw)){
-      const dashItems = JSON.parse(raw as string);
-      //const maybe =dashItems.map((item:any) => ({...item,tag: item.component.__name}));
-      return parseSavedDashItems(dashItems);
-    }
-    return [];
-}
+//Load from local storage
   const loadFromLocalStorage = () => {
     const stored = localStorage.getItem("dashboard-globalVarsStore");
     if (!stored){
@@ -133,7 +121,7 @@ function getDashItemsFromLS():any[]{
     } 
     try {
       const data = JSON.parse(stored);
-      DASHBOARD_ITEMS.value = getDashItemsFromLS();
+      if('DASHBOARD_ITEMS' in data) DASHBOARD_ITEMS.value = parseSavedDashItems(data.DASHBOARD_ITEMS);
       if('SELECTED_SUBJECTS' in data) SELECTED_SUBJECTS.value = data.SELECTED_SUBJECTS;
       if ('CURRENT_ROW' in data) CURRENT_ROW.value = data.CURRENT_ROW;
       if ('DASH_IMAGE_ARRAY' in data) DASH_IMAGE_ARRAY.value = data.DASH_IMAGE_ARRAY;
