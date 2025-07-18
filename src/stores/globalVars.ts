@@ -28,8 +28,8 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
 
 
   //scaffold
-  //const SCAFFOLD_URL = ref("https://sparc.science/datasets/426?type=dataset&datasetDetailsTab=images")
-  const SCAFFOLD_URL = ref("https://mapcore-bucket1.s3-us-west-2.amazonaws.com/others/29_Jan_2020/heartICN_metadata.json")
+  const SCAFFOLD_URL = ref("https://api.sparc.science//s3-resource/426/files/derivative/sub-M000/L/060-visualization/leftHumanVagus_metadata.json")
+  //const SCAFFOLD_URL = ref("https://mapcore-bucket1.s3-us-west-2.amazonaws.com/others/29_Jan_2020/heartICN_metadata.json")
 
   const clearAllFilters = ()=>{
     DATASET_ID.value = "";
