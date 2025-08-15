@@ -17,18 +17,17 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch} from 'vue';
-import {FlatmapViewerDash,ImageSelectorDash,BiolucidaViewerDash,QDBGraphDash,TextWidgetDash,ScaffoldViewerDash,SubjectSelectorDash,HealFlatmapDash} from './components/Index' //import all the external widgets from your chosen library. 
-import { changeGlobalNodesTarget } from 'element-plus/es/utils';
-
+import {ImageSelectorDash,BiolucidaViewerDash,QDBGraphDash,TextWidgetDash,ScaffoldViewerDash,SubjectSelectorDash,HealFlatmapDash} from './components/Index' //import all the external widgets from your chosen library. 
+// Lazy loader for Flatmap; only fetched when used
+const FlatmapViewerDash = () => import('./components/FlatmapViewer.vue'); //when own library import('SparcDash/FlatmapWidget');
+//add them to the dashboard via your options.availableWidgets array
 const availableWidgets = [
-    FlatmapViewerDash, //add them to the dashboard via your options.availableWidgets array
-    ImageSelectorDash,
-    BiolucidaViewerDash,
-    QDBGraphDash,
-    TextWidgetDash,
-    ScaffoldViewerDash,
-    SubjectSelectorDash,
-    HealFlatmapDash
+    {name:"Flatmap",loader:FlatmapViewerDash},
+    {name:"ImageSelector",component:ImageSelectorDash},
+    {name:"BiolucidaViewer",component:BiolucidaViewerDash},
+    {name:"QDBDGraph",component:QDBGraphDash},
+    {name:"TextWidget",component:TextWidgetDash},
+    {name:"SubjectSelector",component:SubjectSelectorDash}
 ]
 
 //component name works more like a header and might need to be renamed throughout the ap

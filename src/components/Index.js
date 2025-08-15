@@ -1,15 +1,11 @@
 
 //example of index.js in library
-import FlatmapViewerDash from './FlatmapViewer.vue';  ///dashboard component
-import BiolucidaViewerDash from './BiolucidaViewer.vue';
-import HealFlatmapDash from './HealFlatmap.vue';
-import ImageSelectorDash from './ImageSelector.vue';
-import QDBGraphDash from './QDBGraph.vue';
-import ScaffoldViewerDash from './ScaffoldViewer.vue';
-import SubjectSelectorDash from './SubjectSelector.vue';
-import TextWidgetDash from './TextWidget.vue';
-//or
-//import TimeSeries from './path/TimeSeries.vue'
-//import TimeSeriesDash from './path/TimeSeriewDash.vue'
-
-export { FlatmapViewerDash, BiolucidaViewerDash, HealFlatmapDash,ImageSelectorDash,QDBGraphDash,ScaffoldViewerDash,SubjectSelectorDash,TextWidgetDash };//add timeseriesdash and timeseries
+// Re-export without importing — lets bundlers shake unused widgets
+export { default as QDBGraphDash } from './QDBGraph.vue';
+export { default as FlatmapViewerDash} from './FlatmapViewer.vue'
+export { default as BiolucidaViewerDash} from './BiolucidaViewer.vue'
+export { default as HealFlatmapDash} from './HealFlatmap.vue'
+export { default as ImageSelectorDash} from './ImageSelector.vue'
+export { default as ScaffoldViewerDash} from './ScaffoldViewer.vue'
+export {default as SubjectSelectorDash} from './SubjectSelector.vue'
+export { default as TextWidgetDash} from './TextWidget.vue'

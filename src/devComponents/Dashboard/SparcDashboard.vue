@@ -67,7 +67,7 @@
 
 <script setup lang="ts">
 
-import { ref, onBeforeMount, onMounted, nextTick, watch, watchEffect, reactive, computed} from 'vue';
+import { ref, onBeforeMount, onMounted, nextTick, watch, watchEffect, reactive, defineAsyncComponent} from 'vue';
 import { GridStack } from 'gridstack';
 import FilterWidget from "../FilterWidget/FilterWidget.vue";
 import ItemWidget from './ItemWidget.vue';
@@ -137,15 +137,56 @@ function initGridStack(){
     Grid.value.setStatic(staticMode.value)
 }
 //Update Dropdown Options
-watchEffect(() => {
-  const widgets = props.options.availableWidgets ?? [];
-  widgets.forEach((comp) => {
-    if (comp?.__name && !(comp.__name in localRegistry.value)) {
-      localRegistry.value[comp.__name] = comp;
-      ComponentListOptions.value.push(comp.__name);
-    }
-  });
-});
+// Rebuild registry/options any time the list changes
+watch(
+  () => props.options?.availableWidgets,
+  (widgets) => {
+    // Reset to avoid duplicate pushes on re-run
+    localRegistry.value = {};
+    ComponentListOptions.value = [];
+
+    if (!widgets) return;
+
+    widgets.forEach((entry, idx) => {
+      let name: string | undefined;
+      let comp: any | undefined;
+
+      // Case A: descriptor with name + component
+      if (entry && typeof entry === 'object' && 'name' in entry && 'component' in entry) {
+        name = entry.name;
+        comp = entry.component;
+      }
+      // Case B: descriptor with name + loader (lazy)
+      else if (entry && typeof entry === 'object' && 'name' in entry && 'loader' in entry) {
+        name = entry.name;
+        comp = defineAsyncComponent(async () => {
+          const mod = await entry.loader!();
+          // support either default export or bare module
+          return mod.default ?? mod;
+        });
+      }
+      // Case C: plain component
+      else if (entry && (typeof entry === 'function' || typeof entry === 'object')) {
+        comp = entry;
+        // prefer stable .name; fallback to indexed key
+        name = entry.name || `Widget${idx + 1}`;
+      }
+      // Case D: plain loader function (() => import(...))
+      else if (typeof entry === 'function') {
+        // You *must* provide a name to show it in the UI:
+        // recommend passing as { name, loader } instead
+        return; // skip unnamed loader to avoid unlabeled dropdown entries
+      }
+
+      if (!name || !comp) return;
+      if (!localRegistry.value[name]) {
+        localRegistry.value[name] = comp;
+        ComponentListOptions.value.push(name);
+      }
+    });
+  },
+  { immediate: true, deep: true }
+);
 //Parse Options to Global Vars
 function parseOptions():void{
   const data = props.options.globalData
