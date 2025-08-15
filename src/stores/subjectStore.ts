@@ -7,6 +7,14 @@ export const useSubjectStore = defineStore('subjectStore', () => {
 
     const GlobalVars = useGlobalVarsStore();
     const AvailableSubjects = ref([]);
+    
+    class Subject{
+        constructor(_subject){
+            name:_subject.name || "";
+            sex:_subject.sex|| "X";
+            age:_subject.age || "unknown"
+        }
+    }
 
     const GetAvailableSubjects = async()=>{
         if(AvailableSubjects?.value.length){return}
@@ -22,13 +30,17 @@ export const useSubjectStore = defineStore('subjectStore', () => {
             console.error("could not get available subjects",e)
         }
     }
+
+    const mapSubjectsAgainstUUID = ()=>{
+        const client = algoliasearch('ALGOLIA_APPLICATION_ID', 'ALGOLIA_API_KEY');
+
+        // Call the API
+        const response = await client.searchForFacetValues({ indexName: 'indexName', facetName: 'facetName' });
+    }
     //Placeholder function for getting metadata from a subject
     const getSubjectMetaData = (subjectArray)=>{
-        return subjectArray.map(name => ({
-            name,
-            sex: "F",  // Hardcoded for now
-            age: "50"
-          }));
+        console.log(subjectArray)
+        return subjectArray.map(subject => new Subject(subject));
     }
 
   return { 
