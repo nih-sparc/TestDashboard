@@ -106,8 +106,8 @@ const {ComponentRegistry:localRegistry} = storeToRefs(_globalVars);
 const widgetRefs = reactive<Record<string,HTMLElement | null>>({});
 
 //Load from Local Storage
-onBeforeMount(() => {
-    _globalVars.DefaultLayout = props.options.defaultLayout;
+onBeforeMount(() => { 
+    addOptionsToState();
     _globalVars.loadFromLocalStorage();
     NextId = _globalVars.DASHBOARD_ITEMS.length+1
 
@@ -118,7 +118,10 @@ onBeforeMount(() => {
 
   });
 
-
+function addOptionsToState(){
+  _globalVars.DefaultLayout = props.options.defaultLayout;
+  _globalVars.setOptionServices(props.options.services)
+}
 //Initialize Gridstack
 function initGridStack(){
     const options={

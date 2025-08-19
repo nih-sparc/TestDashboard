@@ -18,6 +18,8 @@
 <script setup lang="ts">
 import { ref, onMounted, watch} from 'vue';
 import {ImageSelectorDash,BiolucidaViewerDash,QDBGraphDash,TextWidgetDash,ScaffoldViewerDash,SubjectSelectorDash,HealFlatmapDash} from './components/Index' //import all the external widgets from your chosen library. 
+import * as siteConfig from '@/config/local.json'
+import algoliasearch from 'algoliasearch'
 // Lazy loader for Flatmap; only fetched when used
 const FlatmapViewerDash = () => import('./components/FlatmapViewer.vue'); //when own library import('SparcDash/FlatmapWidget');
 //add them to the dashboard via your options.availableWidgets array
@@ -44,6 +46,7 @@ const defaultLayout = debug ? [
     { id: "ODBGraph-1", x: 0, y: 8, h: 3, w:5, componentName:"Graph",component:QDBGraphDash },
     { id: "TextWidget-4", x: 3, y: 1, h: 2, w:2, componentName:"Collaborator Counts",component:TextWidgetDash,Props:{bindedKey:"CollaboaratorCount"}}]
 
+const AlgoliaClient = algoliasearch(siteConfig?.ALGOLIA_APP_ID, siteConfig?.ALGOLIA_API_KEY);
 //options object ot pass the Dashboard. 
 const dashboardOptions =ref({
 //key value pairs that can be accessed to the user from high-configurable widgets. 
@@ -51,11 +54,18 @@ const dashboardOptions =ref({
     FileCount:20,
     Status:"Draft",
     CollaboaratorCount:0
+    },
+  services:{
+    AlgoliaClient,
+    AlgoliaConfig:{
+      apiKey:siteConfig?.ALGOLIA_API_KEY,
+      appID:siteConfig?.ALGOLIA_APP_ID,
+      indexName:siteConfig?.AlgoliaIndexName
+    }
   },
   availableWidgets,
   defaultLayout
 })
-
 const dialogVisible = ref(false);
 function closeDialog(){
   dialogVisible.value = false

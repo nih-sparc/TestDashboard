@@ -25,7 +25,7 @@
   import { ref, watch, computed } from 'vue';
   import {useGlobalVarsStore} from "../stores/globalVars.ts"
   import {useSubjectStore} from "../stores/subjectStore.ts"
-import { onBeforeMount } from 'vue';
+  import { onBeforeMount } from 'vue';
 
   defineOptions({
       inheritAttrs: false

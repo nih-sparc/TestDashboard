@@ -5,7 +5,7 @@
 </template>
 <script setup>
   import { ref, onMounted} from "vue";
-  
+
 
 defineOptions({
         inheritAttrs: false
@@ -16,7 +16,7 @@ const widgetName = "Heal Flatmap"
 const MAP_SERVER = ref('https://mapcore-demo.org/current/flatmap/v3/')
 
 onMounted(async () => {
-  const { MapViewer } = await import('https://cdn.jsdelivr.net/npm/@abi-software/flatmap-viewer/+esm')
+ const { MapViewer } = await import('https://cdn.jsdelivr.net/npm/@abi-software/flatmap-viewer/+esm')
 
   const viewer = new MapViewer(MAP_SERVER.value)
 
