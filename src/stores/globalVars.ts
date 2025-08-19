@@ -1,8 +1,10 @@
 import { ref, isReactive, isRef, markRaw, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { SparcImageObject } from '../devComponents/ImageSelector/ImageModel';
+import { useLocationStore} from "../stores/locationSelect";
 
 export const useGlobalVarsStore = defineStore('globalVars', () => {
+  const locationStore = useLocationStore();
   //global objects
   const DefaultLayout = ref([]); //retrieved from Dashboard's properties
   const ComponentRegistry = ref<Record<string,any>>({})
@@ -24,6 +26,8 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
   //filtered metadata
 
   const SELECTED_SUBJECTS = ref([])
+
+  const MIN_MAX = ref<{min:string,max:string}>()
   const CURRENT_ROW = ref({})
     //BiolucidaViewer.vue
   const SELECTED_IMAGE = ref(null);
@@ -31,7 +35,8 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
 
   //scaffold
   //const SCAFFOLD_URL = ref("https://sparc.science/datasets/426?type=dataset&datasetDetailsTab=images")
-  const SCAFFOLD_URL = ref("https://mapcore-bucket1.s3-us-west-2.amazonaws.com/others/29_Jan_2020/heartICN_metadata.json")
+  //const SCAFFOLD_URL = ref("https://mapcore-bucket1.s3-us-west-2.amazonaws.com/others/29_Jan_2020/heartICN_metadata.json")
+  const SCAFFOLD_URL = ref("https://api.sparc.science//s3-resource/426/files/derivative/sub-M000/L/060-visualization/leftHumanVagus_metadata.json")
 
   const clearAllFilters = ()=>{
     DATASET_ID.value = "";
@@ -47,7 +52,7 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
 
   //GETTERS
   const getDashItem =(widgetId:string)=>{
-    return DASHBOARD_ITEMS.value?.find(item => item.id===widgetId);
+    return DASHBOARD_ITEMS.value.find(item => item.id===widgetId);
   }
   //SETTERS
   const addOptionsDataItems = (name:string,value:any)=>{
@@ -56,6 +61,14 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
   const clearOptionsDataItems = ()=>{
     optionsData.value = [];
   }
+  const setMinMax = (minMax:{min:string,max:string})=>{
+    MIN_MAX.value = minMax;
+    locationStore.getLocationFromMinMax();
+ }
+ const setSelectedSubject = (subjectArray:string[])=>{
+  SELECTED_SUBJECTS.value = subjectArray;
+  locationStore.getLocationFromMinMax();
+}
   const setOptionServices = (services:any)=>{
     const sanitized =sanitizeServices(services);
     Services.value = sanitized;
@@ -98,13 +111,13 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
     MBF_IMAGE_NAME.value = selectedImage.packageId || "";
   };
   
-  const setBiolucidaPath = (path: string) => {
-    if (SELECTED_IMAGE.value) {
-      SELECTED_IMAGE.value = { ...SELECTED_IMAGE.value, biolucidaPath: path };
-    } else {
-      console.warn("No image selected. Cannot set Biolucida path.");
-    }
-  };
+  // const setBiolucidaPath = (path: string) => {
+  //   if (SELECTED_IMAGE.value) {
+  //     SELECTED_IMAGE.value = { ...SELECTED_IMAGE.value, biolucidaPath: path };
+  //   } else {
+  //     console.warn("No image selected. Cannot set Biolucida path.");
+  //   }
+  // };
 
   const toggleWidgetLock = (widgetId: string) => {
     const widget = DASHBOARD_ITEMS.value.find(w => w.id === widgetId);
@@ -127,6 +140,7 @@ function saveDashboardGrid():void {
     
     const data = {
       DASHBOARD_ITEMS: saveDashboardGrid(),
+      MIN_MAX:MIN_MAX.value,
       SELECTED_SUBJECTS: SELECTED_SUBJECTS.value,
       CURRENT_ROW: CURRENT_ROW.value,
       DASH_IMAGE_ARRAY: DASH_IMAGE_ARRAY.value,
@@ -148,6 +162,7 @@ function saveDashboardGrid():void {
     try {
       const data = JSON.parse(stored);
       if('DASHBOARD_ITEMS' in data) DASHBOARD_ITEMS.value = parseSavedDashItems(data.DASHBOARD_ITEMS);
+      if('MIN_MAX' in data) MIN_MAX.value = data.MIN_MAX;
       if('SELECTED_SUBJECTS' in data) SELECTED_SUBJECTS.value = data.SELECTED_SUBJECTS;
       if ('CURRENT_ROW' in data) CURRENT_ROW.value = data.CURRENT_ROW;
       if ('DASH_IMAGE_ARRAY' in data) DASH_IMAGE_ARRAY.value = data.DASH_IMAGE_ARRAY;
@@ -193,13 +208,14 @@ function isValidJSON(str:string | null) {
     FLATMAP_LOCATION,
     MBF_IMAGE_NAME,
     SELECTED_SUBJECTS,
+    MIN_MAX,
     SELECTED_IMAGE,
     optionsData,
     SCAFFOLD_URL,
     gridInstance,
     getDashItem,
     toggleWidgetLock,
-    setBiolucidaPath,
+    setMinMax,
     setImageArray,
     setSelectedImage,
     addOptionsDataItems,

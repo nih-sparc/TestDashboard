@@ -156,17 +156,13 @@ const metricList = ref([]);
 
 const getMetricList = async ()=>{
   let _metric_list = {};
-  let _response = {};
     try{
-        await Api.qdb.getClasses().then(response =>{
-            _response = response;
-        })
-        if (_response.status === 200) {
-          _metric_list = _response.data.result;
-          _metric_list = _metric_list.map(m=>m.label);
-          _metric_list.push("random data");
-          metricList.value = _metric_list;
-        }
+        const response = await Api.qdb.getClasses()
+        _metric_list = response;
+        _metric_list = _metric_list.map(m=>m.label);
+        _metric_list.push("random data");
+        metricList.value = _metric_list;
+        
     }catch(e){
         console.error("couldn't fetch classes/metrics from QDB");
         console.error(e.message)
@@ -184,18 +180,13 @@ const getMetricList = async ()=>{
 //const aspectList = ref([]);
 const getAspectList = async(metric, dataset)=>{
   let _aspect_list = {};
-  let _response = {};
+
   try{
-      await Api.qdb.getAspectsFromMetric(metric).then(response =>{
-          _response = response;
-      })
-      if (_response.status === 200) {
-        _aspect_list = _response.data.result;
-        dataset._aspectList = _aspect_list.map(a=>a.label);
-      }
+      const response = await Api.qdb.getAspectsFromMetric(metric)
+      _aspect_list = response;
+      dataset._aspectList = _aspect_list.map(a=>a.label);
   }catch(e){
-      console.error("couldn't fetch aspects of "+metric+" from QDB");
-      console.log(e)
+      console.error("couldn't fetch aspects of "+metric+" from QDB",e);
   }
 }
 //change value of x or y axis
@@ -209,22 +200,16 @@ function changeAxis(axis, aspect, metric){
 //---------------------------------------------------------------
 const getDataByAspect = async(axis,aspect,metricIndex)=>{
     try{
-      let _response = {};
       let _axisData = {};
       const metricName = newGraphData.value.datasets[metricIndex]._metric;
-      await Api.qdb.getDataByAspect(metricName,aspect).then(response=>{
-        _response = response;
-        if(_response.status===200){
-           _axisData = _response.data.result;
-           if(_axisData && _axisData.length){
-              newGraphData.value.addDataToMetric(axis,_axisData,metricIndex);
-           }
-        }
-      })
+      const response = await Api.qdb.getDataByAspect(metricName,aspect)
+      _axisData = response;
+      if(_axisData && _axisData.length){
+        newGraphData.value.addDataToMetric(axis,_axisData,metricIndex);
+      }
     }
     catch(e){
-      console.error("could not fetch data points from qdb");
-      console.log(e);
+      console.error("could not fetch data points from qdb",e);
     }
 }
 

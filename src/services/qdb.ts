@@ -41,17 +41,24 @@ export const qdb = {
     return unwrap(resp);
   },
 
-  // GET /objects?aspect=distance-via-reva-ft-sample-id-normalized-v1<subject>&value-quant-min=<min>&value-quant-max=<max>
-  async getLocationMinMax(min: number, max: number, subject: string) {
-    const resp = await api.get("objects", {
-      params: {
-        aspect: `distance-via-reva-ft-sample-id-normalized-v1${subject}`,
-        "value-quant-min": min,
-        "value-quant-max": max,
-      },
-    });
+  async getLocationMinMax(
+    min: number,
+    max: number,
+    subject: string | string[]
+  ) {
+    const params = new URLSearchParams();
+    params.set('aspect', 'distance-via-reva-ft-sample-id-normalized-v1');
+    params.set('value-quant-min', String(min));
+    params.set('value-quant-max', String(max));
+  
+    (Array.isArray(subject) ? subject : [subject])
+      .filter(Boolean)
+      .forEach(s => params.append('subject', s));
+  
+    const resp = await api.get(`objects?${params.toString()}`);
     return unwrap(resp);
   },
+  
 
   // GET /objects?dataset=<uuid>&inst=<instance>
   async getImagesByInstance(dataset: string, instance: string) {

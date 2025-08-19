@@ -17,11 +17,11 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch} from 'vue';
-import {ImageSelectorDash,BiolucidaViewerDash,QDBGraphDash,TextWidgetDash,ScaffoldViewerDash,SubjectSelectorDash,HealFlatmapDash} from './components/Index' //import all the external widgets from your chosen library. 
+import {ImageSelectorDash,BiolucidaViewerDash,QDBGraphDash,TextWidgetDash,ScaffoldViewerDash,SubjectSelectorDash,HealFlatmapDash, FlatmapViewerDash} from './components/Index' //import all the external widgets from your chosen library. 
 import * as siteConfig from '@/config/local.json'
 import algoliasearch from 'algoliasearch'
 // Lazy loader for Flatmap; only fetched when used
-const FlatmapViewerDash = () => import('./components/FlatmapViewer.vue'); //when own library import('SparcDash/FlatmapWidget');
+//const FlatmapViewerDash = () => import('./components/FlatmapViewer.vue'); //when own library import('SparcDash/FlatmapWidget');
 //add them to the dashboard via your options.availableWidgets array
 const availableWidgets = [
     {name:"Flatmap",loader:FlatmapViewerDash},
@@ -40,11 +40,13 @@ const defaultLayout = debug ? [
   { id: "TextWidget-3", x: 2, y: 1, h: 2, w:2, componentName:"Karen",component:TextWidgetDash,Props:{bindedKey:"Status"}},
   { id: "TextWidget-4", x: 3, y: 1, h: 2, w:2, componentName:"Collaborator Counts",component:TextWidgetDash,Props:{bindedKey:"CollaboaratorCount"}}
 ] : 
-[{ id: "FlatmapViewer-1", x: 0, y: 0, h: 8, w:2, componentName:"Flatmap Viewer",component:FlatmapViewerDash },
-    { id: "ImageSelector-2", x: 2, y: 0, h: 8, w:3, componentName:"Image Selector", component:ImageSelectorDash},
-    { id: "BiolucidaViewer-3", x: 5, y: 0,h: 11, w:7, componentName:"MBF Viewer", component:BiolucidaViewerDash},
-    { id: "ODBGraph-1", x: 0, y: 8, h: 3, w:5, componentName:"Graph",component:QDBGraphDash },
-    { id: "TextWidget-4", x: 3, y: 1, h: 2, w:2, componentName:"Collaborator Counts",component:TextWidgetDash,Props:{bindedKey:"CollaboaratorCount"}}]
+[
+    { id: "SubjectSelector-1",component: SubjectSelectorDash,componentName: "Select Subject",h:2, w:5, x:0, y:0 },
+        { id: "BiolucidaViewer-2", componentName:"MBF Viewer", component:BiolucidaViewerDash, h:11, w:7, x:5, y:0},
+        { id: "FlatmapViewer-3",component: FlatmapViewerDash,componentName: "Flatmap Viewer",h: 8, w: 2, x: 0, y: 2},
+        { id: "ImageSelector-4", component:ImageSelectorDash, componentName:"Image Selector", h:8, w:3, x:2, y:2},
+        { id: "ODBGraph-5", component: QDBGraphDash, componentName: "Graph", h: 3, w: 5, x: 0, y: 10, }
+      ]
 
 const AlgoliaClient = algoliasearch(siteConfig?.ALGOLIA_APP_ID, siteConfig?.ALGOLIA_API_KEY);
 //options object ot pass the Dashboard. 
