@@ -37,6 +37,8 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
   //const SCAFFOLD_URL = ref("https://mapcore-bucket1.s3-us-west-2.amazonaws.com/others/29_Jan_2020/heartICN_metadata.json")
 
   const clearAllFilters = ()=>{
+    MIN_MAX.value = {min:"",max:""};
+    SELECTED_SUBJECTS.value = [];
     DATASET_ID.value = "";
     DASH_IMAGE_ARRAY.value = [];
     FLATMAP_LOCATION.value = "";
