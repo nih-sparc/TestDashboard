@@ -17,7 +17,7 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch} from 'vue';
-import {ImageSelectorDash,BiolucidaViewerDash,QDBGraphDash,TextWidgetDash,ScaffoldViewerDash,SubjectSelectorDash,HealFlatmapDash, FlatmapViewerDash} from './components/Index' //import all the external widgets from your chosen library. 
+import {ImageSelectorDash,BiolucidaViewerDash,QDBGraphDash,TextWidgetDash,ScaffoldViewerDash,SubjectSelectorDash,HealFlatmapDash, FlatmapViewerDash, MarkdownDash} from './components/Index' //import all the external widgets from your chosen library. 
 import * as siteConfig from '@/config/local.json'
 import algoliasearch from 'algoliasearch'
 // Lazy loader for Flatmap; only fetched when used
@@ -29,7 +29,8 @@ const availableWidgets = [
     {name:"BiolucidaViewer",component:BiolucidaViewerDash},
     {name:"QDBDGraph",component:QDBGraphDash},
     {name:"TextWidget",component:TextWidgetDash},
-    {name:"SubjectSelector",component:SubjectSelectorDash}
+    {name:"SubjectSelector",component:SubjectSelectorDash},
+    {name:"Read Me",component:MarkdownDash}
 ]
 
 //component name works more like a header and might need to be renamed throughout the ap
