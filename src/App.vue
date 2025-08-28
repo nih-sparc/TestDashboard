@@ -59,6 +59,7 @@ const dashboardOptions =ref({
     CollaboaratorCount:0
     },
   services:{
+    ApiUrl:"https://somestring/fortheurl/",
     AlgoliaClient,
     AlgoliaConfig:{
       apiKey:siteConfig?.ALGOLIA_API_KEY,

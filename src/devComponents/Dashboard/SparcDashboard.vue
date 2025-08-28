@@ -67,11 +67,11 @@
 
 <script setup lang="ts">
 
-import { ref, onBeforeMount, onMounted, nextTick, watch, watchEffect, reactive, defineAsyncComponent} from 'vue';
+import { ref, onBeforeMount, onMounted, nextTick, watch, provide, reactive, defineAsyncComponent, computed} from 'vue';
 import { GridStack } from 'gridstack';
 import FilterWidget from "../FilterWidget/FilterWidget.vue";
 import ItemWidget from './ItemWidget.vue';
-import { useGlobalVarsStore }from '../../stores/globalVars.ts';
+import { useGlobalVarsStore }from '../../stores/globalVars';
 import { storeToRefs } from 'pinia';
 import "../../assets/theme.scss";
 import "gridstack/dist/gridstack.min.css";
@@ -92,7 +92,10 @@ const props = defineProps<{
 const _globalVars = useGlobalVarsStore();
 const { DASHBOARD_ITEMS: DashboardItems } = storeToRefs(_globalVars);
 
-
+//provide widgets with certain globalv
+provide('dashboard:globalVars', {
+  apiUrl: computed(() => _globalVars.Services.ApiUrl),           
+})
 
 let editGridButton = ref<string>("Edit Grid")
 const {gridInstance:Grid} = storeToRefs(_globalVars);

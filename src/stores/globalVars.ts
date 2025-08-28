@@ -13,7 +13,7 @@ export const useGlobalVarsStore = defineStore('globalVars', () => {
   const DATASET_ID = ref("");
   const optionsData = ref([])
   const DASHBOARD_ITEMS = ref([]);
-  const Services = ref({})
+  const Services = ref<Record<string,any>>({})
  
   //component objects
     //ImageSelector.vue
@@ -213,6 +213,7 @@ function isValidJSON(str:string | null) {
     optionsData,
     SCAFFOLD_URL,
     gridInstance,
+    Services,
     getDashItem,
     toggleWidgetLock,
     setMinMax,
